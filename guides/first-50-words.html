@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The First 50 Words — A Parent's Complete Checklist | BabyPath</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#fef9f0;--indigo:#6366f1;--pink:#ec4899;--green:#10b981;--text:#2d2a3e;--light-indigo:#eef2ff;--light-pink:#fdf2f8;--light-green:#ecfdf5}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;font-size:15px}
+.top-bar{position:sticky;top:0;background:#fff;border-bottom:2px solid var(--indigo);padding:10px 32px;display:flex;justify-content:space-between;align-items:center;z-index:100}
+.top-bar a{color:var(--indigo);text-decoration:none;font-weight:700;font-size:14px}
+.top-bar a:hover{text-decoration:underline}
+.btn-print{background:var(--indigo);color:#fff;border:none;padding:8px 20px;border-radius:8px;font-family:inherit;font-weight:700;font-size:14px;cursor:pointer}
+.btn-print:hover{background:#4f46e5}
+.page{max-width:750px;margin:0 auto;padding:48px 32px 64px;page-break-after:always;min-height:95vh}
+.page:last-child{page-break-after:avoid}
+h1{font-size:2.6em;font-weight:800;color:var(--indigo);line-height:1.15}
+h2{font-size:1.6em;font-weight:800;color:var(--indigo);margin-bottom:12px;border-bottom:3px solid var(--pink);display:inline-block;padding-bottom:4px}
+h3{font-size:1.15em;font-weight:700;color:var(--pink);margin:20px 0 8px}
+p,li{margin-bottom:8px}
+.cover{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:90vh}
+.cover .subtitle{font-size:1.5em;font-weight:600;color:var(--pink);margin:8px 0 6px}
+.cover .byline{font-size:1em;color:#888;margin-bottom:32px}
+.cover .intro{max-width:560px;font-size:1.05em;color:#555;line-height:1.75}
+.badge{display:inline-block;background:var(--light-green);color:var(--green);font-weight:700;font-size:.75em;padding:4px 14px;border-radius:20px;margin-bottom:20px;text-transform:uppercase;letter-spacing:.5px}
+.rule-card{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:14px;border-left:4px solid var(--indigo);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.rule-card strong{color:var(--indigo)}
+.note-box{background:var(--light-pink);border-radius:10px;padding:16px 20px;margin:18px 0;border:1px solid #f9a8d4;font-size:.95em}
+.note-box.green{background:var(--light-green);border-color:#6ee7b7}
+.cat-title{font-size:1.2em;font-weight:800;color:#fff;background:var(--indigo);display:inline-block;padding:6px 18px;border-radius:8px;margin:28px 0 14px}
+.cat-title.pink{background:var(--pink)}
+.cat-title.green{background:var(--green)}
+.word-row{display:grid;grid-template-columns:28px 1fr 1fr 1fr;gap:6px 10px;align-items:start;padding:10px 12px;border-bottom:1px solid #e8e4dc;font-size:.92em}
+.word-row:nth-child(odd){background:rgba(255,255,255,.5)}
+.word-row .cb{width:16px;height:16px;border:2px solid var(--indigo);border-radius:3px;margin-top:3px}
+.word-row .lang{font-weight:700}
+.word-row .meta{grid-column:2/5;color:#666;font-size:.88em;line-height:1.5;margin-top:2px}
+.word-row .meta span{display:inline-block;margin-right:12px}
+.word-row .meta .sound{color:var(--indigo);font-weight:600}
+.word-row .meta .approx{color:var(--green)}
+.word-header{display:grid;grid-template-columns:28px 1fr 1fr 1fr;gap:6px 10px;padding:8px 12px;font-weight:700;font-size:.82em;color:#999;text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--indigo)}
+table.tracker{width:100%;border-collapse:collapse;margin-top:16px}
+table.tracker th{background:var(--indigo);color:#fff;padding:10px 12px;font-size:.85em;text-align:left}
+table.tracker td{border:1px solid #ddd;padding:22px 12px;font-size:.85em}
+table.tracker tr:nth-child(even) td{background:rgba(255,255,255,.4)}
+.routine{background:#fff;border-radius:12px;padding:18px 22px;margin-bottom:16px;border-top:4px solid var(--pink);box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.routine h3{color:var(--indigo);margin-top:0}
+.routine .words{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}
+.routine .words span{background:var(--light-indigo);color:var(--indigo);padding:3px 12px;border-radius:6px;font-weight:700;font-size:.9em}
+.routine .phrase{font-style:italic;color:var(--pink);margin:6px 0}
+.routine .gesture{color:var(--green);font-size:.92em}
+.red-flag{background:#fff;border-left:4px solid #ef4444;padding:12px 18px;margin-bottom:10px;border-radius:0 8px 8px 0;font-size:.95em}
+.red-flag strong{color:#ef4444}
+.footer{text-align:center;padding:20px;font-size:.82em;color:#aaa;border-top:1px solid #e8e4dc;margin-top:40px}
+@media print{
+  .top-bar{display:none!important}
+  body{background:#fff;font-size:13px}
+  .page{padding:24px 16px 32px;max-width:100%;min-height:auto}
+  .cover{min-height:85vh}
+  .word-row,.rule-card,.routine,.red-flag{break-inside:avoid}
+  .cat-title{break-after:avoid}
+  .note-box{break-inside:avoid}
+  h2{break-after:avoid}
+  table.tracker td{padding:18px 10px}
+  .footer{font-size:.7em}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html">&larr; Back to BabyPath</a>
+  <button class="btn-print" onclick="window.print()">Print this guide</button>
+</div>
+
+<!-- PAGE 1: COVER -->
+<div class="page cover">
+  <span class="badge">Free Guide</span>
+  <h1>The First 50 Words</h1>
+  <div class="subtitle">A Parent's Complete Checklist</div>
+  <div class="byline">By BabyPath &mdash; babypath.app</div>
+  <p class="intro">
+    Your child's first words are one of the most magical milestones you will ever witness. This guide gives you a clear, evidence-based roadmap of the 50 most common early words, organized by category, so you always know what to model next. Whether your family speaks one language or three, this checklist will help you celebrate every sound, syllable, and approximation along the way.
+  </p>
+</div>
+
+<!-- PAGE 2: HOW TO USE -->
+<div class="page">
+  <h2>How to Use This Guide</h2>
+
+  <h3>What Counts as a "Word"?</h3>
+  <p>A word is any sound your child uses <strong>consistently and intentionally</strong> to mean something. If your toddler says <em>"ba"</em> every time they see a ball, that is a word. If they sign "more" at the dinner table, that counts too. Animal sounds (<em>"moo," "woof"</em>) absolutely count. You are looking for <strong>meaning and intention</strong>, not perfect pronunciation.</p>
+
+  <h3>The 3 Golden Rules</h3>
+
+  <div class="rule-card">
+    <strong>1. Model, Don't Demand</strong><br>
+    Say the word naturally during everyday moments. "Look, a <em>dog</em>! Big dog!" Never pressure your child with "Say dog. Say it. Say dog!" Modeling builds language; demanding builds frustration.
+  </div>
+  <div class="rule-card">
+    <strong>2. Accept Approximations</strong><br>
+    When your child says "nana" for banana, celebrate it! Then gently model back: "Yes! Ba-na-na! Yummy banana." They will refine over time. Your job is to keep the conversation going.
+  </div>
+  <div class="rule-card">
+    <strong>3. Repeat, Repeat, Repeat</strong><br>
+    Research shows children need to hear a word <strong>hundreds of times</strong> in context before they produce it. Repetition in natural routines (meals, baths, walks) is the most powerful teaching tool you have.
+  </div>
+
+  <div class="note-box">
+    <strong>Evidence base:</strong> This guide draws on the Hanen Centre's <em>It Takes Two to Talk</em> program and the American Speech-Language-Hearing Association (ASHA) developmental milestones. The word list reflects research on early communicative vocabulary across languages.
+  </div>
+
+  <div class="note-box green">
+    <strong>Bilingual &amp; multilingual families:</strong> Count words across ALL languages your child hears. If they say "water" in English, "вода" in Russian, and "суу" in Kyrgyz, that is <strong>three words</strong>, not one. Multilingual children may mix languages in a single sentence &mdash; this is normal and a sign of cognitive flexibility.
+  </div>
+</div>
+
+<!-- PAGES 3-8: THE 50 WORDS -->
+<div class="page">
+  <h2>The 50 Words Checklist</h2>
+
+  <!-- CATEGORY 1: Social Words -->
+  <div class="cat-title">1. Social Words (7)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">hi</div><div class="lang">привет</div><div class="lang">салам</div>
+    <div class="meta"><span class="sound">Sound: /h/</span><span>Tip: Wave and say "hi!" every time someone enters the room.</span><span class="approx">Accept: "ha" or just a wave</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">bye</div><div class="lang">пока</div><div class="lang">жакшы кал</div>
+    <div class="meta"><span class="sound">Sound: /b/</span><span>Tip: Exaggerate your wave at the door &mdash; make it a ritual.</span><span class="approx">Accept: "ba" + wave</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">please</div><div class="lang">пожалуйста</div><div class="lang">сураныч</div>
+    <div class="meta"><span class="sound">Sound: /p/</span><span>Tip: Pair with an open-palm gesture. Model before handing items.</span><span class="approx">Accept: "pee" or sign</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">thank you</div><div class="lang">спасибо</div><div class="lang">рахмат</div>
+    <div class="meta"><span class="sound">Sound: /t/</span><span>Tip: Say it slowly every time you hand something to your child.</span><span class="approx">Accept: "ta" or "tankoo"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">yes</div><div class="lang">да</div><div class="lang">ооба</div>
+    <div class="meta"><span class="sound">Sound: /j/</span><span>Tip: Nod exaggeratedly and say "yes!" when they reach for something.</span><span class="approx">Accept: "ya" or a nod</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">no</div><div class="lang">нет</div><div class="lang">жок</div>
+    <div class="meta"><span class="sound">Sound: /n/</span><span>Tip: Shake head gently; this is often one of the very first words.</span><span class="approx">Accept: head shake or "nah"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">uh-oh</div><div class="lang">ой</div><div class="lang">ой</div>
+    <div class="meta"><span class="sound">Sound: vowels</span><span>Tip: Use whenever something drops or spills &mdash; great for turn-taking.</span><span class="approx">Accept: "uh" or "oh"</span></div>
+  </div>
+
+  <!-- CATEGORY 2: People -->
+  <div class="cat-title pink">2. People (5)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">mama</div><div class="lang">мама</div><div class="lang">апа</div>
+    <div class="meta"><span class="sound">Sound: /m/</span><span>Tip: Point to yourself and say "mama" warmly during close moments.</span><span class="approx">Accept: "ma" or "muh"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">papa / daddy</div><div class="lang">папа</div><div class="lang">ата</div>
+    <div class="meta"><span class="sound">Sound: /p/</span><span>Tip: Point to dad in photos and in person. Use one consistent name.</span><span class="approx">Accept: "pa" or "da"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">baby</div><div class="lang">малыш</div><div class="lang">бала</div>
+    <div class="meta"><span class="sound">Sound: /b/</span><span>Tip: Point at babies in books and mirrors. "Look, a baby!"</span><span class="approx">Accept: "bay" or "baba"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">grandma</div><div class="lang">бабушка</div><div class="lang">чоң апа</div>
+    <div class="meta"><span class="sound">Sound: /b/, /g/</span><span>Tip: Use during video calls or when looking at family photos together.</span><span class="approx">Accept: "baba" or "nana"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">grandpa</div><div class="lang">дедушка</div><div class="lang">чоң ата</div>
+    <div class="meta"><span class="sound">Sound: /g/, /d/</span><span>Tip: Same as grandma &mdash; photos and video calls are perfect moments.</span><span class="approx">Accept: "deda" or "papa"</span></div>
+  </div>
+</div>
+
+<div class="page">
+  <!-- CATEGORY 3: Core / Requesting -->
+  <div class="cat-title green">3. Core / Requesting Words (8)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">more</div><div class="lang">ещё</div><div class="lang">дагы</div>
+    <div class="meta"><span class="sound">Sound: /m/</span><span>Tip: Pause during snack time and wait. Model "more?" with hands together.</span><span class="approx">Accept: "mo" or tapping hands together</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">all done</div><div class="lang">всё</div><div class="lang">бүттү</div>
+    <div class="meta"><span class="sound">Sound: /d/</span><span>Tip: Wave hands and say "all done!" at the end of meals and play.</span><span class="approx">Accept: "done" or "da" + waving hands</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">want</div><div class="lang">хочу</div><div class="lang">келет</div>
+    <div class="meta"><span class="sound">Sound: /w/</span><span>Tip: Hold two items and ask "Which one do you want?" Model the answer.</span><span class="approx">Accept: reaching + "wa"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">help</div><div class="lang">помоги</div><div class="lang">жардам</div>
+    <div class="meta"><span class="sound">Sound: /h/</span><span>Tip: When your child struggles with a lid or toy, model "help!" before assisting.</span><span class="approx">Accept: "heh" or reaching toward you</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">open</div><div class="lang">открой</div><div class="lang">ач</div>
+    <div class="meta"><span class="sound">Sound: /o/</span><span>Tip: Pause before opening containers, doors, books. Wait and model.</span><span class="approx">Accept: "oh" or "opuh"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">go</div><div class="lang">пошли</div><div class="lang">кет / жүр</div>
+    <div class="meta"><span class="sound">Sound: /g/</span><span>Tip: Say "ready, set... GO!" during play. The pause creates anticipation.</span><span class="approx">Accept: "guh" or "go" with a push gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">stop</div><div class="lang">стоп</div><div class="lang">токто</div>
+    <div class="meta"><span class="sound">Sound: /s/</span><span>Tip: Play stop-and-go games. Hold your hand up as a visual cue.</span><span class="approx">Accept: "top" or hand up gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">up</div><div class="lang">наверх</div><div class="lang">жогору</div>
+    <div class="meta"><span class="sound">Sound: vowel + /p/</span><span>Tip: Wait before picking child up. Arms out, say "up!" every time.</span><span class="approx">Accept: "uh" + reaching arms up</span></div>
+  </div>
+
+  <!-- CATEGORY 4: Food & Drink -->
+  <div class="cat-title pink">4. Food &amp; Drink (8)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">milk</div><div class="lang">молоко</div><div class="lang">сүт</div>
+    <div class="meta"><span class="sound">Sound: /m/</span><span>Tip: Say "milk" before every bottle or nursing session consistently.</span><span class="approx">Accept: "mi" or "muh"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">water</div><div class="lang">вода</div><div class="lang">суу</div>
+    <div class="meta"><span class="sound">Sound: /w/</span><span>Tip: Offer the cup and say "water" before handing it over each time.</span><span class="approx">Accept: "wa" or "wawa"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">juice</div><div class="lang">сок</div><div class="lang">шире</div>
+    <div class="meta"><span class="sound">Sound: /dʒ/</span><span>Tip: Let them see you pour it. "Juice! Yummy juice."</span><span class="approx">Accept: "joo" or "doo"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">bread</div><div class="lang">хлеб</div><div class="lang">нан</div>
+    <div class="meta"><span class="sound">Sound: /b/</span><span>Tip: Let them help tear bread at mealtimes while you narrate.</span><span class="approx">Accept: "beh" or "bed"</span></div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">banana</div><div class="lang">банан</div><div class="lang">банан</div>
+    <div class="meta"><span class="sound">Sound: /b/, /n/</span><span>Tip: Let them help peel it. Narrate: "Peel the banana! Banana!"</span><span class="approx">Accept: "nana" or "bana"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">apple</div><div class="lang">яблоко</div><div class="lang">алма</div>
+    <div class="meta"><span class="sound">Sound: vowel + /p/</span><span>Tip: Hold up the apple, let them touch it. "Apple! Red apple."</span><span class="approx">Accept: "apuh" or "ah"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">cookie</div><div class="lang">печенье</div><div class="lang">печенье</div>
+    <div class="meta"><span class="sound">Sound: /k/</span><span>Tip: A powerful motivator! Hold the cookie, model the word, then give it.</span><span class="approx">Accept: "kuh" or "koo-kee"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">eat</div><div class="lang">кушать</div><div class="lang">жегиле</div>
+    <div class="meta"><span class="sound">Sound: vowel /i/</span><span>Tip: Before every meal, point to food and say "Time to eat!"</span><span class="approx">Accept: "ee" or pretend-eating gesture</span></div>
+  </div>
+
+  <!-- CATEGORY 5: Animals -->
+  <div class="cat-title green">5. Animals (6)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">dog</div><div class="lang">собака</div><div class="lang">ит</div>
+    <div class="meta"><span class="sound">Sound: /d/</span><span>Tip: Point at every dog you see outside. "Dog! Woof woof!"</span><span class="approx">Accept: "dah" or "woof"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">cat</div><div class="lang">кошка</div><div class="lang">мышык</div>
+    <div class="meta"><span class="sound">Sound: /k/</span><span>Tip: Use books with cat pictures. Pair with "meow!" sound.</span><span class="approx">Accept: "ka" or "meow"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">bird</div><div class="lang">птичка</div><div class="lang">куш</div>
+    <div class="meta"><span class="sound">Sound: /b/</span><span>Tip: Point at birds outside the window. Flap your arms!</span><span class="approx">Accept: "buh" or "twee"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">fish</div><div class="lang">рыбка</div><div class="lang">балык</div>
+    <div class="meta"><span class="sound">Sound: /f/</span><span>Tip: Make fish lips together &mdash; great for oral motor play.</span><span class="approx">Accept: "fi" or fish-lip gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">cow</div><div class="lang">корова</div><div class="lang">уй</div>
+    <div class="meta"><span class="sound">Sound: /k/</span><span>Tip: Animal sound books are perfect. "Cow says moooo!"</span><span class="approx">Accept: "moo" or "kow"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">horse</div><div class="lang">лошадка</div><div class="lang">ат</div>
+    <div class="meta"><span class="sound">Sound: /h/</span><span>Tip: Bounce them on your knee like a horse ride and say the word.</span><span class="approx">Accept: "haw" or clip-clop sound</span></div>
+  </div>
+
+  <!-- CATEGORY 6: Body Parts -->
+  <div class="cat-title">6. Body Parts (7)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">eye</div><div class="lang">глаз</div><div class="lang">көз</div>
+    <div class="meta"><span class="sound">Sound: vowel /aɪ/</span><span>Tip: Touch your eye gently, then touch theirs. "Eye! Your eye!"</span><span class="approx">Accept: "ah" + pointing to eye</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">nose</div><div class="lang">нос</div><div class="lang">мурун</div>
+    <div class="meta"><span class="sound">Sound: /n/</span><span>Tip: Play "beep the nose" &mdash; tap noses and say "nose!"</span><span class="approx">Accept: "noh" or touching nose</span></div>
+  </div>
+</div>
+
+<div class="page">
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">mouth</div><div class="lang">рот</div><div class="lang">ооз</div>
+    <div class="meta"><span class="sound">Sound: /m/</span><span>Tip: Open your mouth wide during play. "Big mouth! Where's your mouth?"</span><span class="approx">Accept: "mow" or opening mouth wide</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">ear</div><div class="lang">ухо</div><div class="lang">кулак</div>
+    <div class="meta"><span class="sound">Sound: vowel /ɪ/</span><span>Tip: Cup your ear. "I hear something! Ear!" Works great with music.</span><span class="approx">Accept: "ee" + touching ear</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">hand</div><div class="lang">рука</div><div class="lang">кол</div>
+    <div class="meta"><span class="sound">Sound: /h/</span><span>Tip: Clap games, high fives, and hand washing are perfect moments.</span><span class="approx">Accept: "ha" or showing palm</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">foot</div><div class="lang">нога</div><div class="lang">бут</div>
+    <div class="meta"><span class="sound">Sound: /f/</span><span>Tip: Tickle feet during diaper changes. "Foot! Tickle your foot!"</span><span class="approx">Accept: "foo" or kicking motion</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">head</div><div class="lang">голова</div><div class="lang">баш</div>
+    <div class="meta"><span class="sound">Sound: /h/</span><span>Tip: "Head, shoulders, knees and toes" is the classic for this one.</span><span class="approx">Accept: "heh" or patting head</span></div>
+  </div>
+
+  <!-- CATEGORY 7: Actions & Descriptors -->
+  <div class="cat-title pink">7. Actions &amp; Descriptors (9)</div>
+  <div class="word-header"><div></div><div>English</div><div>Русский</div><div>Кыргызча</div></div>
+
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">drink</div><div class="lang">пить</div><div class="lang">ич</div>
+    <div class="meta"><span class="sound">Sound: /d/</span><span>Tip: Pretend to drink from an empty cup, then hand them theirs.</span><span class="approx">Accept: "dih" or tipping cup gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">sleep</div><div class="lang">спать</div><div class="lang">уйку</div>
+    <div class="meta"><span class="sound">Sound: /s/</span><span>Tip: Put a stuffed animal to sleep. "Shh, bear is sleeping!"</span><span class="approx">Accept: "seep" or closing eyes gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">play</div><div class="lang">играть</div><div class="lang">ойно</div>
+    <div class="meta"><span class="sound">Sound: /p/</span><span>Tip: Before starting any play, announce "Let's play!" consistently.</span><span class="approx">Accept: "pay" or "pah"</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">wash</div><div class="lang">мыть</div><div class="lang">жуу</div>
+    <div class="meta"><span class="sound">Sound: /w/</span><span>Tip: Bath time and hand washing are daily repetition opportunities.</span><span class="approx">Accept: "wah" or rubbing hands together</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">read</div><div class="lang">читать</div><div class="lang">оку</div>
+    <div class="meta"><span class="sound">Sound: /r/</span><span>Tip: Hold up a book and say "Read? Let's read!" before storytime.</span><span class="approx">Accept: "ree" or bringing a book to you</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">big</div><div class="lang">большой</div><div class="lang">чоң</div>
+    <div class="meta"><span class="sound">Sound: /b/</span><span>Tip: Stretch arms wide. "Biiiig!" Contrast with small objects.</span><span class="approx">Accept: "bih" or arms wide gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">little</div><div class="lang">маленький</div><div class="lang">кичине</div>
+    <div class="meta"><span class="sound">Sound: /l/</span><span>Tip: Pinch fingers together. "Little! So little." Pair with "big."</span><span class="approx">Accept: "li" or pinching fingers together</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">hot</div><div class="lang">горячий</div><div class="lang">ысык</div>
+    <div class="meta"><span class="sound">Sound: /h/</span><span>Tip: Blow on warm food together. "Hot! Blow, blow." Great safety word.</span><span class="approx">Accept: "hah" or blowing gesture</span></div>
+  </div>
+  <div class="word-row">
+    <div class="cb"></div><div class="lang">cold</div><div class="lang">холодный</div><div class="lang">суук</div>
+    <div class="meta"><span class="sound">Sound: /k/</span><span>Tip: Touch something cold together and shiver. "Brrr! Cold!"</span><span class="approx">Accept: "koh" or shivering gesture</span></div>
+  </div>
+</div>
+
+<!-- PAGE 9: TRACKING SHEET -->
+<div class="page">
+  <h2>Word Tracking Sheet</h2>
+  <p>Use this table to record your child's new words as they appear. Celebrate every entry &mdash; even the smallest approximation is a milestone worth noting.</p>
+
+  <table class="tracker">
+    <thead>
+      <tr><th style="width:15%">Date</th><th style="width:22%">New Word</th><th style="width:15%">Language</th><th style="width:24%">Context</th><th style="width:24%">Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+      <tr><td></td><td></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="note-box" style="margin-top:24px">
+    <strong>Remember:</strong> Write down the word exactly as your child says it (the approximation), the language it came from, and what was happening when they said it. Context helps you spot patterns and find more teaching moments.
+  </div>
+</div>
+
+<!-- PAGE 10: DAILY ROUTINE CHEAT SHEET -->
+<div class="page">
+  <h2>Daily Routine Cheat Sheet</h2>
+  <p>Language happens in everyday moments. Here are five daily routines with specific words to model, phrases to say, and gestures to use.</p>
+
+  <div class="routine">
+    <h3>Mealtime</h3>
+    <div class="words"><span>eat</span><span>more</span><span>all done</span></div>
+    <div class="phrase">"Do you want more? More banana! Mmm, eat!"</div>
+    <div class="gesture">Gesture: Tap fingertips together for "more." Wave hands open for "all done."</div>
+  </div>
+
+  <div class="routine">
+    <h3>Bath Time</h3>
+    <div class="words"><span>wash</span><span>water</span><span>foot</span></div>
+    <div class="phrase">"Let's wash! Splash the water. Wash your foot!"</div>
+    <div class="gesture">Gesture: Rub hands together in a washing motion while saying "wash."</div>
+  </div>
+
+  <div class="routine">
+    <h3>Playtime</h3>
+    <div class="words"><span>play</span><span>open</span><span>help</span></div>
+    <div class="phrase">"Let's play! Can you open it? Do you need help?"</div>
+    <div class="gesture">Gesture: Hold out both palms and flip them up for "open."</div>
+  </div>
+
+  <div class="routine">
+    <h3>Going Outside</h3>
+    <div class="words"><span>go</span><span>dog</span><span>bird</span></div>
+    <div class="phrase">"Let's go! Look, a dog! I see a bird up there!"</div>
+    <div class="gesture">Gesture: Point at animals and wait. Let your child look, then name what they see.</div>
+  </div>
+
+  <div class="routine">
+    <h3>Bedtime</h3>
+    <div class="words"><span>sleep</span><span>read</span><span>bye</span></div>
+    <div class="phrase">"Time to sleep. Let's read a book. Bye bye, sun!"</div>
+    <div class="gesture">Gesture: Put your hands together under your cheek for "sleep."</div>
+  </div>
+
+  <div class="note-box green" style="margin-top:24px">
+    <strong>Pro tip:</strong> Pick just ONE routine to focus on each week. Once those words feel natural, add another. Consistency within a routine is more powerful than trying to teach everything at once.
+  </div>
+</div>
+
+<!-- PAGE 11: WHEN TO SEEK HELP -->
+<div class="page">
+  <h2>When to Seek Help</h2>
+  <p>Every child develops at their own pace, and there is a wide range of normal. However, certain signs suggest it may be time to consult a speech-language pathologist. <strong>Early support leads to better outcomes</strong> &mdash; there is never a downside to asking.</p>
+
+  <h3>Red Flags (from ASHA guidelines)</h3>
+
+  <div class="red-flag"><strong>By 12 months:</strong> No babbling (e.g., "bababa," "mamama"), no gestures like waving or pointing.</div>
+  <div class="red-flag"><strong>By 16 months:</strong> No single words at all (in any language).</div>
+  <div class="red-flag"><strong>By 18 months:</strong> Fewer than 6 words, or does not respond to their name consistently.</div>
+  <div class="red-flag"><strong>By 24 months:</strong> Fewer than 50 words, or no two-word combinations (e.g., "more milk," "daddy go").</div>
+  <div class="red-flag"><strong>At any age:</strong> Loss of previously acquired words or skills (regression).</div>
+  <div class="red-flag"><strong>At any age:</strong> Difficulty understanding simple instructions ("Give me the ball").</div>
+
+  <div class="note-box" style="margin-top:24px">
+    <strong>Trust your instincts.</strong> You know your child better than anyone. If something feels off, do not wait &mdash; seek a professional evaluation. Early intervention (before age 3) is when the brain is most responsive to support. Getting help early is one of the best gifts you can give your child.
+  </div>
+
+  <div class="note-box green">
+    <strong>Important disclaimer:</strong> This checklist is NOT a diagnostic tool. It is an educational resource for parents. It does not replace professional evaluation or advice from a qualified speech-language pathologist, pediatrician, or developmental specialist.
+  </div>
+
+  <div style="text-align:center;margin-top:40px;padding:28px;background:#fff;border-radius:16px;border:2px solid var(--indigo)">
+    <p style="font-size:1.2em;font-weight:700;color:var(--indigo);margin-bottom:6px">You are doing an amazing job.</p>
+    <p style="color:#666;margin:0">The fact that you are reading this guide means you care deeply about your child's development. That love and attention is the most important ingredient of all.</p>
+  </div>
+</div>
+
+<div class="footer">BabyPath &mdash; babypath.app | Evidence-based tools for new parents</div>
+
+</body>
+</html>

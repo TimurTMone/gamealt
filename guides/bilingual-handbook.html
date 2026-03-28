@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raising a Bilingual Child: The Practical Handbook — BabyPath</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #fef9f0; --indigo: #6366f1; --teal: #0d9488;
+    --warm: #f59e0b; --rose: #e11d48; --slate: #334155;
+    --light-indigo: #eef2ff; --light-teal: #f0fdfa;
+  }
+  body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--slate); line-height: 1.7; }
+
+  /* Top bar */
+  .top-bar { position: sticky; top: 0; z-index: 100; background: #fff; border-bottom: 1px solid #e2e8f0; padding: 12px 32px; display: flex; justify-content: space-between; align-items: center; }
+  .top-bar a { color: var(--indigo); text-decoration: none; font-weight: 700; font-size: 0.95rem; }
+  .top-bar a:hover { text-decoration: underline; }
+  .print-btn { background: var(--indigo); color: #fff; border: none; padding: 8px 20px; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.9rem; cursor: pointer; }
+  .print-btn:hover { background: #4f46e5; }
+
+  .container { max-width: 820px; margin: 0 auto; padding: 24px 32px 60px; }
+
+  /* Cover */
+  .cover { text-align: center; padding: 80px 20px 60px; page-break-after: always; }
+  .cover .badge { display: inline-block; background: var(--light-indigo); color: var(--indigo); font-weight: 800; font-size: 0.8rem; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 18px; border-radius: 20px; margin-bottom: 28px; }
+  .cover h1 { font-size: 2.6rem; font-weight: 900; color: var(--indigo); line-height: 1.2; margin-bottom: 16px; }
+  .cover .subtitle { font-size: 1.25rem; color: var(--teal); font-weight: 700; margin-bottom: 40px; }
+  .cover .lang-pills { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+  .cover .lang-pills span { padding: 8px 22px; border-radius: 24px; font-weight: 700; font-size: 0.95rem; }
+  .pill-en { background: var(--light-indigo); color: var(--indigo); }
+  .pill-ru { background: #fef3c7; color: #b45309; }
+  .pill-kg { background: var(--light-teal); color: var(--teal); }
+  .cover .brand { font-size: 1rem; color: #94a3b8; font-weight: 600; margin-top: 20px; }
+  .cover .brand strong { color: var(--indigo); }
+
+  /* Sections */
+  .section { page-break-before: always; margin-top: 48px; }
+  .section:first-of-type { margin-top: 0; }
+  .section-num { display: inline-block; background: var(--indigo); color: #fff; font-weight: 800; font-size: 0.75rem; padding: 4px 12px; border-radius: 12px; margin-bottom: 10px; letter-spacing: 1px; }
+  .section h2 { font-size: 1.75rem; font-weight: 900; color: var(--indigo); margin-bottom: 18px; line-height: 1.3; }
+  .section h3 { font-size: 1.15rem; font-weight: 800; color: var(--teal); margin: 22px 0 8px; }
+  .section p, .section li { font-size: 1rem; margin-bottom: 10px; }
+  .section ul, .section ol { padding-left: 24px; margin-bottom: 16px; }
+  .section li { margin-bottom: 6px; }
+
+  /* Highlight boxes */
+  .tip { background: var(--light-teal); border-left: 4px solid var(--teal); padding: 16px 20px; border-radius: 0 10px 10px 0; margin: 18px 0; }
+  .tip strong { color: var(--teal); }
+  .myth { background: #fef3c7; border-left: 4px solid var(--warm); padding: 16px 20px; border-radius: 0 10px 10px 0; margin: 18px 0; }
+  .myth strong { color: #b45309; }
+  .quote-block { background: var(--light-indigo); border-left: 4px solid var(--indigo); padding: 14px 20px; border-radius: 0 10px 10px 0; margin: 12px 0; font-style: italic; }
+  .quote-block .response { font-style: normal; font-weight: 700; color: var(--indigo); margin-top: 6px; }
+
+  /* Strategy cards */
+  .strategy { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin: 16px 0; }
+  .strategy .label { display: inline-block; background: var(--indigo); color: #fff; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 8px; margin-bottom: 8px; }
+  .strategy h4 { font-size: 1.1rem; font-weight: 800; color: var(--slate); margin-bottom: 6px; }
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px; }
+  .pros-cons div { font-size: 0.9rem; }
+  .pros-cons .pro { color: var(--teal); }
+  .pros-cons .con { color: var(--rose); }
+
+  /* Word table */
+  .cat-label { background: var(--indigo); color: #fff; font-weight: 800; font-size: 0.85rem; padding: 8px 16px; border-radius: 8px 8px 0 0; margin-top: 24px; display: inline-block; }
+  table.words { width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 0.95rem; }
+  table.words th { background: var(--slate); color: #fff; text-align: left; padding: 10px 14px; font-weight: 700; }
+  table.words td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  table.words tr:nth-child(even) td { background: #f8fafc; }
+  table.words tr:nth-child(odd) td { background: #fff; }
+  table.words tr:hover td { background: var(--light-indigo); }
+  table.words td:first-child { font-weight: 700; color: var(--indigo); }
+  table.words td:nth-child(2) { color: #b45309; }
+  table.words td:nth-child(3) { color: var(--teal); font-weight: 600; }
+
+  /* Schedule */
+  .timeline { margin: 16px 0; }
+  .t-row { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 6px; padding: 10px 16px; border-radius: 10px; }
+  .t-row:nth-child(odd) { background: #fff; }
+  .t-row:nth-child(even) { background: var(--light-indigo); }
+  .t-time { font-weight: 800; color: var(--indigo); min-width: 56px; }
+  .t-lang { font-size: 0.75rem; font-weight: 800; padding: 2px 10px; border-radius: 10px; min-width: 64px; text-align: center; }
+  .lang-kg { background: var(--light-teal); color: var(--teal); }
+  .lang-ru { background: #fef3c7; color: #b45309; }
+  .lang-en { background: var(--light-indigo); color: var(--indigo); }
+  .t-desc { flex: 1; }
+
+  /* Footer */
+  .page-footer { text-align: center; padding: 32px 0 20px; color: #94a3b8; font-size: 0.85rem; font-weight: 600; border-top: 1px solid #e2e8f0; margin-top: 40px; }
+  .page-footer strong { color: var(--indigo); }
+
+  /* Print */
+  @media print {
+    body { background: #fff; font-size: 11pt; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .top-bar { display: none; }
+    .container { max-width: 100%; padding: 0; }
+    .cover { padding: 120px 20px 80px; }
+    .section { page-break-before: always; margin-top: 0; padding-top: 24px; }
+    .strategy { break-inside: avoid; }
+    .quote-block { break-inside: avoid; }
+    table.words { font-size: 9.5pt; }
+    table.words td, table.words th { padding: 6px 10px; }
+    .cat-label { margin-top: 14px; }
+    .t-row { break-inside: avoid; }
+    .page-footer { position: running(footer); }
+    @page { size: A4; margin: 18mm 16mm 22mm 16mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a href="../index.html">&larr; Back to BabyPath</a>
+  <button class="print-btn" onclick="window.print()">Print this guide</button>
+</div>
+
+<div class="container">
+
+<!-- ===== COVER ===== -->
+<div class="cover">
+  <div class="badge">BabyPath Guide</div>
+  <h1>Raising a Bilingual Child</h1>
+  <p class="subtitle">The Practical Handbook</p>
+  <div class="lang-pills">
+    <span class="pill-en">English</span>
+    <span class="pill-ru">Русский</span>
+    <span class="pill-kg">Кыргызча</span>
+  </div>
+  <p style="color:#64748b; max-width:520px; margin:0 auto;">A research-backed, family-friendly guide for raising multilingual children in English, Russian, and Kyrgyz-speaking homes.</p>
+  <p class="brand">Made with care by <strong>BabyPath</strong></p>
+</div>
+
+<!-- ===== SECTION 1 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 1</span>
+  <h2>Bilingualism Is a Superpower</h2>
+  <p>Your child's brain is the most powerful language-learning machine on the planet. In the first few years of life, infants can distinguish the sounds of every language on Earth. By choosing to raise your child with more than one language, you are not adding a burden; you are activating a capacity that is already there, waiting to be used.</p>
+
+  <h3>What the research tells us</h3>
+  <ul>
+    <li><strong>Stronger executive function.</strong> Bilingual children regularly practice switching between language systems, which strengthens the brain's ability to focus, plan, and manage competing information (Bialystok, 2001).</li>
+    <li><strong>Greater cognitive flexibility.</strong> Navigating two or more grammars trains the brain to think in more than one way about the same concept, improving creative problem-solving.</li>
+    <li><strong>Enhanced metalinguistic awareness.</strong> Children who grow up hearing multiple languages develop an earlier understanding that words are symbols, not the things themselves. They recognize that "water," "вода," and "суу" all point to the same reality.</li>
+    <li><strong>Deeper family and cultural connection.</strong> Language is the vehicle for stories, humor, and traditions. When your child speaks Kyrgyz with grandparents or Russian with cousins, they are receiving a cultural inheritance that no textbook can replicate.</li>
+  </ul>
+
+  <div class="myth">
+    <strong>Myth: "Bilingualism causes speech delays."</strong><br>
+    This has been thoroughly debunked. Research by Petitto et al. (2001) showed that bilingual babies hit language milestones on the same timeline as monolingual babies. The American Speech-Language-Hearing Association (ASHA) states clearly: learning two or more languages does not cause or worsen speech or language problems.
+  </div>
+
+  <div class="tip">
+    <strong>Key takeaway:</strong> You are not confusing your child. You are giving them a neurological advantage, a cultural gift, and a lifelong skill. Their brain was built for this.
+  </div>
+</div>
+
+<!-- ===== SECTION 2 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 2</span>
+  <h2>Common Strategies for Multilingual Families</h2>
+  <p>There is no single "correct" approach. The best strategy is the one your family can maintain with joy and consistency. Here are four well-known approaches.</p>
+
+  <div class="strategy">
+    <span class="label">STRATEGY 1</span>
+    <h4>OPOL &mdash; One Parent, One Language</h4>
+    <p>Each caregiver consistently speaks one language. For example: Papa speaks English, Mama speaks Russian, grandparents speak Kyrgyz.</p>
+    <div class="pros-cons">
+      <div class="pro"><strong>+ Pros:</strong> Clear, consistent input. Each language has a reliable source. Easy for young children to map "who speaks what."</div>
+      <div class="con"><strong>- Cons:</strong> Can feel rigid at family meals. One parent may feel left out of conversations. Requires discipline.</div>
+    </div>
+  </div>
+
+  <div class="strategy">
+    <span class="label">STRATEGY 2</span>
+    <h4>Minority Language at Home (ML@H)</h4>
+    <p>The family uses the minority language(s) at home, while the majority language is acquired at school or daycare. For example: Kyrgyz and Russian at home, English at preschool.</p>
+    <div class="pros-cons">
+      <div class="pro"><strong>+ Pros:</strong> Protects the minority language, which is the one most at risk of fading. Children get plenty of majority-language exposure outside the home.</div>
+      <div class="con"><strong>- Cons:</strong> Children may resist using the home language once school starts. Parents need to stay committed even when the child replies in the majority language.</div>
+    </div>
+  </div>
+
+  <div class="strategy">
+    <span class="label">STRATEGY 3</span>
+    <h4>Time and Place</h4>
+    <p>Languages are allocated by time of day, activity, or location. For example: Russian in the morning, English in the afternoon, Kyrgyz with grandparents on weekends.</p>
+    <div class="pros-cons">
+      <div class="pro"><strong>+ Pros:</strong> Flexible and creative. Works well for families where both parents speak multiple languages. Can be adapted easily.</div>
+      <div class="con"><strong>- Cons:</strong> Requires more planning. Boundaries can blur. Harder for very young children to understand the "rules."</div>
+    </div>
+  </div>
+
+  <div class="strategy">
+    <span class="label">STRATEGY 4</span>
+    <h4>The Mixed Approach (What Most Families Actually Do)</h4>
+    <p>Languages flow naturally depending on context, mood, and who is present. A sentence might start in Russian and end in English. Dinner might be in Kyrgyz one night and Russian the next.</p>
+    <div class="pros-cons">
+      <div class="pro"><strong>+ Pros:</strong> Low stress. Feels natural. Reflects how multilingual adults actually speak. No guilt about "breaking rules."</div>
+      <div class="con"><strong>- Cons:</strong> The minority language may get less time unless you are intentional. Helpful to build in dedicated blocks for the most vulnerable language.</div>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>Bottom line:</strong> Pick an approach that feels sustainable. You can combine strategies. You can change your mind. The single most important factor is that your child hears each language regularly, in warm and meaningful interactions.
+  </div>
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 3</span>
+  <h2>Code-Switching Is Smart, Not Confused</h2>
+  <p>When your toddler says <em>"I want суу"</em> (mixing English and Kyrgyz for water) or <em>"Мама, look at the собака!"</em> (mixing Russian and English), it can sound like confusion. It is the opposite.</p>
+  <p><strong>Code-switching</strong> is what happens when a bilingual speaker selects the most accessible or precise word from any of their languages. Research consistently shows that code-switching is a sign of <em>bilingual competence</em>, not deficit. Your child is doing something sophisticated: scanning two or three mental dictionaries in real time and choosing the best match.</p>
+
+  <div class="tip">
+    <strong>What to do:</strong> When your child code-switches, respond naturally. You can model the full sentence in one language ("Yes, let's get you some water" or "Да, давай водички"), but do not correct or shame them for mixing. They will sort it out as each language strengthens.
+  </div>
+</div>
+
+<!-- ===== SECTION 4 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 4</span>
+  <h2>How to Count Your Child's Words</h2>
+  <p>One of the most common mistakes is comparing a bilingual child's single-language vocabulary to monolingual norms. This is like judging a swimmer's total fitness by only measuring how fast they can run.</p>
+
+  <h3>Use total conceptual vocabulary</h3>
+  <p>If your 18-month-old says <strong>15 words in English</strong>, <strong>20 words in Russian</strong>, and <strong>10 words in Kyrgyz</strong>, their total conceptual vocabulary is approximately <strong>45 words</strong> (minus any exact duplicates across languages). That is well within the typical range.</p>
+
+  <div class="myth">
+    <strong>Remember:</strong> Some words may only exist in one language for your child. They might say "нан" (Kyrgyz for bread) but not yet know "bread" or "хлеб." That word still counts. Every word in every language is a word.
+  </div>
+
+  <p>When tracking milestones in BabyPath, count across all languages. If a pediatrician or speech therapist only asks about English words, gently share the full picture.</p>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 5</span>
+  <h2>100 Essential Words in Three Languages</h2>
+  <p>This reference table covers the words young children learn first. Print it, stick it on the fridge, share it with caregivers. The goal is not memorization; it is exposure.</p>
+
+  <!-- Core/Functional -->
+  <div class="cat-label">Core / Functional (20 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>more</td><td>ещё</td><td>дагы</td></tr>
+    <tr><td>all done</td><td>всё / готово</td><td>бүттү</td></tr>
+    <tr><td>want</td><td>хочу</td><td>каалайм</td></tr>
+    <tr><td>help</td><td>помоги</td><td>жардам</td></tr>
+    <tr><td>open</td><td>открой</td><td>ач</td></tr>
+    <tr><td>go</td><td>иди</td><td>бар</td></tr>
+    <tr><td>stop</td><td>стоп / стой</td><td>токто</td></tr>
+    <tr><td>up</td><td>вверх</td><td>жогору</td></tr>
+    <tr><td>down</td><td>вниз</td><td>ылдый</td></tr>
+    <tr><td>yes</td><td>да</td><td>ооба</td></tr>
+    <tr><td>no</td><td>нет</td><td>жок</td></tr>
+    <tr><td>hi</td><td>привет</td><td>салам</td></tr>
+    <tr><td>bye</td><td>пока</td><td>жакшы кал</td></tr>
+    <tr><td>please</td><td>пожалуйста</td><td>суранам</td></tr>
+    <tr><td>thank you</td><td>спасибо</td><td>рахмат</td></tr>
+    <tr><td>sorry</td><td>прости</td><td>кечиресиз</td></tr>
+    <tr><td>mine</td><td>моё</td><td>меники</td></tr>
+    <tr><td>uh-oh</td><td>ой</td><td>ой</td></tr>
+    <tr><td>where</td><td>где</td><td>кайда</td></tr>
+    <tr><td>what</td><td>что</td><td>эмне</td></tr>
+  </table>
+
+  <!-- People -->
+  <div class="cat-label">People (10 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>mama</td><td>мама</td><td>апа</td></tr>
+    <tr><td>papa</td><td>папа</td><td>ата</td></tr>
+    <tr><td>baby</td><td>малыш</td><td>бала</td></tr>
+    <tr><td>grandma</td><td>бабушка</td><td>чоң апа</td></tr>
+    <tr><td>grandpa</td><td>дедушка</td><td>чоң ата</td></tr>
+    <tr><td>brother</td><td>брат</td><td>ага / ини</td></tr>
+    <tr><td>sister</td><td>сестра</td><td>эже / сиңди</td></tr>
+    <tr><td>friend</td><td>друг</td><td>дос</td></tr>
+    <tr><td>teacher</td><td>учитель</td><td>мугалим</td></tr>
+    <tr><td>doctor</td><td>доктор / врач</td><td>дарыгер</td></tr>
+  </table>
+
+  <!-- Food & Drink -->
+  <div class="cat-label">Food & Drink (15 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>milk</td><td>молоко</td><td>сүт</td></tr>
+    <tr><td>water</td><td>вода</td><td>суу</td></tr>
+    <tr><td>juice</td><td>сок</td><td>шире</td></tr>
+    <tr><td>bread</td><td>хлеб</td><td>нан</td></tr>
+    <tr><td>apple</td><td>яблоко</td><td>алма</td></tr>
+    <tr><td>banana</td><td>банан</td><td>банан</td></tr>
+    <tr><td>rice</td><td>рис</td><td>күрүч</td></tr>
+    <tr><td>egg</td><td>яйцо</td><td>жумуртка</td></tr>
+    <tr><td>soup</td><td>суп</td><td>шорпо</td></tr>
+    <tr><td>cookie</td><td>печенье</td><td>печенье</td></tr>
+    <tr><td>eat</td><td>кушать / есть</td><td>же</td></tr>
+    <tr><td>drink</td><td>пить</td><td>ич</td></tr>
+    <tr><td>yummy</td><td>вкусно</td><td>даамдуу</td></tr>
+    <tr><td>hot</td><td>горячий</td><td>ысык</td></tr>
+    <tr><td>cold</td><td>холодный</td><td>суук</td></tr>
+  </table>
+
+  <!-- Animals -->
+  <div class="cat-label">Animals (10 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>dog</td><td>собака</td><td>ит</td></tr>
+    <tr><td>cat</td><td>кошка</td><td>мышык</td></tr>
+    <tr><td>bird</td><td>птица</td><td>куш</td></tr>
+    <tr><td>fish</td><td>рыба</td><td>балык</td></tr>
+    <tr><td>cow</td><td>корова</td><td>уй</td></tr>
+    <tr><td>horse</td><td>лошадь</td><td>ат</td></tr>
+    <tr><td>sheep</td><td>овца</td><td>кой</td></tr>
+    <tr><td>chicken</td><td>курица</td><td>тоок</td></tr>
+    <tr><td>bear</td><td>медведь</td><td>аюу</td></tr>
+    <tr><td>rabbit</td><td>кролик</td><td>коён</td></tr>
+  </table>
+
+  <!-- Body -->
+  <div class="cat-label">Body (10 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>eye</td><td>глаз</td><td>көз</td></tr>
+    <tr><td>nose</td><td>нос</td><td>мурун</td></tr>
+    <tr><td>mouth</td><td>рот</td><td>ооз</td></tr>
+    <tr><td>ear</td><td>ухо</td><td>кулак</td></tr>
+    <tr><td>hand</td><td>рука</td><td>кол</td></tr>
+    <tr><td>foot</td><td>нога</td><td>бут</td></tr>
+    <tr><td>head</td><td>голова</td><td>баш</td></tr>
+    <tr><td>hair</td><td>волосы</td><td>чач</td></tr>
+    <tr><td>teeth</td><td>зубы</td><td>тиш</td></tr>
+    <tr><td>belly</td><td>живот</td><td>курсак</td></tr>
+  </table>
+
+  <!-- Actions -->
+  <div class="cat-label">Actions (15 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>eat</td><td>есть</td><td>жее</td></tr>
+    <tr><td>drink</td><td>пить</td><td>ичүү</td></tr>
+    <tr><td>sleep</td><td>спать</td><td>уктоо</td></tr>
+    <tr><td>play</td><td>играть</td><td>ойноо</td></tr>
+    <tr><td>go</td><td>идти</td><td>баруу</td></tr>
+    <tr><td>stop</td><td>остановиться</td><td>токтоо</td></tr>
+    <tr><td>run</td><td>бегать</td><td>чуркоо</td></tr>
+    <tr><td>jump</td><td>прыгать</td><td>секирүү</td></tr>
+    <tr><td>wash</td><td>мыть</td><td>жуу</td></tr>
+    <tr><td>read</td><td>читать</td><td>окуу</td></tr>
+    <tr><td>open</td><td>открыть</td><td>ачуу</td></tr>
+    <tr><td>close</td><td>закрыть</td><td>жабуу</td></tr>
+    <tr><td>give</td><td>дать</td><td>берүү</td></tr>
+    <tr><td>come</td><td>иди сюда</td><td>кел</td></tr>
+    <tr><td>sit</td><td>сидеть</td><td>отуруу</td></tr>
+  </table>
+
+  <!-- Descriptors -->
+  <div class="cat-label">Descriptors (10 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>big</td><td>большой</td><td>чоң</td></tr>
+    <tr><td>little</td><td>маленький</td><td>кичинекей</td></tr>
+    <tr><td>hot</td><td>горячий</td><td>ысык</td></tr>
+    <tr><td>cold</td><td>холодный</td><td>суук</td></tr>
+    <tr><td>happy</td><td>весёлый</td><td>кубанычтуу</td></tr>
+    <tr><td>sad</td><td>грустный</td><td>кайгылуу</td></tr>
+    <tr><td>good</td><td>хороший</td><td>жакшы</td></tr>
+    <tr><td>bad</td><td>плохой</td><td>жаман</td></tr>
+    <tr><td>fast</td><td>быстрый</td><td>тез</td></tr>
+    <tr><td>slow</td><td>медленный</td><td>жай</td></tr>
+  </table>
+
+  <!-- Daily Life -->
+  <div class="cat-label">Daily Life (10 words)</div>
+  <table class="words">
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>house</td><td>дом</td><td>үй</td></tr>
+    <tr><td>car</td><td>машина</td><td>машина</td></tr>
+    <tr><td>book</td><td>книга</td><td>китеп</td></tr>
+    <tr><td>ball</td><td>мяч</td><td>топ</td></tr>
+    <tr><td>shoe</td><td>ботинок</td><td>бут кийим</td></tr>
+    <tr><td>bed</td><td>кровать</td><td>төшөк</td></tr>
+    <tr><td>door</td><td>дверь</td><td>эшик</td></tr>
+    <tr><td>light</td><td>свет</td><td>жарык</td></tr>
+    <tr><td>phone</td><td>телефон</td><td>телефон</td></tr>
+    <tr><td>water</td><td>вода</td><td>суу</td></tr>
+  </table>
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 6</span>
+  <h2>A Sample Daily Language Plan</h2>
+  <p>Here is one way a trilingual day might look. This is not a prescription. It is a starting point you can adapt to your family's rhythm.</p>
+
+  <div class="timeline">
+    <div class="t-row">
+      <span class="t-time">7:00</span>
+      <span class="t-lang lang-kg">Kyrgyz</span>
+      <span class="t-desc"><strong>Morning routine</strong> &mdash; Mama wakes child in Kyrgyz. "Тур балам, таң атты!" Name clothes, body parts, morning actions in Kyrgyz.</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">8:30</span>
+      <span class="t-lang lang-ru">Russian</span>
+      <span class="t-desc"><strong>Breakfast</strong> &mdash; Model food words in Russian. "Хочешь молоко? Вот хлеб. Яблоко вкусное!" Let the child hear full sentences around food.</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">10:00</span>
+      <span class="t-lang lang-en">English</span>
+      <span class="t-desc"><strong>Playtime</strong> &mdash; Follow the child's lead in English. Narrate what they do: "You're building a tower! It's so tall!" Use play as a language bath.</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">12:00</span>
+      <span class="t-lang lang-ru">Russian</span>
+      <span class="t-desc"><strong>Lunch</strong> &mdash; Continue the Russian mealtime pattern. Repetition around food builds strong vocabulary quickly.</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">14:00</span>
+      <span class="t-lang lang-kg">Kyrgyz</span>
+      <span class="t-desc"><strong>Walk outside</strong> &mdash; Name nature in Kyrgyz: "Карачы, куш! Бул гүл. Асман көк." The outdoors is a vocabulary playground.</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">16:00</span>
+      <span class="t-lang lang-en">English</span>
+      <span class="t-desc"><strong>Reading time</strong> &mdash; Alternate languages by book. One book in English, one in Russian. Sing Kyrgyz nursery songs between books.</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">18:00</span>
+      <span class="t-lang lang-en">English</span>
+      <span class="t-desc"><strong>Bath time</strong> &mdash; English for body parts and water play. "Where are your toes? Splash! The water is warm!"</span>
+    </div>
+    <div class="t-row">
+      <span class="t-time">19:30</span>
+      <span class="t-lang lang-kg">Kyrgyz</span>
+      <span class="t-desc"><strong>Bedtime</strong> &mdash; Wind down in Kyrgyz. Lullabies, soft words. "Жакшы түш көр, балам. Уктай бер." End the day in the language of the heart.</span>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>This is flexible.</strong> Swap languages around. Skip a block. Add one. The goal is that each language gets meaningful time each day or each week. Consistency matters more than perfection. Any schedule that your family can sustain is the right schedule.
+  </div>
+</div>
+
+<!-- ===== SECTION 7 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 7</span>
+  <h2>When Others Doubt You</h2>
+  <p>Raising a multilingual child means you will hear well-meaning but uninformed comments. Here is how to respond with confidence.</p>
+
+  <div class="quote-block">
+    "You'll confuse them!"
+    <div class="response">"Research shows the opposite. Bilingual children have cognitive advantages and hit milestones on the same schedule. We're not confusing them &mdash; we're giving them more tools to think with."</div>
+  </div>
+
+  <div class="quote-block">
+    "Just stick to one language until they're older."
+    <div class="response">"Their brain is most receptive to languages right now. Waiting actually makes it harder, not easier. We're taking advantage of a window that won't stay open forever."</div>
+  </div>
+
+  <div class="quote-block">
+    "They're behind because of two languages."
+    <div class="response">"When you count their total vocabulary across all three languages, they're right on track. A bilingual child's words are spread across languages &mdash; that's normal and expected."</div>
+  </div>
+
+  <div class="quote-block">
+    "They keep mixing languages &mdash; that's a problem."
+    <div class="response">"Code-switching is actually a sign of bilingual competence. They're choosing the best word from all their languages in real time. That's sophisticated, not confused."</div>
+  </div>
+
+  <div class="tip">
+    <strong>You don't owe anyone a debate.</strong> A simple "Our pediatrician supports this, and the research is clear" is enough. Then change the subject.
+  </div>
+</div>
+
+<!-- ===== SECTION 8 ===== -->
+<div class="section">
+  <span class="section-num">SECTION 8</span>
+  <h2>Resources</h2>
+
+  <h3>BabyPath Tools</h3>
+  <ul>
+    <li><strong>Speech Buddy</strong> &mdash; Track words across all your child's languages. BabyPath counts total conceptual vocabulary automatically.</li>
+    <li><strong>Milestone Tracker</strong> &mdash; Monitor developmental milestones with bilingual norms in mind.</li>
+  </ul>
+
+  <h3>Recommended Books</h3>
+  <ul>
+    <li><strong>"The Bilingual Edge"</strong> by Kendall King &amp; Alison Mackey &mdash; A practical, research-based guide for parents. Covers strategies, common concerns, and how to maintain motivation.</li>
+    <li><strong>"Growing Up with Two Languages"</strong> by Una Cunningham-Andersson &amp; Staffan Andersson &mdash; Real family stories and practical advice for raising bilingual children from birth.</li>
+    <li><strong>"Bilingual: Life and Reality"</strong> by Fran&ccedil;ois Grosjean &mdash; Addresses myths about bilingualism with decades of research behind it.</li>
+  </ul>
+
+  <h3>Professional Resources</h3>
+  <ul>
+    <li><strong>ASHA (American Speech-Language-Hearing Association)</strong> &mdash; Position statements and fact sheets on bilingualism: <em>asha.org</em></li>
+    <li><strong>Multilingual Children's Association</strong> &mdash; Community support and resources for multilingual families.</li>
+    <li><strong>Your pediatrician or speech-language pathologist</strong> &mdash; If you have concerns, seek a professional experienced with bilingual children. Always share your child's full language profile.</li>
+  </ul>
+</div>
+
+<!-- Footer -->
+<div class="page-footer">
+  <strong>BabyPath</strong> &mdash; babypath.app
+</div>
+
+</div><!-- /container -->
+</body>
+</html>

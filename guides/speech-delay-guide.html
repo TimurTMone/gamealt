@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>When Your Child Isn't Talking Yet — BabyPath</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fef9f0;
+    --indigo: #6366f1;
+    --pink: #ec4899;
+    --green: #10b981;
+    --dark: #1e1b4b;
+    --muted: #64748b;
+    --light-indigo: #eef2ff;
+    --light-pink: #fdf2f8;
+    --light-green: #ecfdf5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    font-size: 15px;
+    line-height: 1.7;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: white;
+    border-bottom: 2px solid var(--indigo);
+    padding: 12px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .top-bar a {
+    color: var(--indigo);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .top-bar a:hover { text-decoration: underline; }
+
+  .print-btn {
+    background: var(--indigo);
+    color: white;
+    border: none;
+    padding: 8px 22px;
+    border-radius: 24px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .print-btn:hover { background: #4f46e5; }
+
+  .page {
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 48px 40px;
+  }
+
+  /* ---------- Cover ---------- */
+  .cover {
+    text-align: center;
+    padding: 80px 40px 60px;
+    page-break-after: always;
+  }
+
+  .cover .brand {
+    display: inline-block;
+    background: var(--indigo);
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+    padding: 6px 20px;
+    border-radius: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+
+  .cover h1 {
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--dark);
+    margin-bottom: 20px;
+  }
+
+  .cover h1 span { color: var(--pink); }
+
+  .cover .subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 40px;
+    font-weight: 600;
+  }
+
+  .cover .hearts {
+    font-size: 36px;
+    letter-spacing: 12px;
+    margin-bottom: 48px;
+  }
+
+  .cover .meta {
+    font-size: 13px;
+    color: var(--muted);
+    border-top: 1px solid #e2e8f0;
+    padding-top: 24px;
+    margin-top: 24px;
+  }
+
+  /* ---------- Section ---------- */
+  .section {
+    page-break-after: always;
+    padding-bottom: 32px;
+  }
+
+  .section:last-of-type { page-break-after: avoid; }
+
+  .section-number {
+    display: inline-block;
+    background: var(--indigo);
+    color: white;
+    font-weight: 800;
+    font-size: 13px;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 50%;
+    margin-bottom: 8px;
+  }
+
+  .section h2 {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--dark);
+    margin-bottom: 6px;
+    line-height: 1.3;
+  }
+
+  .section h2 .accent { color: var(--pink); }
+
+  .section-intro {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 24px;
+    border-left: 3px solid var(--pink);
+    padding-left: 16px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--indigo);
+    margin: 24px 0 8px;
+  }
+
+  p { margin-bottom: 12px; }
+
+  /* ---------- Callout ---------- */
+  .callout {
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 20px 0;
+  }
+
+  .callout-green { background: var(--light-green); border-left: 4px solid var(--green); }
+  .callout-pink { background: var(--light-pink); border-left: 4px solid var(--pink); }
+  .callout-indigo { background: var(--light-indigo); border-left: 4px solid var(--indigo); }
+
+  .callout strong { display: block; margin-bottom: 4px; }
+
+  /* ---------- Table ---------- */
+  .milestone-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  .milestone-table th {
+    background: var(--indigo);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 700;
+  }
+
+  .milestone-table th:first-child { border-radius: 10px 0 0 0; }
+  .milestone-table th:last-child { border-radius: 0 10px 0 0; }
+
+  .milestone-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+
+  .milestone-table tr:nth-child(even) td { background: var(--light-indigo); }
+  .milestone-table td:first-child { font-weight: 700; white-space: nowrap; color: var(--indigo); }
+
+  /* ---------- Strategy Card ---------- */
+  .strategy-card {
+    background: white;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin: 20px 0;
+    box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+    border: 1px solid #e2e8f0;
+    page-break-inside: avoid;
+  }
+
+  .strategy-card .num {
+    display: inline-block;
+    background: var(--pink);
+    color: white;
+    font-weight: 800;
+    font-size: 13px;
+    width: 28px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+
+  .strategy-card h3 {
+    display: inline;
+    font-size: 17px;
+    color: var(--dark);
+    vertical-align: middle;
+    margin: 0;
+  }
+
+  .strategy-card .why {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--indigo);
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  .strategy-card .how { margin-top: 8px; }
+
+  .strategy-card .how ul {
+    margin: 4px 0 0 20px;
+    padding: 0;
+  }
+
+  .strategy-card .how li { margin-bottom: 4px; }
+
+  .strategy-card .mistake {
+    margin-top: 10px;
+    background: #fef2f2;
+    border-left: 3px solid #ef4444;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #991b1b;
+  }
+
+  .strategy-card .mistake strong { color: #991b1b; }
+
+  /* ---------- Quick Ref ---------- */
+  .quick-ref {
+    background: white;
+    border: 2px solid var(--indigo);
+    border-radius: 16px;
+    padding: 32px;
+    page-break-inside: avoid;
+  }
+
+  .quick-ref h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .quick-ref .cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .quick-ref ul {
+    margin: 0 0 0 18px;
+    padding: 0;
+    font-size: 13px;
+  }
+
+  .quick-ref li { margin-bottom: 4px; }
+
+  .red-flags { color: #dc2626; }
+  .red-flags strong { color: #dc2626; }
+
+  /* ---------- Footer ---------- */
+  .page-footer {
+    text-align: center;
+    padding: 20px 0 8px;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid #e2e8f0;
+    margin-top: 40px;
+  }
+
+  .page-footer strong { color: var(--indigo); }
+
+  /* ---------- Lists ---------- */
+  ul, ol { margin-left: 20px; margin-bottom: 12px; }
+  li { margin-bottom: 4px; }
+
+  /* ---------- Print ---------- */
+  @media print {
+    body { background: white; font-size: 12pt; }
+    .top-bar { display: none; }
+    .page { padding: 20mm 18mm; max-width: none; }
+    .cover { padding: 40mm 18mm 30mm; }
+    .section { page-break-after: always; }
+    .strategy-card { box-shadow: none; border: 1px solid #ccc; }
+    .quick-ref { page-break-before: always; }
+    a { color: var(--indigo); text-decoration: none; }
+
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <a href="../index.html">&larr; Back to BabyPath</a>
+  <button class="print-btn" onclick="window.print()">Print this guide</button>
+</div>
+
+<!-- ======================= COVER ======================= -->
+<div class="page cover">
+  <div class="brand">BabyPath Guide</div>
+  <div class="hearts">&#x1F49C; &#x1F9E1; &#x1F49A;</div>
+  <h1>When Your Child<br><span>Isn't Talking Yet</span></h1>
+  <p class="subtitle">A compassionate, evidence-based guide for parents of late talkers</p>
+  <p style="font-size:14px; color:var(--muted); margin-top:32px;">
+    Practical strategies you can start today.<br>
+    Written for both parents equally.
+  </p>
+  <div class="meta">
+    BabyPath &mdash; babypath.app<br>
+    Based on current ASHA, CDC, and Hanen guidelines
+  </div>
+</div>
+
+<!-- ======================= SECTION 1 ======================= -->
+<div class="page section">
+  <div class="section-number">1</div>
+  <h2>You're <span class="accent">Not Alone</span></h2>
+  <p class="section-intro">
+    If you're reading this, you've probably been lying awake at night wondering why your child isn't saying as many words as other kids. Take a breath. You are in the right place.
+  </p>
+
+  <p>Between <strong>15 and 20 percent of two-year-olds</strong> are considered "late talkers" &mdash; children who understand language well but use fewer spoken words than expected for their age. That means in any playgroup of ten toddlers, at least one or two are in the same boat as yours.</p>
+
+  <p>Research tells us that many late talkers do catch up on their own by age three or four. But research also tells us something equally important: <strong>early support makes a meaningful difference</strong>, whether your child catches up independently or needs ongoing help. You cannot "wait and see" your way into a worse outcome by seeking support too early, but you can miss a valuable window by waiting too long.</p>
+
+  <div class="callout callout-green">
+    <strong>What this guide is for</strong>
+    This is not a list of things to worry about. It is a collection of practical, evidence-based things you can <em>do</em> &mdash; starting today, at home, with no special equipment &mdash; to support your child's language development. It is also a guide to knowing when and how to ask for professional help.
+  </div>
+
+  <p>You are not failing your child. The fact that you noticed, that you care enough to read this, already puts you ahead. A child's most powerful language tool is a parent who pays attention and responds with warmth. You are already that parent.</p>
+
+  <div class="callout callout-pink">
+    <strong>A note on guilt</strong>
+    Speech and language delays are not caused by "not talking to your child enough" or by screen time alone or by using two languages at home. Development is complex. Genetics, temperament, hearing, environment, and neurology all play a role. Release the guilt &mdash; it takes energy you need for the strategies ahead.
+  </div>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= SECTION 2 ======================= -->
+<div class="page section">
+  <div class="section-number">2</div>
+  <h2>What's <span class="accent">Normal</span> &mdash; Speech &amp; Language Milestones</h2>
+  <p class="section-intro">
+    Milestones are averages, not deadlines. But they help us know when to look closer. Here is what most children do and when.
+  </p>
+
+  <table class="milestone-table">
+    <thead>
+      <tr>
+        <th>Age</th>
+        <th>Speech &amp; Language</th>
+        <th>Understanding &amp; Social</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>6 &ndash; 12 months</td>
+        <td>Babbles with varied sounds ("bababa", "mamama"). May say first word around 12 months.</td>
+        <td>Responds to own name. Looks where you point. Uses gestures like waving and reaching.</td>
+      </tr>
+      <tr>
+        <td>12 &ndash; 18 months</td>
+        <td>Uses 1 &ndash; 20 words (even approximations count). Tries to imitate words.</td>
+        <td>Points to ask for things or to show you something. Understands simple instructions ("Give me the cup").</td>
+      </tr>
+      <tr>
+        <td>18 &ndash; 24 months</td>
+        <td>Uses 50+ words. Starts combining two words ("more milk", "daddy go"). Has a "word explosion."</td>
+        <td>Follows two-step instructions ("Get the ball and bring it here"). Points to pictures in books when named.</td>
+      </tr>
+      <tr>
+        <td>24 &ndash; 36 months</td>
+        <td>Uses short sentences (2 &ndash; 4 words). Uses pronouns (I, you, me). Speech is understood by familiar adults ~75% of the time.</td>
+        <td>Answers simple questions. Follows stories. Engages in pretend play with language.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout callout-indigo">
+    <strong>Remember</strong>
+    These are based on monolingual English norms (ASHA &amp; CDC, updated 2022). For bilingual children, count words across <em>all</em> languages combined &mdash; see Section 5.
+  </div>
+
+  <p><strong>Understanding matters as much as speaking.</strong> A child who understands language well but doesn't produce many words is in a very different place than a child who neither understands nor produces. Both deserve support, but they may need different kinds.</p>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= SECTION 3 ======================= -->
+<div class="page section">
+  <div class="section-number">3</div>
+  <h2>Late Talker vs. <span class="accent">Something More</span></h2>
+  <p class="section-intro">
+    Not every late talker has a disorder. But every late talker deserves a closer look. Here is what professionals consider.
+  </p>
+
+  <h3>"Late Talker" (Expressive Language Delay)</h3>
+  <p>A child who understands language at or near age level, uses gestures and eye contact well, engages socially, and has good play skills &mdash; but produces fewer words than expected. Many of these children catch up by age 3&ndash;4 without formal therapy, especially with parent-led strategies like the ones in Section 4.</p>
+
+  <h3>Language Disorder (Developmental Language Disorder / DLD)</h3>
+  <p>A persistent difficulty with understanding and/or using language that is not explained by hearing loss, intellectual disability, or another known condition. About 7% of children have DLD. It does not go away on its own, but with speech-language therapy and support, children with DLD make strong progress.</p>
+
+  <h3>Autism Spectrum</h3>
+  <p>Language delay can be one feature of autism, but it is never the only one. Professionals also look at social communication (eye contact, shared attention, back-and-forth interaction), restricted or repetitive behaviors, and sensory responses. Many autistic children develop strong language skills with the right support. An evaluation is not a label &mdash; it is a roadmap.</p>
+
+  <div class="callout callout-pink">
+    <strong>Risk factors that suggest looking closer</strong>
+    <ul style="margin:8px 0 0 18px;">
+      <li>Family history of speech/language delay or learning disabilities</li>
+      <li>Limited babbling before 12 months</li>
+      <li>Few or no gestures (pointing, waving) by 12 months</li>
+      <li>No single words by 16 months</li>
+      <li>No two-word phrases by 24 months</li>
+      <li>Loss of previously acquired words or skills at any age</li>
+      <li>Limited eye contact or not responding to name</li>
+    </ul>
+  </div>
+
+  <div class="callout callout-green">
+    <strong>The most important thing to know</strong>
+    An evaluation never hurts. Waiting can. If your gut says something is off, trust it. You do not need a referral from anyone to contact a speech-language pathologist. Early intervention is free or low-cost in most countries for children under 3.
+  </div>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= SECTION 4 ======================= -->
+<div class="page section">
+  <div class="section-number">4</div>
+  <h2>10 Strategies You Can <span class="accent">Start Today</span></h2>
+  <p class="section-intro">
+    These are the same techniques speech-language pathologists teach parents in therapy. You don't need to wait for an appointment to begin. Pick two or three that feel natural and build from there.
+  </p>
+
+  <!-- Strategy 1 -->
+  <div class="strategy-card">
+    <span class="num">1</span>
+    <h3>OWL: Observe, Wait, Listen</h3>
+    <p class="why">Research from the Hanen Centre shows that when parents pause and wait, children initiate communication up to four times more often.</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li><strong>Observe</strong> what your child is looking at or reaching for before you speak.</li>
+        <li><strong>Wait</strong> at least 5 seconds after your child does something &mdash; resist the urge to fill the silence. Lean forward, raise your eyebrows, show you're expectant.</li>
+        <li><strong>Listen</strong> for any sound, word, or gesture, then respond to it as meaningful communication.</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Filling every silence with questions or instructions. Silence is not empty &mdash; it is space for your child to practice.</div>
+  </div>
+
+  <!-- Strategy 2 -->
+  <div class="strategy-card">
+    <span class="num">2</span>
+    <h3>Model, Don't Demand</h3>
+    <p class="why">Studies consistently show that language modeling ("Here's your ball!") promotes faster vocabulary growth than direct demands ("Say ball!") (Tamis-LeMonda et al., 2014).</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>Instead of "Say please," model: "Please! You want more crackers, please."</li>
+        <li>Instead of "What's this?" (a test), say: "Look, a truck! A big red truck."</li>
+        <li>When your child points at something, name it naturally: "Oh, you see the bird!"</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Saying "Say ___!" This puts children on the spot and can create anxiety around speaking. Model the word; let them choose to try it.</div>
+  </div>
+
+  <!-- Strategy 3 -->
+  <div class="strategy-card">
+    <span class="num">3</span>
+    <h3>Follow Their Lead</h3>
+    <p class="why">Children learn language best when words map onto things they are already attending to (Tomasello, 2003). Joint attention is the foundation of word learning.</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>If your child picks up a spoon, don't redirect &mdash; talk about the spoon: "Spoon! You have a spoon. Scoop, scoop!"</li>
+        <li>Get on their physical level. Sit on the floor. Make eye contact easy, not required.</li>
+        <li>Let them lead play. If they want to stack blocks instead of do the puzzle, stack blocks and narrate.</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Constantly redirecting to "educational" activities. The most educational activity is the one your child is genuinely interested in.</div>
+  </div>
+
+  <!-- Strategy 4 -->
+  <div class="strategy-card">
+    <span class="num">4</span>
+    <h3>Narrate Your Day (Self-Talk &amp; Parallel Talk)</h3>
+    <p class="why">Children who hear more varied language in context develop larger vocabularies (Weisleder &amp; Fernald, 2013). Narration provides rich, meaningful input tied to real experience.</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li><strong>Self-talk:</strong> Describe what <em>you</em> are doing. "I'm cutting the banana. Cut, cut, cut. Now I'm putting it on the plate."</li>
+        <li><strong>Parallel talk:</strong> Describe what <em>your child</em> is doing. "You're splashing! Splash, splash! The water is going everywhere!"</li>
+        <li>Use short, clear sentences. Emphasize key words. Repeat naturally.</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Narrating nonstop like a sports commentator. That's overwhelming. Narrate in bursts, then pause and OWL (Strategy 1).</div>
+  </div>
+
+  <!-- Strategy 5 -->
+  <div class="strategy-card">
+    <span class="num">5</span>
+    <h3>Use Routines as Language Goldmines</h3>
+    <p class="why">Predictable routines allow children to anticipate what comes next, freeing up cognitive resources for language (Bruner, 1983). Repetition is not boring &mdash; it is how language sticks.</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li><strong>Mealtimes:</strong> "More? You want more? More banana!" Use the same words every meal.</li>
+        <li><strong>Bath time:</strong> "Wash your tummy! Wash your toes! Splash!" Sing the same short song every bath.</li>
+        <li><strong>Bedtime:</strong> Pause before the last word of a familiar book or song and wait for your child to fill it in.</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Switching up language constantly to "expose" them to more words. At this stage, repetition of core words matters more than variety.</div>
+  </div>
+
+  <!-- Strategy 6 -->
+  <div class="strategy-card">
+    <span class="num">6</span>
+    <h3>Accept Approximations</h3>
+    <p class="why">Responding to a child's word attempts &mdash; even imperfect ones &mdash; as successful communication increases their motivation to keep trying (Golinkoff et al., 2015).</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>"Ba" means ball? Celebrate it! "Ball! Yes! You want the ball!" Then give them the ball.</li>
+        <li>"Muh" means more? Respond immediately: "More! You want more!"</li>
+        <li>Treat any consistent sound your child uses for a meaning as a real word &mdash; because it is.</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Withholding what they want until they say the "real" word. This creates frustration and can actually reduce attempts to communicate.</div>
+  </div>
+
+  <!-- Strategy 7 -->
+  <div class="strategy-card">
+    <span class="num">7</span>
+    <h3>Add One Word (The +1 Rule)</h3>
+    <p class="why">Vygotsky's "zone of proximal development" applies beautifully here &mdash; language input just one step above a child's current level is the sweet spot for growth.</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>Child says "milk" &rarr; you say "More milk!" or "Cold milk!"</li>
+        <li>Child says "car go" &rarr; you say "Car go fast!"</li>
+        <li>Child points and grunts &rarr; you provide the single word: "Dog!"</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Adding too many words. If your child uses one word at a time, model two. If they use two, model three. Don't jump to full sentences.</div>
+  </div>
+
+  <!-- Strategy 8 -->
+  <div class="strategy-card">
+    <span class="num">8</span>
+    <h3>Use Gestures Alongside Words</h3>
+    <p class="why">Research shows that gestures do not replace speech &mdash; they bridge to it. Children who use more gestures at 14 months tend to have larger spoken vocabularies at 42 months (Rowe &amp; Goldin-Meadow, 2009).</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>Point to things as you name them. Wave when you say "bye-bye." Gesture "up" when you say "up."</li>
+        <li>Try a few baby signs: "more," "all done," "help," "eat," "drink." Say the word every time you sign it.</li>
+        <li>Exaggerate your own gestures &mdash; nod big, shake your head big, use your whole body.</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Worrying that signing will "replace" talking. It won't. Decades of research confirm that signing supports and accelerates spoken language.</div>
+  </div>
+
+  <!-- Strategy 9 -->
+  <div class="strategy-card">
+    <span class="num">9</span>
+    <h3>Read Together Interactively</h3>
+    <p class="why">Dialogic reading &mdash; where the child participates rather than passively listens &mdash; leads to significantly larger vocabulary gains than traditional reading (Whitehurst et al., 1988).</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>Don't read every word on the page. Point to pictures: "Look! A cat! What's the cat doing?"</li>
+        <li>Let your child turn pages, point at pictures, and go back to their favorite page five times in a row.</li>
+        <li>Pause at predictable parts and wait. In "Brown Bear," pause before "... I see a ____ looking at me."</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Getting frustrated when your toddler won't sit through a whole book. Three engaged pages beat twenty passive ones. Follow their interest.</div>
+  </div>
+
+  <!-- Strategy 10 -->
+  <div class="strategy-card">
+    <span class="num">10</span>
+    <h3>Reduce Background Noise &amp; Screens</h3>
+    <p class="why">Background TV reduces both the quantity and quality of parent-child conversation by up to 25% (Christakis et al., 2009). Children learn language from people, not screens.</p>
+    <div class="how">
+      <strong>How to do it:</strong>
+      <ul>
+        <li>Turn off the TV during meals and play. Even "background" noise competes for your child's attention.</li>
+        <li>Prioritize face-to-face interaction. Get on the floor. Make silly faces. Be present.</li>
+        <li>If you do use screens, watch together, pause, and talk about what you see: "Oh look, Elmo is dancing! Dance!"</li>
+      </ul>
+    </div>
+    <div class="mistake"><strong>Common mistake:</strong> Feeling guilty about any screen time. The issue is not the existence of screens &mdash; it is whether they replace conversation. A video call with grandma is wonderful. An hour of unsupervised YouTube is not the same.</div>
+  </div>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= SECTION 5 ======================= -->
+<div class="page section">
+  <div class="section-number">5</div>
+  <h2>The <span class="accent">Bilingual</span> Question</h2>
+  <p class="section-intro">
+    "Should we stop speaking our language at home?" No. The answer is always no. Here is why.
+  </p>
+
+  <h3>Bilingualism Does Not Cause Speech Delays</h3>
+  <p>This is one of the most persistent myths in child development, and it has been thoroughly debunked. Research by Petitto et al. (2001) and many others demonstrates that bilingual children hit language milestones on the same timeline as monolingual children. ASHA's official position states: <em>"Using two languages does not cause or worsen speech or language problems."</em></p>
+
+  <h3>Count Vocabulary Across All Languages</h3>
+  <p>A bilingual child might say 20 words in English and 15 words in Russian. That is not 20 words &mdash; that is <strong>35 words</strong> (minus any exact duplicates). Many professionals only test in one language, which dramatically undercounts a bilingual child's true ability. If your child is being evaluated, make sure the evaluator knows all the languages spoken at home and counts vocabulary across them.</p>
+
+  <h3>Keep Using Every Home Language</h3>
+  <p>Your home language is how you express love, humor, discipline, and culture. It carries your family's identity. Switching to a language you are less comfortable in reduces the quality and richness of your input &mdash; which is the opposite of what your child needs. Speak to your child in the language that comes most naturally to you.</p>
+
+  <div class="callout callout-indigo">
+    <strong>For families using English, Russian, and/or Kyrgyz</strong>
+    <ul style="margin:8px 0 0 18px;">
+      <li>Each parent can speak their strongest language &mdash; this is the "one parent, one language" approach and it works well.</li>
+      <li>Mixing languages in a single sentence is normal and not harmful. Bilingual adults do this too. It is called code-switching and it is a sign of linguistic skill, not confusion.</li>
+      <li>Your child will learn the community language (e.g., English at school, Russian at daycare). Your job is to provide the language the community will not &mdash; your home language.</li>
+      <li>Books, songs, and stories in Kyrgyz or Russian are just as valuable for language development as English ones. More so, because they carry emotional and cultural meaning.</li>
+    </ul>
+  </div>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= SECTION 6 ======================= -->
+<div class="page section">
+  <div class="section-number">6</div>
+  <h2>Getting <span class="accent">Professional Help</span></h2>
+  <p class="section-intro">
+    Seeking help is not admitting failure. It is giving your child access to expertise that complements your love.
+  </p>
+
+  <h3>What Is an SLP?</h3>
+  <p>A Speech-Language Pathologist (SLP) is a professional trained to evaluate and treat communication disorders in children and adults. They hold a master's degree and clinical certification (CCC-SLP in the US, or equivalent in other countries). They are your partner, not your judge.</p>
+
+  <h3>How to Find One</h3>
+  <ul>
+    <li><strong>Ask your pediatrician</strong> for a referral &mdash; but you do not need one. You can contact an SLP directly.</li>
+    <li><strong>Early intervention programs</strong> (for children under 3) are available in most countries, often at no cost. In the US, search "early intervention" + your state. In many countries, contact your local health authority.</li>
+    <li><strong>ASHA ProFind</strong> (asha.org) lets you search for certified SLPs by location and specialty.</li>
+    <li><strong>Telepractice</strong> is effective for young children when the parent is coached to implement strategies at home. This can be a good option for families in areas with limited access.</li>
+  </ul>
+
+  <h3>What Happens in an Evaluation</h3>
+  <p>An evaluation typically takes 45&ndash;90 minutes. The SLP will observe your child playing, ask you detailed questions about their communication at home, and may use standardized tests. They will assess what your child understands (receptive language), what they express (expressive language), how they play and interact socially, and whether their speech sounds are developing typically. You will leave with a clear picture of where your child is and what to do next.</p>
+
+  <h3>How to Advocate for Your Child</h3>
+  <div class="callout callout-green">
+    <ul style="margin:0 0 0 18px;">
+      <li>If a doctor says "wait and see" but your gut disagrees, seek a second opinion or contact an SLP directly.</li>
+      <li>Bring a list of words your child uses (in all languages) to the evaluation.</li>
+      <li>Ask: "What can I do at home between sessions?" The best therapy happens in daily life, not in a clinic.</li>
+      <li>You know your child better than any professional. Your observations are valid data.</li>
+    </ul>
+  </div>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= SECTION 7 ======================= -->
+<div class="page section" style="page-break-after: avoid;">
+  <div class="section-number">7</div>
+  <h2>A Note for <span class="accent">Dads</span></h2>
+  <p class="section-intro">
+    This section is for fathers, but everyone should read it.
+  </p>
+
+  <p>Research consistently shows that <strong>paternal involvement is independently associated with stronger language outcomes</strong> in children (Pancsofar &amp; Vernon-Feagans, 2006). This is not about replacing or helping the other parent &mdash; it is about the unique contribution that each parent makes.</p>
+
+  <p>Fathers tend to play differently: more roughhousing, more physical games, more silly voices, more unexpected twists. This is not inferior to "educational" play &mdash; it is complementary. When you narrate a wrestling match ("I'm gonna get you! Here I come! Tickle, tickle!"), you are providing rich, emotional, embodied language input. When you take your child to the hardware store and name every tool, you are expanding their world.</p>
+
+  <div class="callout callout-indigo">
+    <strong>You are not "helping mom."</strong> You are a parent. Your voice, your words, your play style, and your presence matter enormously. Do not outsource communication to one parent. Talk to your child. Read to your child. Be silly with your child. Your relationship with language shapes theirs.
+  </div>
+</div>
+
+<!-- ======================= SECTION 8 ======================= -->
+<div class="page section">
+  <div class="section-number">8</div>
+  <h2>Taking Care of <span class="accent">Yourself</span></h2>
+  <p class="section-intro">
+    You cannot pour from an empty cup, and you do not need to pretend the cup is full.
+  </p>
+
+  <p><strong>The worry is real and valid.</strong> Watching other children chatter while yours stays quiet can feel isolating and frightening. You are allowed to feel scared, frustrated, and exhausted. These feelings do not make you a bad parent. They make you a human one.</p>
+
+  <p><strong>You are not failing your child.</strong> Speech and language development is influenced by dozens of factors, most of which are not within your control. You did not cause this by working too much, by using screens, by not reading enough books, or by speaking the "wrong" language. Stop counting the things you think you did wrong. Start counting the things you are doing right &mdash; like reading this guide.</p>
+
+  <p><strong>Progress is not linear.</strong> There will be weeks where your child suddenly says five new words, and weeks where it feels like nothing is happening. Both are normal. The brain is working even when the mouth is quiet.</p>
+
+  <div class="callout callout-pink">
+    <strong>Connect with other parents</strong>
+    <ul style="margin:8px 0 0 18px;">
+      <li>Online communities of parents of late talkers can reduce isolation enormously. You are not the only family going through this.</li>
+      <li>Talk to your partner. Make sure you are both on the same page about strategies and concerns. This is a team effort.</li>
+      <li>If the worry is affecting your sleep, appetite, or daily functioning, talk to your own doctor. Parental mental health directly affects child development.</li>
+    </ul>
+  </div>
+
+  <div class="page-footer"><strong>BabyPath</strong> &mdash; babypath.app</div>
+</div>
+
+<!-- ======================= QUICK REFERENCE ======================= -->
+<div class="page section" style="page-break-after: avoid;">
+  <div class="quick-ref">
+    <h2>Quick Reference Card</h2>
+    <p style="text-align:center; color:var(--muted); margin-bottom:20px; font-size:14px;">Cut this page out or screenshot it. Put it on your fridge.</p>
+
+    <div class="cols">
+      <div>
+        <h3 style="color:var(--indigo); margin-top:0;">10 Daily Strategies</h3>
+        <ul>
+          <li><strong>OWL:</strong> Observe, Wait, Listen</li>
+          <li><strong>Model</strong> words &mdash; never demand "Say ___!"</li>
+          <li><strong>Follow their lead</strong> &mdash; talk about what they care about</li>
+          <li><strong>Narrate</strong> your day and theirs</li>
+          <li><strong>Use routines</strong> &mdash; meals, bath, bedtime</li>
+          <li><strong>Accept approximations</strong> &mdash; "ba" = ball</li>
+          <li><strong>Add one word</strong> &mdash; the +1 rule</li>
+          <li><strong>Use gestures</strong> alongside words</li>
+          <li><strong>Read interactively</strong> &mdash; point, pause, wait</li>
+          <li><strong>Reduce noise &amp; screens</strong> &mdash; prioritize face time</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="red-flags" style="margin-top:0;">When to Call a Professional</h3>
+        <ul class="red-flags">
+          <li>No babbling by 12 months</li>
+          <li>No gestures (pointing, waving) by 12 months</li>
+          <li>No single words by 16 months</li>
+          <li>No two-word phrases by 24 months</li>
+          <li>Loss of words or skills at any age</li>
+          <li>Not responding to name consistently</li>
+          <li>Limited eye contact or social interest</li>
+          <li>You feel something is off &mdash; trust that</li>
+        </ul>
+
+        <h3 style="color:var(--green); margin-top:20px;">Remember</h3>
+        <ul>
+          <li>Early support always helps</li>
+          <li>Bilingualism is never the problem</li>
+          <li>Both parents' voices matter</li>
+          <li>You are your child's best advocate</li>
+        </ul>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:24px; padding-top:16px; border-top:1px solid #e2e8f0;">
+      <strong style="color:var(--indigo); font-size:16px;">BabyPath</strong>
+      <span style="color:var(--muted);"> &mdash; babypath.app</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Routine Cards — BabyPath</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Nunito', sans-serif; background: #f0f0f0; color: #333; }
+
+  /* ---- Top bar ---- */
+  .topbar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 28px; background: #fff; border-bottom: 3px solid #eee;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .topbar a { text-decoration: none; font-weight: 700; color: #6c5ce7; font-size: 1.05rem; }
+  .topbar a:hover { text-decoration: underline; }
+  .topbar button {
+    background: #6c5ce7; color: #fff; border: none; padding: 10px 22px;
+    border-radius: 30px; font-family: inherit; font-weight: 700;
+    font-size: 1rem; cursor: pointer; transition: background .2s;
+  }
+  .topbar button:hover { background: #5a4bd1; }
+
+  /* ---- Card ---- */
+  .card {
+    width: 190mm; min-height: 270mm; margin: 30px auto; padding: 32px 36px;
+    border-radius: 24px; border: 6px solid; background: #fff;
+    page-break-after: always; display: flex; flex-direction: column;
+  }
+  .card:last-child { page-break-after: auto; }
+
+  .card-header { text-align: center; margin-bottom: 18px; }
+  .card-emoji { font-size: 4rem; line-height: 1.1; }
+  .card-title { font-size: 2.2rem; font-weight: 900; margin-top: 4px; }
+  .card-subtitle { font-size: 1.05rem; font-weight: 600; opacity: .7; margin-top: 2px; }
+
+  /* ---- Word table ---- */
+  .words-label { font-weight: 800; font-size: 1.1rem; margin-bottom: 6px; text-align: center; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  th, td {
+    padding: 8px 10px; text-align: center; font-size: 1.05rem;
+    border: 3px solid; border-radius: 8px;
+  }
+  th { font-weight: 800; font-size: 1rem; text-transform: uppercase; letter-spacing: .5px; }
+
+  /* ---- Sections ---- */
+  .section { margin-bottom: 14px; }
+  .section-title {
+    font-weight: 800; font-size: 1.15rem; margin-bottom: 5px;
+    padding: 4px 14px; border-radius: 12px; display: inline-block;
+  }
+  .section ul { list-style: none; padding-left: 8px; }
+  .section li { font-size: 1.05rem; line-height: 1.55; padding-left: 20px; position: relative; }
+  .section li::before { content: ''; position: absolute; left: 0; top: 10px; width: 10px; height: 10px; border-radius: 50%; }
+
+  .tip-box {
+    border: 4px dashed; border-radius: 16px; padding: 14px 18px;
+    font-size: 1.05rem; line-height: 1.5; margin-top: auto;
+  }
+  .tip-box strong { display: block; margin-bottom: 2px; font-size: 1.08rem; }
+
+  /* ---- Color themes ---- */
+  .card.orange   { border-color: #e17055; }
+  .card.orange .card-title { color: #d35400; }
+  .card.orange th { background: #ffeaa7; border-color: #e17055; color: #d35400; }
+  .card.orange td { border-color: #fab1a0; }
+  .card.orange .section-title { background: #ffeaa7; color: #d35400; }
+  .card.orange li::before { background: #e17055; }
+  .card.orange .tip-box { border-color: #e17055; background: #fff5ee; }
+
+  .card.blue     { border-color: #74b9ff; }
+  .card.blue .card-title { color: #0984e3; }
+  .card.blue th { background: #dfe6e9; border-color: #74b9ff; color: #0984e3; }
+  .card.blue td { border-color: #a8d8ea; }
+  .card.blue .section-title { background: #dfe6e9; color: #0984e3; }
+  .card.blue li::before { background: #0984e3; }
+  .card.blue .tip-box { border-color: #74b9ff; background: #f0f8ff; }
+
+  .card.green    { border-color: #00b894; }
+  .card.green .card-title { color: #00a878; }
+  .card.green th { background: #d5f5e3; border-color: #00b894; color: #00a878; }
+  .card.green td { border-color: #a3e4bc; }
+  .card.green .section-title { background: #d5f5e3; color: #00a878; }
+  .card.green li::before { background: #00b894; }
+  .card.green .tip-box { border-color: #00b894; background: #f0fff8; }
+
+  .card.yellow   { border-color: #fdcb6e; }
+  .card.yellow .card-title { color: #d4a017; }
+  .card.yellow th { background: #fef9e7; border-color: #fdcb6e; color: #b7950b; }
+  .card.yellow td { border-color: #f7dc6f; }
+  .card.yellow .section-title { background: #fef9e7; color: #b7950b; }
+  .card.yellow li::before { background: #f39c12; }
+  .card.yellow .tip-box { border-color: #fdcb6e; background: #fffef5; }
+
+  .card.purple   { border-color: #a29bfe; }
+  .card.purple .card-title { color: #6c5ce7; }
+  .card.purple th { background: #ede7f6; border-color: #a29bfe; color: #6c5ce7; }
+  .card.purple td { border-color: #c4b6f0; }
+  .card.purple .section-title { background: #ede7f6; color: #6c5ce7; }
+  .card.purple li::before { background: #6c5ce7; }
+  .card.purple .tip-box { border-color: #a29bfe; background: #f8f5ff; }
+
+  /* ---- Bonus back page ---- */
+  .bonus { text-align: center; justify-content: center; align-items: center; border-color: #636e72; }
+  .bonus .card-title { color: #2d3436; }
+  .bonus .arrow { font-size: 1.6rem; color: #6c5ce7; }
+  .bonus .note { font-size: .92rem; opacity: .55; margin-top: auto; }
+  .bonus ul { text-align: left; max-width: 520px; margin: 0 auto; }
+  .bonus li { font-size: 1.1rem; line-height: 1.7; padding-left: 0; }
+  .bonus li::before { display: none; }
+
+  /* ---- Print ---- */
+  @media print {
+    body { background: #fff; }
+    .topbar { display: none; }
+    .card {
+      margin: 0; border-radius: 0; box-shadow: none;
+      width: 100%; min-height: 96vh; padding: 18mm 16mm;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="../index.html">&larr; Back to BabyPath</a>
+  <button onclick="window.print()">Print these cards</button>
+</div>
+
+<!-- ==================== CARD 1: MEALTIME ==================== -->
+<div class="card orange">
+  <div class="card-header">
+    <div class="card-emoji">🍽️</div>
+    <div class="card-title">Mealtime</div>
+    <div class="card-subtitle">Daily Routine Card &bull; BabyPath</div>
+  </div>
+
+  <div class="words-label">Target Words</div>
+  <table>
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>eat</td><td>кушать</td><td>же</td></tr>
+    <tr><td>drink</td><td>пить</td><td>ич</td></tr>
+    <tr><td>more</td><td>ещё</td><td>дагы</td></tr>
+    <tr><td>all done</td><td>всё</td><td>бүттү</td></tr>
+    <tr><td>milk</td><td>молоко</td><td>сүт</td></tr>
+    <tr><td>water</td><td>вода</td><td>суу</td></tr>
+    <tr><td>yummy</td><td>вкусно</td><td>даамдуу</td></tr>
+    <tr><td>hot</td><td>горячо</td><td>ысык</td></tr>
+  </table>
+
+  <div class="section">
+    <div class="section-title">Phrases to Model</div>
+    <ul>
+      <li>&ldquo;Time to eat!&rdquo;</li>
+      <li>&ldquo;Want more?&rdquo;</li>
+      <li>&ldquo;All done!&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Try These Actions</div>
+    <ul>
+      <li>Point to food and name it as you serve each item</li>
+      <li>Wait 5 seconds before giving more &mdash; let them ask!</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>Power Tip</strong>
+    Give tiny portions. Model &ldquo;more&rdquo; before refilling. The pause creates a reason to communicate.
+  </div>
+</div>
+
+<!-- ==================== CARD 2: BATH TIME ==================== -->
+<div class="card blue">
+  <div class="card-header">
+    <div class="card-emoji">🛁</div>
+    <div class="card-title">Bath Time</div>
+    <div class="card-subtitle">Daily Routine Card &bull; BabyPath</div>
+  </div>
+
+  <div class="words-label">Target Words</div>
+  <table>
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>water</td><td>вода</td><td>суу</td></tr>
+    <tr><td>splash</td><td>плюх</td><td>чалп</td></tr>
+    <tr><td>wash</td><td>мыть</td><td>жуу</td></tr>
+    <tr><td>bubbles</td><td>пузыри</td><td>көбүктөр</td></tr>
+    <tr><td>hot</td><td>горячо</td><td>ысык</td></tr>
+    <tr><td>cold</td><td>холодно</td><td>суук</td></tr>
+    <tr><td>pour</td><td>лить</td><td>куй</td></tr>
+    <tr><td>all done</td><td>всё</td><td>бүттү</td></tr>
+  </table>
+
+  <div class="section">
+    <div class="section-title">Phrases to Model</div>
+    <ul>
+      <li>&ldquo;Splash splash!&rdquo;</li>
+      <li>&ldquo;Wash your hands!&rdquo;</li>
+      <li>&ldquo;Water is warm!&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Try These Actions</div>
+    <ul>
+      <li>Pour water back and forth, saying &ldquo;pour!&rdquo; each time</li>
+      <li>Name each body part as you wash it</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>Power Tip</strong>
+    Bath time is PERFECT for language &mdash; it&rsquo;s predictable, fun, and multi-sensory.
+  </div>
+</div>
+
+<!-- ==================== CARD 3: PLAYTIME ==================== -->
+<div class="card green">
+  <div class="card-header">
+    <div class="card-emoji">🎮</div>
+    <div class="card-title">Playtime</div>
+    <div class="card-subtitle">Daily Routine Card &bull; BabyPath</div>
+  </div>
+
+  <div class="words-label">Target Words</div>
+  <table>
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>ball</td><td>мяч</td><td>топ</td></tr>
+    <tr><td>go</td><td>иди</td><td>бар</td></tr>
+    <tr><td>stop</td><td>стоп</td><td>токто</td></tr>
+    <tr><td>more</td><td>ещё</td><td>дагы</td></tr>
+    <tr><td>up</td><td>вверх</td><td>жогору</td></tr>
+    <tr><td>down</td><td>вниз</td><td>төмөн</td></tr>
+    <tr><td>my turn</td><td>моя очередь</td><td>менин кезегим</td></tr>
+    <tr><td>help</td><td>помоги</td><td>жардам</td></tr>
+  </table>
+
+  <div class="section">
+    <div class="section-title">Phrases to Model</div>
+    <ul>
+      <li>&ldquo;Ready, set, GO!&rdquo;</li>
+      <li>&ldquo;My turn! Your turn!&rdquo;</li>
+      <li>&ldquo;Ball UP... ball DOWN!&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Try These Actions</div>
+    <ul>
+      <li>Pause before actions &mdash; let them fill the gap</li>
+      <li>Take turns with toys, narrating each exchange</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>Power Tip</strong>
+    Anticipation teaches language. &ldquo;Ready, set...&rdquo; and WAIT. They&rsquo;ll try to say &ldquo;go!&rdquo;
+  </div>
+</div>
+
+<!-- ==================== CARD 4: OUTSIDE ==================== -->
+<div class="card yellow">
+  <div class="card-header">
+    <div class="card-emoji">☀️</div>
+    <div class="card-title">Outside</div>
+    <div class="card-subtitle">Daily Routine Card &bull; BabyPath</div>
+  </div>
+
+  <div class="words-label">Target Words</div>
+  <table>
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>dog</td><td>собака</td><td>ит</td></tr>
+    <tr><td>bird</td><td>птица</td><td>куш</td></tr>
+    <tr><td>car</td><td>машина</td><td>машина</td></tr>
+    <tr><td>tree</td><td>дерево</td><td>дарак</td></tr>
+    <tr><td>big</td><td>большой</td><td>чоң</td></tr>
+    <tr><td>little</td><td>маленький</td><td>кичине</td></tr>
+    <tr><td>walk</td><td>гулять</td><td>басуу</td></tr>
+    <tr><td>look</td><td>смотри</td><td>кара</td></tr>
+  </table>
+
+  <div class="section">
+    <div class="section-title">Phrases to Model</div>
+    <ul>
+      <li>&ldquo;Look! A big dog!&rdquo;</li>
+      <li>&ldquo;Bird! Tweet tweet!&rdquo;</li>
+      <li>&ldquo;Let&rsquo;s walk!&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Try These Actions</div>
+    <ul>
+      <li>Point at things and name them as you go</li>
+      <li>Stop and listen to sounds together &mdash; then name them</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>Power Tip</strong>
+    Nature is language therapy. Name everything. Compare sizes. Copy animal sounds.
+  </div>
+</div>
+
+<!-- ==================== CARD 5: BEDTIME ==================== -->
+<div class="card purple">
+  <div class="card-header">
+    <div class="card-emoji">🌙</div>
+    <div class="card-title">Bedtime</div>
+    <div class="card-subtitle">Daily Routine Card &bull; BabyPath</div>
+  </div>
+
+  <div class="words-label">Target Words</div>
+  <table>
+    <tr><th>English</th><th>Русский</th><th>Кыргызча</th></tr>
+    <tr><td>sleep</td><td>спать</td><td>укта</td></tr>
+    <tr><td>book</td><td>книга</td><td>китеп</td></tr>
+    <tr><td>hug</td><td>обними</td><td>кучакта</td></tr>
+    <tr><td>night night</td><td>баю-бай</td><td>жукта-жукта</td></tr>
+    <tr><td>star</td><td>звезда</td><td>жылдыз</td></tr>
+    <tr><td>moon</td><td>луна</td><td>ай</td></tr>
+    <tr><td>love you</td><td>люблю</td><td>сүйөм</td></tr>
+    <tr><td>quiet</td><td>тихо</td><td>акырын</td></tr>
+  </table>
+
+  <div class="section">
+    <div class="section-title">Phrases to Model</div>
+    <ul>
+      <li>&ldquo;Time to sleep!&rdquo;</li>
+      <li>&ldquo;Night night, teddy!&rdquo;</li>
+      <li>&ldquo;I love you!&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Try These Actions</div>
+    <ul>
+      <li>Read a book &mdash; point at pictures and name them</li>
+      <li>Tuck in each toy saying &ldquo;night night&rdquo;</li>
+    </ul>
+  </div>
+
+  <div class="tip-box">
+    <strong>Power Tip</strong>
+    Bedtime routine is the most predictable part of the day. Same words, same order, every night = fastest learning.
+  </div>
+</div>
+
+<!-- ==================== BONUS: BACK PAGE ==================== -->
+<div class="card bonus" style="border-color:#636e72; background:linear-gradient(135deg,#ffeaa7 0%,#dfe6e9 30%,#e8daef 60%,#fad7a0 100%);">
+  <div class="card-header">
+    <div class="card-emoji">✨</div>
+    <div class="card-title">How to Use These Cards</div>
+    <div class="card-subtitle">BabyPath &bull; Turn Every Moment Into a Language Lesson</div>
+  </div>
+
+  <div class="section" style="max-width:540px;margin:0 auto 20px;">
+    <ul>
+      <li style="font-size:1.15rem;line-height:1.8;">
+        <strong>Print</strong> the cards you need. Cut if needed. <strong>Tape them where you use them</strong> &mdash; kitchen, bathroom, bedroom door.
+      </li>
+      <li style="font-size:1.15rem;line-height:1.8;">
+        Glance at the card during the routine. Pick <strong>1&ndash;2 target words</strong> to focus on each week.
+      </li>
+      <li style="font-size:1.15rem;line-height:1.8;">
+        Use <strong>any language</strong> &mdash; or all three! Multilingual input helps, not hurts.
+      </li>
+    </ul>
+  </div>
+
+  <div style="background:#fff;border-radius:20px;padding:26px 20px;max-width:520px;margin:0 auto 22px;border:4px solid #6c5ce7;">
+    <div style="font-weight:800;font-size:1.3rem;color:#6c5ce7;margin-bottom:12px;">The Magic Formula</div>
+    <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;font-size:1.2rem;font-weight:700;">
+      <span style="background:#ffeaa7;padding:6px 16px;border-radius:12px;">NAME IT</span>
+      <span class="arrow">&rarr;</span>
+      <span style="background:#74b9ff;padding:6px 16px;border-radius:12px;color:#fff;">WAIT</span>
+      <span class="arrow">&rarr;</span>
+      <span style="background:#00b894;padding:6px 16px;border-radius:12px;color:#fff;">CELEBRATE</span>
+      <span class="arrow">&rarr;</span>
+      <span style="background:#a29bfe;padding:6px 16px;border-radius:12px;color:#fff;">REPEAT</span>
+    </div>
+    <div style="margin-top:10px;font-size:1rem;opacity:.8;">any attempt</div>
+  </div>
+
+  <div class="note" style="font-size:.92rem;opacity:.55;margin-top:auto;">
+    These words were chosen based on AAC Core Vocabulary research.<br>
+    &copy; BabyPath &mdash; Daily Routine Cards
+  </div>
+</div>
+
+</body>
+</html>
