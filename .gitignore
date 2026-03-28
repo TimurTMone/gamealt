@@ -1,0 +1,7 @@
+# Generated content (large files, not for repo)
+generated/
+
+# Environment / secrets
+.env
+*.pyc
+__pycache__/
