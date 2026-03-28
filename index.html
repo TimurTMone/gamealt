@@ -3,1095 +3,878 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AltPlay — Game Arcade</title>
+    <title>BabyPath — Your Baby's Development, Together</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #0a0a0f;
-            --surface: #14141f;
-            --surface2: #1c1c2e;
-            --border: #2a2a40;
-            --text: #e8e8f0;
-            --text2: #8888aa;
-            --accent: #6c5ce7;
-            --accent2: #a29bfe;
-            --green: #00b894;
-            --orange: #fdcb6e;
-            --pink: #fd79a8;
-            --blue: #0984e3;
+            --bg: #fef9f0;
+            --surface: #ffffff;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-bg: #eef2ff;
+            --warm: #f59e0b;
+            --warm-bg: #fffbeb;
+            --pink: #ec4899;
+            --pink-bg: #fdf2f8;
+            --green: #10b981;
+            --green-bg: #ecfdf5;
+            --text: #1e293b;
+            --text2: #64748b;
+            --border: #e2e8f0;
             --radius: 16px;
         }
 
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Nunito', -apple-system, sans-serif;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* ─── TOP AD BANNER ─── */
-        .ad-banner-top {
-            width: 100%;
-            background: linear-gradient(90deg, #1a1a2e, #16213e);
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 8px;
-            position: relative;
-        }
-
-        .ad-slot {
-            background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(162,155,254,0.05));
-            border: 1px dashed rgba(108,92,231,0.3);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text2);
-            font-size: 12px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .ad-slot::before {
-            content: 'Ad';
-            position: absolute;
-            top: 4px;
-            right: 8px;
-            font-size: 9px;
-            color: var(--text2);
-            opacity: 0.5;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .ad-banner-top .ad-slot {
-            width: 728px;
-            max-width: 95%;
-            height: 70px;
-        }
-
-        /* ─── NAVBAR ─── */
+        /* ─── NAV ─── */
         nav {
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 32px;
-            border-bottom: 1px solid var(--border);
-            backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(10,10,15,0.9);
         }
 
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 24px;
-            font-weight: 900;
-            letter-spacing: -0.5px;
         }
 
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--accent), var(--pink));
+            background: linear-gradient(135deg, var(--primary), var(--pink));
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            color: white;
+            font-weight: 900;
         }
 
-        .nav-stats {
-            display: flex;
-            gap: 24px;
-            font-size: 13px;
-            color: var(--text2);
+        .logo-text {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text);
         }
 
-        .nav-stat {
+        .logo-tag {
+            font-size: 10px;
+            background: var(--green-bg);
+            color: var(--green);
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 800;
+        }
+
+        .nav-links {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .nav-stat .val {
-            color: var(--text);
+        .nav-link {
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 13px;
             font-weight: 700;
+            color: var(--text2);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            background: none;
         }
+
+        .nav-link:hover { background: var(--primary-bg); color: var(--primary); }
+
+        .nav-cta {
+            background: var(--primary);
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .nav-cta:hover { transform: scale(1.03); }
 
         /* ─── HERO ─── */
         .hero {
-            padding: 48px 32px 32px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 60px 24px 40px;
             text-align: center;
-            position: relative;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 600px;
-            height: 300px;
-            background: radial-gradient(ellipse, rgba(108,92,231,0.15), transparent 70%);
-            pointer-events: none;
+        .hero-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: 42px;
+            font-size: 48px;
             font-weight: 900;
+            line-height: 1.15;
             letter-spacing: -1px;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #fff, var(--accent2));
+            margin-bottom: 16px;
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(135deg, var(--primary), var(--pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .hero p {
-            font-size: 16px;
+            font-size: 18px;
             color: var(--text2);
-            max-width: 500px;
-            margin: 0 auto 24px;
+            max-width: 600px;
+            margin: 0 auto 28px;
             line-height: 1.6;
         }
 
-        .hero-badges {
+        .hero-ctas {
             display: flex;
             gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
         }
 
-        .badge {
-            background: var(--surface2);
-            border: 1px solid var(--border);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: var(--text2);
-            display: flex;
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .badge .emoji { font-size: 16px; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99,102,241,0.3); }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text);
+            padding: 14px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+        .hero-proof {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: var(--text2);
+        }
+
+        .hero-proof span { display: flex; align-items: center; gap: 6px; }
 
         /* ─── SECTION ─── */
         .section {
-            padding: 20px 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 24px;
         }
 
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
+        .section-label {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--primary);
+            margin-bottom: 8px;
         }
 
         .section-title {
-            font-size: 22px;
+            font-size: 32px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-sub {
+            font-size: 16px;
+            color: var(--text2);
+            max-width: 600px;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        /* ─── TOOL CARDS (the games/tools) ─── */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .tool-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tool-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+
+        .tool-preview {
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            position: relative;
+        }
+
+        .tool-preview .tp-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
             font-weight: 800;
+            color: white;
+        }
+
+        .tool-preview .tp-age {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 800;
+            background: rgba(0,0,0,0.5);
+            color: white;
+        }
+
+        .tool-body { padding: 18px; }
+        .tool-body h3 { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+        .tool-body p { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
+
+        .tool-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        .tool-tag {
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #f1f5f9;
+            color: var(--text2);
+        }
+
+        /* Tool-specific gradients */
+        .tp-speech { background: linear-gradient(135deg, #fef6e4, #f582ae, #8bd3dd); }
+        .tp-typing { background: linear-gradient(135deg, #0f0f2e, #1a0a3e, #0a1a3e); }
+        .tp-kidzone { background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb); background-size: 300% 300%; animation: gshift 6s ease infinite; }
+        .tp-coloring { background: linear-gradient(135deg, #fde68a, #fca5a5, #a5b4fc, #6ee7b7); background-size: 300% 300%; animation: gshift 6s ease infinite; }
+        .tp-ebook { background: linear-gradient(135deg, #dbeafe, #e0e7ff, #fce7f3); }
+        .tp-tracker { background: linear-gradient(135deg, #ecfdf5, #d1fae5, #a7f3d0); }
+
+        @keyframes gshift { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+
+        /* ─── PRICING ─── */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .price-card {
+            background: white;
+            border: 2px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+
+        .price-card.featured {
+            border-color: var(--primary);
+            box-shadow: 0 8px 30px rgba(99,102,241,0.15);
+        }
+
+        .price-card .popular-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .price-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+        .price-card .price-desc { font-size: 13px; color: var(--text2); margin-bottom: 16px; }
+
+        .price-amount {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .price-amount .currency { font-size: 20px; vertical-align: top; }
+        .price-amount .period { font-size: 14px; color: var(--text2); font-weight: 600; }
+
+        .price-features {
+            text-align: left;
+            list-style: none;
+            margin: 20px 0;
+            font-size: 13px;
+        }
+
+        .price-features li {
+            padding: 6px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            line-height: 1.4;
+        }
+
+        .price-features .check { color: var(--green); font-weight: 800; flex-shrink: 0; }
+
+        .price-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .price-btn.primary { background: var(--primary); color: white; }
+        .price-btn.primary:hover { background: #4f46e5; }
+        .price-btn.outline { background: white; color: var(--primary); border: 2px solid var(--primary); }
+
+        /* ─── SHOP PREVIEW ─── */
+        .shop-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .shop-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .shop-item:hover { transform: translateY(-3px); }
+
+        .shop-item .si-emoji { font-size: 48px; margin-bottom: 8px; }
+        .shop-item .si-name { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+        .shop-item .si-desc { font-size: 11px; color: var(--text2); margin-bottom: 8px; }
+
+        .shop-item .si-price {
+            display: inline-block;
+            background: var(--green-bg);
+            color: var(--green);
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .shop-item .si-free {
+            background: var(--primary-bg);
+            color: var(--primary);
+        }
+
+        /* ─── COMMUNITY / SOCIAL PROOF ─── */
+        .testimonials {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .testimonial {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .testimonial .t-text { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 12px; font-style: italic; }
+
+        .testimonial .t-author {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
-        .section-tag {
-            background: var(--accent);
-            color: #fff;
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-weight: 600;
-        }
-
-        /* ─── GAME CARDS ─── */
-        .games-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 24px;
-        }
-
-        .game-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .game-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 60px rgba(108,92,231,0.15);
-            border-color: var(--accent);
-        }
-
-        .card-preview {
-            height: 200px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card-preview-bg {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* Typing Arena preview */
-        .preview-typing {
-            background: linear-gradient(135deg, #0a0a2e 0%, #1a0a3e 50%, #0a1a3e 100%);
-        }
-
-        .preview-typing::after {
-            content: '⌨️';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 72px;
-            filter: drop-shadow(0 0 30px rgba(108,92,231,0.5));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .preview-typing .typing-fx {
-            position: absolute;
-            font-family: monospace;
-            color: var(--green);
-            font-size: 14px;
-            opacity: 0.4;
-            animation: scroll-up 8s linear infinite;
-        }
-
-        @keyframes scroll-up {
-            from { transform: translateY(100%); }
-            to { transform: translateY(-200%); }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -55%) scale(1.05); }
-        }
-
-        /* Kid Zone preview */
-        .preview-kidzone {
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb);
-            background-size: 400% 400%;
-            animation: gradient-shift 6s ease infinite;
-        }
-
-        .preview-kidzone::after {
-            content: '🎨';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 72px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes gradient-shift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        /* Speech Buddy preview */
-        .preview-speech {
-            background: linear-gradient(135deg, #fef6e4, #f582ae, #8bd3dd, #f6a560);
-            background-size: 400% 400%;
-            animation: gradient-shift 6s ease infinite;
-        }
-
-        .preview-speech::after {
-            content: '🗣️';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 72px;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .card-badge.new { background: var(--green); }
-        .card-badge.hot { background: #e17055; }
-
-        .card-age {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            color: #fff;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .card-title {
-            font-size: 20px;
-            font-weight: 800;
-            margin-bottom: 6px;
-        }
-
-        .card-desc {
-            font-size: 13px;
-            color: var(--text2);
-            line-height: 1.5;
-            margin-bottom: 16px;
-        }
-
-        .card-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .card-tags {
-            display: flex;
-            gap: 6px;
-        }
-
-        .card-tag {
-            background: var(--surface2);
-            padding: 4px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            color: var(--text2);
-        }
-
-        .play-btn {
-            background: linear-gradient(135deg, var(--accent), #7c6cf0);
-            color: #fff;
-            border: none;
-            padding: 10px 28px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            letter-spacing: 0.5px;
-        }
-
-        .play-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 25px rgba(108,92,231,0.4);
-        }
-
-        .play-btn:active {
-            transform: scale(0.97);
-        }
-
-        /* ─── MID AD ─── */
-        .ad-mid {
-            padding: 20px 32px;
-        }
-
-        .ad-mid .ad-slot {
-            width: 100%;
-            height: 100px;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        /* ─── FEATURES / MONETIZATION SECTION ─── */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .feature-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 24px;
-            text-align: center;
-            transition: border-color 0.3s;
-        }
-
-        .feature-card:hover {
-            border-color: var(--accent);
-        }
-
-        .feature-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .feature-card h3 {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .feature-card p {
-            font-size: 12px;
-            color: var(--text2);
-            line-height: 1.5;
-        }
-
-        /* ─── SIDEBAR AD (for wider screens) ─── */
-        .layout-with-sidebar {
-            display: flex;
-            gap: 24px;
-            padding: 20px 32px;
-        }
-
-        .layout-main {
-            flex: 1;
-        }
-
-        .layout-sidebar {
-            width: 300px;
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .sidebar-ad .ad-slot {
-            width: 300px;
-            height: 250px;
-        }
-
-        .sidebar-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px;
-        }
-
-        .sidebar-card h3 {
-            font-size: 15px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            font-size: 13px;
-        }
-
-        .leaderboard-item:last-child { border: none; }
-
-        .lb-rank {
-            width: 24px;
-            height: 24px;
-            background: var(--surface2);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            font-weight: 700;
-            margin-right: 10px;
-        }
-
-        .lb-rank.gold { background: #fdcb6e; color: #000; }
-        .lb-rank.silver { background: #b2bec3; color: #000; }
-        .lb-rank.bronze { background: #e17055; color: #fff; }
-
-        .lb-name { flex: 1; }
-        .lb-score { font-weight: 700; color: var(--accent2); }
-
-        /* ─── FOOTER ─── */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 32px;
-            text-align: center;
-            color: var(--text2);
-            font-size: 13px;
-        }
-
-        footer a {
-            color: var(--accent2);
-            text-decoration: none;
-        }
-
-        .footer-ad {
-            margin-bottom: 24px;
-        }
-
-        .footer-ad .ad-slot {
-            width: 728px;
-            max-width: 95%;
-            height: 90px;
-            margin: 0 auto;
-        }
-
-        /* ─── COMING SOON CARD ─── */
-        .game-card.coming-soon {
-            opacity: 0.6;
-            cursor: default;
-        }
-
-        .game-card.coming-soon:hover {
-            transform: none;
-            box-shadow: none;
-            border-color: var(--border);
-        }
-
-        .coming-soon-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(10,10,15,0.7);
+        .testimonial .t-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 18px;
-            font-weight: 800;
-            color: var(--text2);
-            letter-spacing: 2px;
         }
 
-        /* ─── RESPONSIVE ─── */
-        @media (max-width: 900px) {
-            .layout-sidebar { display: none; }
-            .hero h1 { font-size: 30px; }
-            nav { padding: 12px 16px; }
-            .section, .ad-mid { padding: 16px; }
-            .games-grid { grid-template-columns: 1fr; }
-            .layout-with-sidebar { padding: 16px; }
-        }
+        .testimonial .t-name { font-size: 13px; font-weight: 700; }
+        .testimonial .t-role { font-size: 11px; color: var(--text2); }
 
-        /* ─── INTERSTITIAL AD OVERLAY ─── */
-        .interstitial {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .interstitial.active { display: flex; }
-
-        .interstitial .ad-slot {
-            width: 480px;
-            max-width: 90%;
-            height: 320px;
-            margin-bottom: 20px;
-        }
-
-        .interstitial .skip-btn {
-            background: none;
-            border: 1px solid var(--text2);
-            color: var(--text2);
-            padding: 8px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-
-        .interstitial .skip-btn:hover {
-            border-color: #fff;
-            color: #fff;
-        }
-
-        .interstitial .skip-timer {
-            color: var(--text2);
-            font-size: 12px;
+        /* ─── FAQ ─── */
+        .faq-item {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
             margin-bottom: 10px;
+            overflow: hidden;
         }
 
-        /* ─── REWARD AD BUTTON ─── */
-        .reward-ad-btn {
-            background: linear-gradient(135deg, #fdcb6e, #e17055);
-            color: #000;
-            border: none;
-            padding: 8px 18px;
-            border-radius: 10px;
-            font-size: 12px;
+        .faq-q {
+            padding: 16px 20px;
+            font-size: 15px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 6px;
-            transition: transform 0.2s;
         }
 
-        .reward-ad-btn:hover { transform: scale(1.05); }
+        .faq-a {
+            padding: 0 20px 16px;
+            font-size: 14px;
+            color: var(--text2);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.open .faq-a { display: block; }
+        .faq-item.open .faq-arrow { transform: rotate(180deg); }
+
+        .faq-arrow { transition: transform 0.2s; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .footer-copy { font-size: 12px; color: var(--text2); }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 700px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 15px; }
+            nav { padding: 10px 16px; }
+            .nav-link { display: none; }
+            .section { padding: 30px 16px; }
+            .section-title { font-size: 24px; }
+            .hero { padding: 40px 16px 30px; }
+        }
     </style>
 </head>
 <body>
 
-<!-- ====== TOP BANNER AD ====== -->
-<!--
-    MONETIZATION: Leaderboard banner (728x90)
-    Replace inner content with your ad network code:
-    Google AdSense: <ins class="adsbygoogle" data-ad-client="ca-pub-XXXX" data-ad-slot="XXXX"></ins>
-    Or any banner ad network script.
--->
-<div class="ad-banner-top">
-    <div class="ad-slot" id="ad-top-banner">
-        <span>📢 Your Top Banner Ad Here — 728x90</span>
-    </div>
-</div>
-
-<!-- ====== NAVBAR ====== -->
+<!-- NAV -->
 <nav>
     <div class="logo">
-        <div class="logo-icon">🎮</div>
-        <span>AltPlay</span>
+        <div class="logo-icon">B</div>
+        <span class="logo-text">BabyPath</span>
+        <span class="logo-tag">BETA</span>
     </div>
-    <div class="nav-stats">
-        <div class="nav-stat">🎯 Games: <span class="val">3</span></div>
-        <div class="nav-stat">🔥 Plays: <span class="val" id="total-plays">0</span></div>
+    <div class="nav-links">
+        <a class="nav-link" href="#tools">Tools</a>
+        <a class="nav-link" href="#shop">Shop</a>
+        <a class="nav-link" href="#pricing">Pricing</a>
+        <button class="nav-cta" onclick="scrollTo('#pricing')">Start Free</button>
     </div>
 </nav>
 
-<!-- ====== HERO ====== -->
+<!-- HERO -->
 <section class="hero">
-    <h1>Play. Learn. Have Fun.</h1>
-    <p>Free arcade games that are actually good for you. Master typing, let your little one explore safely, and more coming soon!</p>
-    <div class="hero-badges">
-        <div class="badge"><span class="emoji">🧠</span> Educational</div>
-        <div class="badge"><span class="emoji">🔒</span> Kid-Safe</div>
-        <div class="badge"><span class="emoji">🆓</span> Free to Play</div>
-        <div class="badge"><span class="emoji">📱</span> Works Everywhere</div>
+    <div class="hero-eyebrow">👶 Built by parents, backed by research</div>
+    <h1>You're not lost.<br>You just need a <span class="highlight">path.</span></h1>
+    <p>Interactive tools, expert guides, and a community for new parents navigating their baby's first years — speech, milestones, learning, and everything in between.</p>
+    <div class="hero-ctas">
+        <button class="btn-primary" onclick="scrollTo('#tools')">Explore Free Tools →</button>
+        <button class="btn-secondary" onclick="scrollTo('#pricing')">See Plans</button>
+    </div>
+    <div class="hero-proof">
+        <span>🔬 Evidence-based</span>
+        <span>🌍 EN · RU · KY</span>
+        <span>👨‍👩‍👧 For moms AND dads</span>
     </div>
 </section>
 
-<!-- ====== MAIN LAYOUT WITH SIDEBAR ====== -->
-<div class="layout-with-sidebar">
-    <div class="layout-main">
+<!-- TOOLS -->
+<section class="section" id="tools">
+    <div class="section-label">Interactive Tools</div>
+    <div class="section-title">Everything your child needs to grow</div>
+    <div class="section-sub">Free games and tools designed by parents, backed by speech pathologists and child development research. No fluff, no guilt — just practical help.</div>
 
-        <!-- ====== GAMES SECTION ====== -->
-        <div class="section" style="padding: 0;">
-            <div class="section-header">
-                <div class="section-title">
-                    🕹️ Games
-                    <span class="section-tag">FEATURED</span>
+    <div class="tools-grid">
+        <!-- SPEECH BUDDY -->
+        <a class="tool-card" href="games/speech-buddy.html">
+            <div class="tool-preview tp-speech">
+                🗣️
+                <span class="tp-badge" style="background:var(--green);">FREE</span>
+                <span class="tp-age">Ages 1-4</span>
+            </div>
+            <div class="tool-body">
+                <h3>Speech Buddy</h3>
+                <p>Evidence-based speech therapy in 3 languages. 4 developmental stages, parent coaching tips per word, milestone tracker. Based on ASHA, Hanen, and AAC research.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">🗣️ Speech Therapy</span>
+                    <span class="tool-tag">🌍 3 Languages</span>
+                    <span class="tool-tag">📋 Milestones</span>
                 </div>
             </div>
+        </a>
 
-            <div class="games-grid">
-
-                <!-- GAME 1: TYPING ARENA -->
-                <div class="game-card" onclick="launchGame('typing-arena')">
-                    <div class="card-preview">
-                        <div class="card-preview-bg preview-typing">
-                            <div class="typing-fx" style="left:10%;animation-delay:0s">function hack(){</div>
-                            <div class="typing-fx" style="left:60%;animation-delay:2s">while(true){type}</div>
-                            <div class="typing-fx" style="left:35%;animation-delay:4s">speed = MAX;</div>
-                        </div>
-                        <span class="card-badge hot">🔥 HOT</span>
-                        <span class="card-age">Ages 7-15</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title">Word Warrior — Typing Arena</div>
-                        <div class="card-desc">
-                            Destroy falling words with your keyboard! Learn 10-finger typing through
-                            epic battles. Color-coded fingers, combos, boss waves, and leaderboards.
-                            Not your boring typing tutor.
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-tags">
-                                <span class="card-tag">⌨️ Typing</span>
-                                <span class="card-tag">🧠 Education</span>
-                                <span class="card-tag">⚡ Arcade</span>
-                            </div>
-                            <button class="play-btn">PLAY ▶</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- GAME 2: KID ZONE -->
-                <div class="game-card" onclick="launchGame('kid-zone')">
-                    <div class="card-preview">
-                        <div class="card-preview-bg preview-kidzone"></div>
-                        <span class="card-badge new">✨ NEW</span>
-                        <span class="card-age">Ages 2-6</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title">Magic Keyboard — Kid Zone</div>
-                        <div class="card-desc">
-                            Hand your laptop to your little one worry-free! Every key makes magic —
-                            animals, music, fireworks. All input is safely captured. Nothing touches
-                            your other apps.
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-tags">
-                                <span class="card-tag">👶 Toddler</span>
-                                <span class="card-tag">🔒 Safe</span>
-                                <span class="card-tag">🎨 Creative</span>
-                            </div>
-                            <button class="play-btn">PLAY ▶</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- GAME 3: SPEECH BUDDY -->
-                <div class="game-card" onclick="launchGame('speech-buddy')">
-                    <div class="card-preview">
-                        <div class="card-preview-bg preview-speech"></div>
-                        <span class="card-badge new">✨ NEW</span>
-                        <span class="card-age">Ages 1-4</span>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title">Speech Buddy — Learn to Talk!</div>
-                        <div class="card-desc">
-                            Help your toddler learn their first words! Tap pictures to hear words spoken
-                            aloud, play "Find It" games, and use the microphone to encourage talking.
-                            Supports English, Russian, and Kyrgyz.
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-tags">
-                                <span class="card-tag">🗣️ Speech</span>
-                                <span class="card-tag">🌍 3 Languages</span>
-                                <span class="card-tag">👶 Toddler</span>
-                            </div>
-                            <button class="play-btn">PLAY ▶</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- COMING SOON CARD -->
-                <div class="game-card coming-soon">
-                    <div class="card-preview" style="height:200px;background:var(--surface2);">
-                        <div class="coming-soon-overlay">COMING SOON</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title">Math Blaster</div>
-                        <div class="card-desc">
-                            Solve math problems to blast asteroids! Addition, subtraction,
-                            multiplication — all wrapped in a space adventure.
-                        </div>
-                        <div class="card-meta">
-                            <div class="card-tags">
-                                <span class="card-tag">🔢 Math</span>
-                                <span class="card-tag">🚀 Space</span>
-                            </div>
-                            <button class="play-btn" style="opacity:0.4;cursor:default;">SOON</button>
-                        </div>
-                    </div>
-                </div>
-
+        <!-- TYPING ARENA -->
+        <a class="tool-card" href="games/typing-arena.html">
+            <div class="tool-preview tp-typing">
+                <span style="filter:drop-shadow(0 0 20px rgba(108,92,231,0.5))">⌨️</span>
+                <span class="tp-badge" style="background:var(--green);">FREE</span>
+                <span class="tp-age">Ages 7-15</span>
             </div>
-        </div>
-
-        <!-- ====== MID-PAGE AD ====== -->
-        <!--
-            MONETIZATION: In-feed / mid-content ad (responsive banner)
-            Great placement — users see this while browsing games.
-        -->
-        <div class="ad-mid">
-            <div class="ad-slot" id="ad-mid-content">
-                <span>📢 Mid-Content Ad — Responsive Banner</span>
+            <div class="tool-body">
+                <h3>Word Warrior — Typing Arena</h3>
+                <p>Destroy falling words to learn 10-finger typing! Color-coded finger guides, combo system, boss waves, and WPM tracking. Not your boring typing tutor.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">⌨️ Typing</span>
+                    <span class="tool-tag">🎮 Arcade</span>
+                    <span class="tool-tag">🧠 Education</span>
+                </div>
             </div>
-        </div>
+        </a>
 
-        <!-- ====== FEATURES ====== -->
-        <div class="section" style="padding: 0;">
-            <div class="section-header">
-                <div class="section-title">✨ Why AltPlay?</div>
+        <!-- KID ZONE -->
+        <a class="tool-card" href="games/kid-zone.html">
+            <div class="tool-preview tp-kidzone">
+                🎨
+                <span class="tp-badge" style="background:var(--green);">FREE</span>
+                <span class="tp-age">Ages 1-5</span>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎯</div>
-                    <h3>Actually Fun</h3>
-                    <p>No boring drills. Every game is designed to be addictive and educational at the same time.</p>
+            <div class="tool-body">
+                <h3>Magic Keyboard — Kid Zone</h3>
+                <p>Hand your laptop to your toddler worry-free. Every key makes magic — animals, music, fireworks. All input safely captured. PIN-locked exit for parents.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">🔒 Safe Mode</span>
+                    <span class="tool-tag">🎵 Musical</span>
+                    <span class="tool-tag">👶 Toddler-Proof</span>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Kid-Safe Mode</h3>
-                    <p>Hand your laptop to your kid with zero worry. All input is captured — nothing leaks out.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Track Progress</h3>
-                    <p>See WPM, accuracy, and improvement over time. Perfect for teachers and parents.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Works Offline</h3>
-                    <p>No install needed. Runs in your browser. Works on any device, even without internet.</p>
+            </div>
+        </a>
+
+        <!-- COLORING PAGES (coming) -->
+        <div class="tool-card" style="cursor:default;opacity:0.7;">
+            <div class="tool-preview tp-coloring">
+                🖍️
+                <span class="tp-badge" style="background:var(--warm);">COMING SOON</span>
+            </div>
+            <div class="tool-body">
+                <h3>AI Coloring Pages</h3>
+                <p>Printable coloring templates generated by AI — animals, letters, numbers, scenes. New pages every week. Print at home and color together!</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">🖨️ Printable</span>
+                    <span class="tool-tag">🤖 AI-Generated</span>
+                    <span class="tool-tag">🎨 Creative</span>
                 </div>
             </div>
         </div>
 
-    </div>
-
-    <!-- ====== SIDEBAR ====== -->
-    <div class="layout-sidebar">
-
-        <!-- SIDEBAR AD -->
-        <!--
-            MONETIZATION: Medium rectangle (300x250)
-            High-value placement, always visible while scrolling.
-            Replace with Google AdSense or ad network code.
-        -->
-        <div class="sidebar-ad">
-            <div class="ad-slot" id="ad-sidebar-rect">
-                <span>📢 Sidebar Ad<br>300x250</span>
+        <!-- MILESTONE TRACKER (coming) -->
+        <div class="tool-card" style="cursor:default;opacity:0.7;">
+            <div class="tool-preview tp-tracker">
+                📊
+                <span class="tp-badge" style="background:var(--warm);">COMING SOON</span>
             </div>
-        </div>
-
-        <!-- LEADERBOARD -->
-        <div class="sidebar-card">
-            <h3>🏆 Top Typists</h3>
-            <div id="leaderboard">
-                <div class="leaderboard-item">
-                    <span class="lb-rank gold">1</span>
-                    <span class="lb-name">SpeedDemon</span>
-                    <span class="lb-score">142 WPM</span>
-                </div>
-                <div class="leaderboard-item">
-                    <span class="lb-rank silver">2</span>
-                    <span class="lb-name">TypeNinja</span>
-                    <span class="lb-score">128 WPM</span>
-                </div>
-                <div class="leaderboard-item">
-                    <span class="lb-rank bronze">3</span>
-                    <span class="lb-name">KeyMaster</span>
-                    <span class="lb-score">115 WPM</span>
-                </div>
-                <div class="leaderboard-item">
-                    <span class="lb-rank">4</span>
-                    <span class="lb-name">FlashFingers</span>
-                    <span class="lb-score">98 WPM</span>
-                </div>
-                <div class="leaderboard-item">
-                    <span class="lb-rank">5</span>
-                    <span class="lb-name">WordSmith</span>
-                    <span class="lb-score">91 WPM</span>
+            <div class="tool-body">
+                <h3>Baby Milestone Tracker</h3>
+                <p>Track every milestone from birth to age 3 — motor, speech, cognitive, social. Visual timeline, photo diary, pediatrician-ready reports. For BOTH parents.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">📈 Tracking</span>
+                    <span class="tool-tag">👨‍👩‍👧 Both Parents</span>
+                    <span class="tool-tag">📋 Reports</span>
                 </div>
             </div>
         </div>
 
-        <!-- REWARD AD PROMO -->
-        <div class="sidebar-card">
-            <h3>🎁 Free Power-Ups</h3>
-            <p style="font-size:12px;color:var(--text2);margin-bottom:12px;">
-                Watch a short video to earn power-ups in Word Warrior!
-            </p>
-            <!--
-                MONETIZATION: Rewarded video ad trigger.
-                Replace with AdMob rewarded ad or similar.
-                On click: show rewarded video -> grant in-game reward.
-            -->
-            <button class="reward-ad-btn" onclick="showRewardAd()">
-                ▶ Watch Ad → Get ⚡ Freeze Power
-            </button>
-        </div>
-
-        <!-- SECOND SIDEBAR AD -->
-        <div class="sidebar-ad">
-            <div class="ad-slot" id="ad-sidebar-rect-2">
-                <span>📢 Sidebar Ad 2<br>300x250</span>
+        <!-- EBOOKS (coming) -->
+        <div class="tool-card" style="cursor:default;opacity:0.7;">
+            <div class="tool-preview tp-ebook">
+                📖
+                <span class="tp-badge" style="background:var(--warm);">COMING SOON</span>
+            </div>
+            <div class="tool-body">
+                <h3>Parent Guides & eBooks</h3>
+                <p>"First 100 Words" playbook, speech delay survival guide, bilingual parenting handbook. Written for real parents, not textbooks.</p>
+                <div class="tool-tags">
+                    <span class="tool-tag">📚 Guides</span>
+                    <span class="tool-tag">🌍 Multilingual</span>
+                    <span class="tool-tag">📱 Digital</span>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
-<!-- ====== INTERSTITIAL AD OVERLAY ====== -->
-<!--
-    MONETIZATION: Interstitial ad (shown before game launch).
-    This is a high-CPM format. Show between game transitions.
-    Replace ad-slot content with your interstitial ad network code.
--->
-<div class="interstitial" id="interstitial">
-    <div class="skip-timer" id="skip-timer">You can skip in 3s...</div>
-    <div class="ad-slot" id="ad-interstitial">
-        <span>📢 Interstitial Ad — 480x320<br><br>Shown before game launch</span>
+<!-- DIGITAL SHOP -->
+<section class="section" id="shop" style="background:white;max-width:100%;padding:40px 24px;">
+    <div style="max-width:1000px;margin:0 auto;">
+        <div class="section-label">Digital Shop</div>
+        <div class="section-title">Resources that actually help</div>
+        <div class="section-sub">Printables, guides, and tools — designed for exhausted parents who need practical help, not 300-page textbooks.</div>
+
+        <div class="shop-items">
+            <div class="shop-item" onclick="alert('Coming soon! This will be a downloadable PDF pack.')">
+                <div class="si-emoji">🖍️</div>
+                <div class="si-name">Animal Coloring Pack</div>
+                <div class="si-desc">20 AI-generated coloring pages — animals A to Z. Print at home!</div>
+                <span class="si-price">$2.99</span>
+            </div>
+            <div class="shop-item" onclick="alert('Coming soon! Free with email signup.')">
+                <div class="si-emoji">📋</div>
+                <div class="si-name">First 50 Words Checklist</div>
+                <div class="si-desc">Track your toddler's first words. EN/RU/KY. Printable PDF.</div>
+                <span class="si-price si-free">FREE</span>
+            </div>
+            <div class="shop-item" onclick="alert('Coming soon! Digital download.')">
+                <div class="si-emoji">📖</div>
+                <div class="si-name">Speech Delay Guide</div>
+                <div class="si-desc">What to do when your child isn't talking yet. 30-page parent handbook.</div>
+                <span class="si-price">$4.99</span>
+            </div>
+            <div class="shop-item" onclick="alert('Coming soon! Free download for subscribers.')">
+                <div class="si-emoji">🌍</div>
+                <div class="si-name">Bilingual Parenting Kit</div>
+                <div class="si-desc">How to raise a bilingual child. Word lists, tips, daily plan.</div>
+                <span class="si-price">$3.99</span>
+            </div>
+            <div class="shop-item" onclick="alert('Coming soon! Weekly pack with subscription.')">
+                <div class="si-emoji">🎨</div>
+                <div class="si-name">Weekly Coloring Bundle</div>
+                <div class="si-desc">5 new AI coloring pages every week. Themes match the season!</div>
+                <span class="si-price">$1.99/mo</span>
+            </div>
+            <div class="shop-item" onclick="alert('Coming soon!')">
+                <div class="si-emoji">🧸</div>
+                <div class="si-name">Daily Routine Cards</div>
+                <div class="si-desc">Visual schedule cards for toddlers. Morning, meals, bedtime. Printable.</div>
+                <span class="si-price">$3.99</span>
+            </div>
+        </div>
     </div>
-    <button class="skip-btn" id="skip-btn" onclick="skipInterstitial()" style="display:none;">
-        Skip →
-    </button>
-</div>
+</section>
 
-<!-- ====== FOOTER ====== -->
+<!-- SOCIAL PROOF -->
+<section class="section">
+    <div class="section-label">From Parents Like You</div>
+    <div class="section-title">Built because we needed it ourselves</div>
+    <div class="section-sub">We're Timur and his wife — first-time parents of a 2-year-old. Our son had speech delays and we couldn't find the right tools. So we built them.</div>
+
+    <div class="testimonials">
+        <div class="testimonial">
+            <div class="t-text">"Our pediatrician told us 'just wait.' But waiting felt wrong. Speech Buddy gave us something concrete to DO every day — and the coaching tips made us feel like we knew what we were doing."</div>
+            <div class="t-author">
+                <div class="t-avatar" style="background:var(--primary-bg);">👨</div>
+                <div><div class="t-name">Founder's Story</div><div class="t-role">Dad of a 2-year-old, Kyrgyzstan</div></div>
+            </div>
+        </div>
+        <div class="testimonial">
+            <div class="t-text">"Finally an app where I don't feel like a bad parent for not doing enough. The milestone tracker tells me what's normal, and the 'what to accept' tips changed everything."</div>
+            <div class="t-author">
+                <div class="t-avatar" style="background:var(--pink-bg);">👩</div>
+                <div><div class="t-name">Early Tester</div><div class="t-role">Mom of twins, bilingual household</div></div>
+            </div>
+        </div>
+        <div class="testimonial">
+            <div class="t-text">"As a dad, most parenting apps feel like they're not for me. This one doesn't assume anything — just gives me tools. I actually use the typing game with my older kid too."</div>
+            <div class="t-author">
+                <div class="t-avatar" style="background:var(--green-bg);">👨</div>
+                <div><div class="t-name">Early Tester</div><div class="t-role">Dad of 2, Russia</div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing" style="background:white;max-width:100%;padding:50px 24px;">
+    <div style="max-width:1000px;margin:0 auto;text-align:center;">
+        <div class="section-label">Pricing</div>
+        <div class="section-title">Start free. Upgrade when ready.</div>
+        <div class="section-sub" style="margin:0 auto 32px;">All core tools are free forever. Pro gives you everything you need to be your child's best therapist.</div>
+
+        <div class="pricing-grid">
+            <!-- FREE -->
+            <div class="price-card">
+                <h3>Free</h3>
+                <div class="price-desc">Everything to get started</div>
+                <div class="price-amount"><span class="currency">$</span>0 <span class="period">forever</span></div>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> Speech Buddy — all 4 stages</li>
+                    <li><span class="check">✓</span> Word Warrior typing game</li>
+                    <li><span class="check">✓</span> Magic Keyboard kid zone</li>
+                    <li><span class="check">✓</span> 3 languages (EN, RU, KY)</li>
+                    <li><span class="check">✓</span> Basic milestone checklist</li>
+                    <li><span class="check">✓</span> Parent coaching tips</li>
+                </ul>
+                <button class="price-btn outline" onclick="window.location.href='games/speech-buddy.html'">Start Free →</button>
+            </div>
+
+            <!-- PRO -->
+            <div class="price-card featured">
+                <div class="popular-badge">MOST POPULAR</div>
+                <h3>Pro Parent</h3>
+                <div class="price-desc">Everything to help your child thrive</div>
+                <div class="price-amount"><span class="currency">$</span>9.99 <span class="period">/month</span></div>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> Everything in Free</li>
+                    <li><span class="check">✓</span> 200+ words across all stages</li>
+                    <li><span class="check">✓</span> AI coloring pages (20/month)</li>
+                    <li><span class="check">✓</span> All eBooks & guides included</li>
+                    <li><span class="check">✓</span> Detailed progress analytics</li>
+                    <li><span class="check">✓</span> Multi-child profiles</li>
+                    <li><span class="check">✓</span> Routine-based practice plans</li>
+                    <li><span class="check">✓</span> Exportable SLP reports</li>
+                    <li><span class="check">✓</span> Weekly new content</li>
+                </ul>
+                <button class="price-btn primary" onclick="alert('Payment integration coming! Stripe/LemonSqueezy/Gumroad.')">Start 7-Day Free Trial</button>
+            </div>
+
+            <!-- ANNUAL -->
+            <div class="price-card">
+                <h3>Pro Annual</h3>
+                <div class="price-desc">Best value — save 40%</div>
+                <div class="price-amount"><span class="currency">$</span>5.99 <span class="period">/month</span></div>
+                <div style="font-size:12px;color:var(--green);font-weight:700;margin-top:-2px;">Billed $71.88/year (save $48)</div>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> Everything in Pro</li>
+                    <li><span class="check">✓</span> Unlimited AI coloring pages</li>
+                    <li><span class="check">✓</span> Priority new languages</li>
+                    <li><span class="check">✓</span> 1-on-1 onboarding call</li>
+                    <li><span class="check">✓</span> Community access</li>
+                </ul>
+                <button class="price-btn outline" onclick="alert('Payment integration coming!')">Start 7-Day Free Trial</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+    <div class="section-label">FAQ</div>
+    <div class="section-title">Common questions</div>
+    <div style="max-width:700px;margin-top:24px;">
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Is this a replacement for speech therapy? <span class="faq-arrow">▼</span></div>
+            <div class="faq-a"><strong>No.</strong> BabyPath is a supplement to professional therapy, not a replacement. If your child has significant delays, please see a certified speech-language pathologist. Our tool helps you practice at home between sessions and gives you evidence-based techniques to use daily.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Will using 3 languages confuse my child? <span class="faq-arrow">▼</span></div>
+            <div class="faq-a"><strong>No.</strong> Research consistently shows bilingualism does NOT cause speech delays (Petitto et al., 2001; ASHA position statement). Count vocabulary across ALL languages. A child who says 10 words in English and 15 in Russian has 25 words — that's great!</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">My child is 2 and barely talks. Should I worry? <span class="faq-arrow">▼</span></div>
+            <div class="faq-a">Many "late talkers" catch up by age 3. But early intervention is most effective before age 3. If your child has fewer than 50 words by 24 months or isn't combining words, it's worth getting an evaluation. Trust your instincts — you know your child best. Our milestone tracker can help you identify areas to discuss with your pediatrician.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Is this just for moms? <span class="faq-arrow">▼</span></div>
+            <div class="faq-a"><strong>Absolutely not.</strong> This was built by a dad. Research shows children benefit enormously when fathers are actively involved in language development. Every feature is designed for both parents. No pink-washing, no "mommy" language — just parenting.</div>
+        </div>
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">What makes this different from other apps? <span class="faq-arrow">▼</span></div>
+            <div class="faq-a">Three things: (1) Every word has a parent coaching tip telling you HOW to use it naturally — not just "tap to hear." (2) We tell you what approximations to accept — "ba" for ball IS a word. (3) We support underserved languages (Russian, Kyrgyz) that most apps ignore.</div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-    <!-- MONETIZATION: Footer banner ad -->
-    <div class="footer-ad">
-        <div class="ad-slot" id="ad-footer-banner">
-            <span>📢 Footer Banner Ad — 728x90</span>
-        </div>
+    <div class="footer-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Contact</a>
+        <a href="https://github.com/TimurTMone/gamealt" target="_blank">GitHub</a>
     </div>
-    <p>AltPlay &copy; 2026 — Built with ❤️ for kids and learners.</p>
-    <p style="margin-top: 6px;">
-        <a href="#">Privacy Policy</a> · <a href="#">Terms</a> · <a href="#">Contact</a>
-    </p>
+    <div class="footer-copy">BabyPath &copy; 2026 — Built with ❤️ by parents who needed this themselves.</div>
 </footer>
 
 <script>
-    // ─── PLAY COUNTS (localStorage) ───
-    function getPlays() {
-        return parseInt(localStorage.getItem('altplay_total_plays') || '0');
-    }
-
-    function addPlay() {
-        const plays = getPlays() + 1;
-        localStorage.setItem('altplay_total_plays', plays);
-        document.getElementById('total-plays').textContent = plays;
-    }
-
-    document.getElementById('total-plays').textContent = getPlays();
-
-    // ─── LEADERBOARD (localStorage) ───
-    function updateLeaderboard() {
-        const scores = JSON.parse(localStorage.getItem('altplay_typing_scores') || '[]');
-        if (scores.length === 0) return;
-
-        const lb = document.getElementById('leaderboard');
-        // Merge with defaults
-        const defaults = [
-            { name: 'SpeedDemon', wpm: 142 },
-            { name: 'TypeNinja', wpm: 128 },
-            { name: 'KeyMaster', wpm: 115 },
-        ];
-        const all = [...defaults, ...scores].sort((a, b) => b.wpm - a.wpm).slice(0, 5);
-
-        lb.innerHTML = all.map((entry, i) => {
-            const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-            return `
-                <div class="leaderboard-item">
-                    <span class="lb-rank ${rankClass}">${i + 1}</span>
-                    <span class="lb-name">${entry.name}</span>
-                    <span class="lb-score">${entry.wpm} WPM</span>
-                </div>
-            `;
-        }).join('');
-    }
-    updateLeaderboard();
-
-    // ─── INTERSTITIAL AD LOGIC ───
-    let interstitialTarget = null;
-    let skipCountdown = null;
-
-    function showInterstitial(gameSlug) {
-        interstitialTarget = gameSlug;
-        const overlay = document.getElementById('interstitial');
-        const timer = document.getElementById('skip-timer');
-        const btn = document.getElementById('skip-btn');
-
-        overlay.classList.add('active');
-        btn.style.display = 'none';
-        let seconds = 3;
-        timer.textContent = `You can skip in ${seconds}s...`;
-
-        skipCountdown = setInterval(() => {
-            seconds--;
-            if (seconds <= 0) {
-                clearInterval(skipCountdown);
-                timer.textContent = '';
-                btn.style.display = 'inline-block';
-            } else {
-                timer.textContent = `You can skip in ${seconds}s...`;
-            }
-        }, 1000);
-    }
-
-    function skipInterstitial() {
-        document.getElementById('interstitial').classList.remove('active');
-        clearInterval(skipCountdown);
-        if (interstitialTarget) {
-            addPlay();
-            window.location.href = `games/${interstitialTarget}.html`;
-        }
-    }
-
-    // ─── LAUNCH GAME ───
-    function launchGame(slug) {
-        if (slug === 'coming-soon') return;
-
-        // Show interstitial ad before launching
-        // To skip the interstitial for testing, comment out showInterstitial and uncomment direct navigation
-        showInterstitial(slug);
-
-        // Direct launch (no interstitial):
-        // addPlay();
-        // window.location.href = `games/${slug}.html`;
-    }
-
-    // ─── REWARDED AD ───
-    function showRewardAd() {
-        /*
-            MONETIZATION: Rewarded video ad integration point.
-
-            Example with Google AdMob:
-            admob.showRewardedAd({
-                onReward: () => {
-                    localStorage.setItem('altplay_freeze_powerup', 'true');
-                    alert('You earned a Freeze Power-Up!');
-                }
-            });
-
-            For now, simulate:
-        */
-        alert('🎬 [Ad would play here]\n\n⚡ You earned a Freeze Power-Up!\nUse it in Word Warrior to freeze all words for 3 seconds.');
-        localStorage.setItem('altplay_freeze_powerup', 'true');
-    }
-
-    // ─── AD NETWORK INITIALIZATION ───
-    //
-    // MONETIZATION SETUP — Replace these comments with your ad network initialization.
-    //
-    // Google AdSense:
-    //   1. Add adsbygoogle.js to the head tag with your ca-pub-YOUR_ID
-    //   2. Replace each .ad-slot innerHTML with an ins.adsbygoogle element
-    //
-    // Ad Slot IDs for your reference:
-    //   #ad-top-banner        -> Leaderboard 728x90 (top of page)
-    //   #ad-mid-content       -> In-feed responsive (between games)
-    //   #ad-sidebar-rect      -> Medium rectangle 300x250 (sidebar)
-    //   #ad-sidebar-rect-2    -> Medium rectangle 300x250 (sidebar 2)
-    //   #ad-interstitial      -> Interstitial 480x320 (pre-game)
-    //   #ad-footer-banner     -> Leaderboard 728x90 (footer)
-    //
-    // Revenue estimates (rough, US traffic):
-    //   Banner ads: $1-3 CPM
-    //   Medium rectangles: $2-5 CPM
-    //   Interstitials: $5-15 CPM
-    //   Rewarded video: $10-30 CPM (highest revenue)
-    //
-    // In-game ad slots (in each game file):
-    //   Typing Arena: banner during gameplay + interstitial on game over
-    //   Kid Zone: banner at top (parent-facing)
-    //
+function scrollTo(sel) {
+    document.querySelector(sel)?.scrollIntoView({ behavior: 'smooth' });
+}
 </script>
 
 </body>
