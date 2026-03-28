@@ -140,48 +140,6 @@
             color: #fff;
         }
 
-        /* ─── AD BAR (for parent) ─── */
-        .parent-ad {
-            position: fixed;
-            top: 36px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
-        }
-
-        .parent-bar:hover + .parent-ad,
-        .parent-ad:hover {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .parent-ad .ad-slot {
-            width: 468px;
-            max-width: 90vw;
-            height: 50px;
-            background: rgba(20,20,35,0.9);
-            border: 1px dashed rgba(255,255,255,0.15);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.3);
-            font-size: 11px;
-            position: relative;
-        }
-
-        .parent-ad .ad-slot::before {
-            content: 'Ad';
-            position: absolute;
-            top: 2px;
-            right: 6px;
-            font-size: 8px;
-            color: rgba(255,255,255,0.2);
-        }
-
         /* ─── WELCOME SCREEN ─── */
         #welcome {
             position: fixed;
@@ -362,15 +320,6 @@
         <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
         <button onclick="showExitModal()">🔓 Exit (PIN)</button>
     </div>
-</div>
-
-<!--
-    MONETIZATION: Parent-facing banner ad.
-    Only visible when parent hovers the top bar.
-    Non-intrusive — kid never sees it.
--->
-<div class="parent-ad">
-    <div class="ad-slot" id="ad-kidzone-banner">📢 Parent-Facing Ad — 468x50</div>
 </div>
 
 <!-- Welcome screen -->

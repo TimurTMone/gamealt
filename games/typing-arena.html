@@ -391,38 +391,6 @@
             margin-top: 4px;
         }
 
-        /* ─── IN-GAME AD ─── */
-        .ingame-ad {
-            position: absolute;
-            bottom: 175px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 40;
-        }
-
-        .ingame-ad .ad-slot {
-            width: 468px;
-            max-width: 90vw;
-            height: 50px;
-            background: rgba(20,20,35,0.8);
-            border: 1px dashed rgba(108,92,231,0.2);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #555;
-            font-size: 11px;
-        }
-
-        .ingame-ad .ad-slot::before {
-            content: 'Ad';
-            position: absolute;
-            top: 2px;
-            right: 6px;
-            font-size: 8px;
-            color: #444;
-        }
-
         /* ─── PARTICLES ─── */
         .particle {
             position: absolute;
@@ -571,15 +539,6 @@
     <!-- DEFENSE LINE (words reaching here = lose life) -->
     <div class="defense-line" id="defense-line"></div>
 
-    <!-- IN-GAME AD -->
-    <!--
-        MONETIZATION: Small in-game banner ad.
-        Shows during gameplay — non-intrusive placement above keyboard.
-    -->
-    <div class="ingame-ad" id="ingame-ad">
-        <div class="ad-slot">📢 In-Game Banner — 468x50</div>
-    </div>
-
     <!-- VIRTUAL KEYBOARD -->
     <div class="keyboard-container" id="keyboard">
         <div class="finger-guide" id="finger-guide">
@@ -614,13 +573,6 @@
         <div class="screen-title" id="go-title">GAME OVER</div>
         <div class="screen-sub" id="go-sub">The bugs broke through!</div>
         <div class="go-stats" id="go-stats"></div>
-        <!--
-            MONETIZATION: Post-game interstitial / rewarded ad.
-            Perfect time for a "Watch ad to continue" or interstitial.
-        -->
-        <button class="big-btn" style="background:linear-gradient(135deg,#fdcb6e,#e17055);font-size:14px;padding:12px 28px;margin-bottom:8px;" onclick="showContinueAd()">
-            ▶ Watch Ad to Continue
-        </button>
         <button class="big-btn" onclick="startGame()">PLAY AGAIN ⚔️</button>
         <button class="big-btn" style="background:rgba(255,255,255,0.05);font-size:14px;padding:10px 24px;" onclick="window.location.href='../index.html'">← Back to Games</button>
     </div>
@@ -784,7 +736,7 @@ function getConfig() {
 // ============ DEFENSE LINE ============
 function getDefenseY() {
     const kbHeight = document.getElementById('keyboard').offsetHeight;
-    return window.innerHeight - kbHeight - 70; // above ad + keyboard
+    return window.innerHeight - kbHeight - 20; // above keyboard
 }
 
 function updateDefenseLine() {
@@ -1207,28 +1159,6 @@ function gameOver() {
         <div class="go-stat"><div class="val">${wave}</div><div class="lbl">Waves</div></div>
         <div class="go-stat"><div class="val">${wordsTyped}</div><div class="lbl">Words</div></div>
     `;
-}
-
-function showContinueAd() {
-    /*
-        MONETIZATION: Rewarded ad for extra life.
-        Replace with real rewarded ad SDK call:
-
-        admob.showRewardedAd({
-            onReward: () => {
-                lives = 2;
-                state = 'playing';
-                ...resume game
-            }
-        });
-    */
-    alert('🎬 [Rewarded ad would play here]\n\nYou earned 2 extra lives!');
-    lives = 2;
-    updateLives();
-    document.getElementById('gameover-screen').classList.add('hidden');
-    state = 'playing';
-    lastFrame = performance.now();
-    requestAnimationFrame(gameLoop);
 }
 
 // Handle resize
