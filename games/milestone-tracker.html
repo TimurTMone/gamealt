@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BabyPath - Milestone Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #fef6e4;
+  --bg-card: #ffffff;
+  --primary: #6366f1;
+  --primary-light: #a5b4fc;
+  --primary-dark: #4f46e5;
+  --pink: #ec4899;
+  --pink-light: #fbcfe8;
+  --green: #10b981;
+  --green-light: #d1fae5;
+  --yellow: #f59e0b;
+  --yellow-light: #fef3c7;
+  --red: #ef4444;
+  --red-light: #fee2e2;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --text-lighter: #94a3b8;
+  --border: #e2e8f0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --transition: 0.2s ease;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ---- NAV ---- */
+.nav {
+  background: var(--bg-card);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-left { display: flex; align-items: center; gap: 12px; }
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none; color: var(--primary);
+  font-weight: 700; font-size: 14px;
+  padding: 6px 12px; border-radius: var(--radius-sm);
+  background: rgba(99,102,241,0.08);
+  transition: var(--transition);
+}
+.back-btn:hover { background: rgba(99,102,241,0.15); }
+.nav-title {
+  font-weight: 800; font-size: 18px;
+  background: linear-gradient(135deg, var(--primary), var(--pink));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.nav-right { display: flex; align-items: center; gap: 8px; }
+.lang-btn {
+  padding: 5px 10px; border-radius: 8px; border: 2px solid var(--border);
+  background: var(--bg-card); font-family: 'Nunito',sans-serif;
+  font-weight: 700; font-size: 13px; cursor: pointer;
+  color: var(--text-light); transition: var(--transition);
+}
+.lang-btn.active {
+  border-color: var(--primary); color: var(--primary);
+  background: rgba(99,102,241,0.08);
+}
+
+/* ---- CONTAINER ---- */
+.container { max-width: 900px; margin: 0 auto; padding: 20px 16px 80px; }
+
+/* ---- TAB NAV ---- */
+.tab-nav {
+  display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 16px;
+  -ms-overflow-style: none; scrollbar-width: none;
+}
+.tab-nav::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 8px 16px; border-radius: 24px; border: none;
+  background: var(--bg-card); font-family: 'Nunito', sans-serif;
+  font-weight: 700; font-size: 13px; cursor: pointer;
+  color: var(--text-light); white-space: nowrap;
+  box-shadow: var(--shadow); transition: var(--transition);
+}
+.tab-btn.active {
+  background: var(--primary); color: #fff;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+}
+
+/* ---- CARDS ---- */
+.card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 24px; margin-bottom: 16px; box-shadow: var(--shadow);
+}
+.card-title {
+  font-size: 18px; font-weight: 800; margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ---- BABY PROFILE ---- */
+.profile-card {
+  background: linear-gradient(135deg, var(--primary), #8b5cf6, var(--pink));
+  color: #fff; padding: 28px; border-radius: var(--radius);
+  margin-bottom: 20px; box-shadow: var(--shadow-lg);
+}
+.profile-inner { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.profile-photo {
+  width: 90px; height: 90px; border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.5);
+  object-fit: cover; background: rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 36px; cursor: pointer; overflow: hidden;
+  flex-shrink: 0; position: relative;
+}
+.profile-photo img { width: 100%; height: 100%; object-fit: cover; }
+.profile-photo-placeholder { font-size: 36px; }
+.profile-info { flex: 1; min-width: 180px; }
+.profile-name { font-size: 24px; font-weight: 800; margin-bottom: 2px; }
+.profile-age { font-size: 15px; opacity: 0.9; }
+.profile-dob { font-size: 13px; opacity: 0.7; }
+.profile-edit-btn {
+  background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
+  color: #fff; padding: 8px 18px; border-radius: var(--radius-sm);
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  font-size: 13px; cursor: pointer; transition: var(--transition);
+}
+.profile-edit-btn:hover { background: rgba(255,255,255,0.3); }
+.profile-setup {
+  text-align: center; padding: 40px 20px;
+}
+.profile-setup p { opacity: 0.9; margin-bottom: 16px; font-size: 15px; }
+
+/* ---- MODAL ---- */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  align-items: center; justify-content: center;
+  padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 28px; max-width: 420px; width: 100%;
+  box-shadow: var(--shadow-lg); max-height: 90vh; overflow-y: auto;
+}
+.modal h3 { font-size: 20px; font-weight: 800; margin-bottom: 16px; }
+.form-group { margin-bottom: 14px; }
+.form-group label {
+  display: block; font-weight: 700; font-size: 13px;
+  color: var(--text-light); margin-bottom: 4px;
+}
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%; padding: 10px 14px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'Nunito', sans-serif;
+  font-size: 15px; transition: var(--transition);
+  background: var(--bg);
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+  outline: none; border-color: var(--primary);
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+.btn-row { display: flex; gap: 10px; margin-top: 18px; }
+.btn {
+  padding: 10px 20px; border-radius: var(--radius-sm); border: none;
+  font-family: 'Nunito', sans-serif; font-weight: 700;
+  font-size: 14px; cursor: pointer; transition: var(--transition);
+}
+.btn-primary { background: var(--primary); color: #fff; }
+.btn-primary:hover { background: var(--primary-dark); }
+.btn-secondary { background: var(--border); color: var(--text); }
+.btn-secondary:hover { background: #cbd5e1; }
+.btn-pink { background: var(--pink); color: #fff; }
+.btn-pink:hover { background: #db2777; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-green:hover { background: #059669; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-block { width: 100%; text-align: center; }
+
+/* ---- STATS ---- */
+.stats-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--bg-card); border-radius: var(--radius);
+  padding: 18px; text-align: center; box-shadow: var(--shadow);
+}
+.stat-number { font-size: 28px; font-weight: 800; color: var(--primary); }
+.stat-label { font-size: 12px; font-weight: 600; color: var(--text-light); margin-top: 2px; }
+
+/* ---- MILESTONE LIST ---- */
+.category-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 0 10px; border-bottom: 2px solid var(--border);
+  margin-bottom: 14px;
+}
+.category-header .emoji { font-size: 24px; }
+.category-header .title { font-size: 18px; font-weight: 800; }
+.category-header .count { font-size: 13px; color: var(--text-light); font-weight: 600; }
+
+.milestone-item {
+  display: flex; gap: 12px; padding: 14px;
+  border-radius: var(--radius-sm); margin-bottom: 8px;
+  transition: var(--transition); border: 2px solid transparent;
+  background: var(--bg);
+}
+.milestone-item:hover { border-color: var(--primary-light); }
+.milestone-item.completed { background: var(--green-light); border-color: transparent; }
+
+.milestone-check {
+  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  border: 3px solid var(--border); cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: var(--transition);
+  margin-top: 2px; background: var(--bg-card);
+}
+.milestone-check.checked {
+  background: var(--green); border-color: var(--green); color: #fff;
+}
+.milestone-check svg { width: 16px; height: 16px; display: none; }
+.milestone-check.checked svg { display: block; }
+
+.milestone-content { flex: 1; min-width: 0; }
+.milestone-name { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+.milestone-range { font-size: 12px; color: var(--text-light); font-weight: 600; }
+.milestone-status {
+  display: inline-block; padding: 2px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; margin-left: 8px;
+}
+.status-early { background: #dbeafe; color: #2563eb; }
+.status-ontrack { background: var(--green-light); color: #059669; }
+.status-watch { background: var(--yellow-light); color: #d97706; }
+.status-overdue { background: var(--red-light); color: var(--red); }
+.status-upcoming { background: #f1f5f9; color: var(--text-light); }
+
+.milestone-date-note {
+  display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;
+}
+.milestone-date-note input, .milestone-date-note textarea {
+  padding: 6px 10px; border: 2px solid var(--border);
+  border-radius: 8px; font-family: 'Nunito', sans-serif;
+  font-size: 13px; background: var(--bg-card);
+}
+.milestone-date-note input:focus, .milestone-date-note textarea:focus {
+  outline: none; border-color: var(--primary);
+}
+.milestone-date-note input[type="date"] { width: 150px; }
+.milestone-date-note textarea {
+  flex: 1; min-width: 150px; resize: none; min-height: 34px; height: 34px;
+}
+
+/* ---- TIMELINE ---- */
+.timeline-container { position: relative; padding: 20px 0; }
+.timeline-axis {
+  position: relative; height: 6px; background: var(--border);
+  border-radius: 3px; margin: 40px 10px 60px;
+}
+.timeline-marker {
+  position: absolute; top: -8px; width: 22px; height: 22px;
+  border-radius: 50%; border: 3px solid #fff;
+  box-shadow: var(--shadow-md); transform: translateX(-50%);
+  cursor: pointer; z-index: 2;
+}
+.timeline-marker .tooltip {
+  display: none; position: absolute; bottom: 28px; left: 50%;
+  transform: translateX(-50%); background: var(--text);
+  color: #fff; padding: 6px 10px; border-radius: 8px;
+  font-size: 11px; font-weight: 600; white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+.timeline-marker:hover .tooltip { display: block; }
+.timeline-now {
+  position: absolute; top: -20px; width: 4px; height: 46px;
+  background: var(--pink); transform: translateX(-50%);
+  border-radius: 2px; z-index: 3;
+}
+.timeline-now-label {
+  position: absolute; top: -38px; left: 50%;
+  transform: translateX(-50%); background: var(--pink);
+  color: #fff; padding: 3px 10px; border-radius: 8px;
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.timeline-age-labels {
+  display: flex; justify-content: space-between;
+  padding: 0 10px; margin-top: -10px;
+}
+.timeline-age-label { font-size: 11px; color: var(--text-light); font-weight: 600; }
+.color-motor { background: var(--primary); }
+.color-speech { background: var(--pink); }
+.color-cognitive { background: var(--yellow); }
+.color-social { background: var(--green); }
+.timeline-legend {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  margin-top: 10px; justify-content: center;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+
+/* ---- JOURNAL ---- */
+.journal-entry {
+  padding: 14px; background: var(--bg); border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+}
+.journal-date { font-size: 12px; color: var(--text-light); font-weight: 700; }
+.journal-text { font-size: 14px; margin-top: 4px; white-space: pre-wrap; }
+.journal-delete {
+  float: right; background: none; border: none;
+  color: var(--text-lighter); cursor: pointer; font-size: 16px;
+}
+.journal-delete:hover { color: var(--red); }
+
+/* ---- RED FLAGS ---- */
+.red-flag-item {
+  padding: 14px; background: var(--red-light); border-radius: var(--radius-sm);
+  margin-bottom: 10px; border-left: 4px solid var(--red);
+}
+.red-flag-item .flag-age { font-size: 12px; font-weight: 700; color: var(--red); }
+.red-flag-item .flag-text { font-size: 14px; font-weight: 600; margin-top: 2px; }
+
+/* ---- REPORT ---- */
+.report-category {
+  padding: 16px; background: var(--bg); border-radius: var(--radius-sm);
+  margin-bottom: 10px;
+}
+.report-cat-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.report-cat-name { font-weight: 800; font-size: 15px; }
+.report-badge {
+  padding: 3px 10px; border-radius: 8px; font-size: 12px; font-weight: 700;
+}
+.badge-ahead { background: #dbeafe; color: #2563eb; }
+.badge-ontrack { background: var(--green-light); color: #059669; }
+.badge-attention { background: var(--yellow-light); color: #d97706; }
+.progress-bar {
+  height: 8px; background: var(--border); border-radius: 4px; overflow: hidden;
+}
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+.progress-fill.fill-green { background: var(--green); }
+.progress-fill.fill-yellow { background: var(--yellow); }
+.progress-fill.fill-blue { background: var(--primary); }
+
+.disclaimer {
+  background: var(--yellow-light); border: 2px solid #fbbf24;
+  border-radius: var(--radius-sm); padding: 14px;
+  font-size: 13px; font-weight: 600; color: #92400e;
+  margin-bottom: 16px; text-align: center;
+}
+
+/* ---- PREMIUM CTA ---- */
+.premium-cta {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+  color: #fff; padding: 24px; border-radius: var(--radius);
+  text-align: center; margin: 20px 0; box-shadow: var(--shadow-md);
+}
+.premium-cta h3 { font-size: 18px; margin-bottom: 6px; }
+.premium-cta p { font-size: 13px; opacity: 0.9; margin-bottom: 14px; }
+.premium-cta .btn {
+  background: rgba(255,255,255,0.25); color: #fff;
+  border: 2px solid rgba(255,255,255,0.4);
+}
+.premium-cta .btn:hover { background: rgba(255,255,255,0.35); }
+
+/* ---- SECTION HIDDEN ---- */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 600px) {
+  .container { padding: 14px 10px 80px; }
+  .profile-inner { flex-direction: column; text-align: center; }
+  .profile-photo { margin: 0 auto; }
+  .profile-info { text-align: center; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .nav-title { font-size: 15px; }
+  .milestone-date-note { flex-direction: column; }
+  .milestone-date-note input[type="date"] { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <a href="../index.html" class="back-btn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      <span data-i18n="back">Back</span>
+    </a>
+    <span class="nav-title">BabyPath</span>
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('ru')">RU</button>
+    <button class="lang-btn" onclick="setLang('ky')">KY</button>
+  </div>
+</nav>
+
+<!-- CONTAINER -->
+<div class="container">
+
+  <!-- BABY PROFILE CARD -->
+  <div id="profileCard" class="profile-card">
+    <!-- filled by JS -->
+  </div>
+
+  <!-- TAB NAV -->
+  <div class="tab-nav">
+    <button class="tab-btn active" data-tab="dashboard" data-i18n="tab_dashboard">Dashboard</button>
+    <button class="tab-btn" data-tab="milestones" data-i18n="tab_milestones">Milestones</button>
+    <button class="tab-btn" data-tab="timeline" data-i18n="tab_timeline">Timeline</button>
+    <button class="tab-btn" data-tab="report" data-i18n="tab_report">Report</button>
+    <button class="tab-btn" data-tab="journal" data-i18n="tab_journal">Journal</button>
+    <button class="tab-btn" data-tab="redflags" data-i18n="tab_redflags">Red Flags</button>
+  </div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <div id="sec-dashboard" class="section active">
+    <div id="dashStats" class="stats-grid"></div>
+    <div class="card">
+      <div class="card-title" data-i18n="recent_milestones">Recent Milestones</div>
+      <div id="recentMilestones"></div>
+    </div>
+    <div class="premium-cta">
+      <h3 data-i18n="pro_title">Upgrade to BabyPath Pro</h3>
+      <p data-i18n="pro_desc">Unlock photo diary, detailed analytics, multi-child profiles, and PDF export.</p>
+      <button class="btn" onclick="alert('Coming soon! Pro features are under development.')" data-i18n="pro_btn">Upgrade to Pro</button>
+    </div>
+  </div>
+
+  <!-- ============ MILESTONES ============ -->
+  <div id="sec-milestones" class="section">
+    <div class="card" style="padding:12px 16px; margin-bottom: 14px;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-sm btn-primary cat-filter active" data-cat="all" data-i18n="all">All</button>
+        <button class="btn btn-sm btn-secondary cat-filter" data-cat="motor" data-i18n="cat_motor">Motor Skills</button>
+        <button class="btn btn-sm btn-secondary cat-filter" data-cat="speech" data-i18n="cat_speech">Speech & Language</button>
+        <button class="btn btn-sm btn-secondary cat-filter" data-cat="cognitive" data-i18n="cat_cognitive">Cognitive</button>
+        <button class="btn btn-sm btn-secondary cat-filter" data-cat="social" data-i18n="cat_social">Social & Emotional</button>
+      </div>
+    </div>
+    <div id="milestoneList"></div>
+  </div>
+
+  <!-- ============ TIMELINE ============ -->
+  <div id="sec-timeline" class="section">
+    <div class="card">
+      <div class="card-title" data-i18n="visual_timeline">Visual Timeline</div>
+      <div id="timelineView" class="timeline-container"></div>
+    </div>
+  </div>
+
+  <!-- ============ REPORT ============ -->
+  <div id="sec-report" class="section">
+    <div class="disclaimer" data-i18n="disclaimer">This is NOT a diagnostic tool. It is for informational purposes only. Always consult your pediatrician with any concerns about your child's development.</div>
+    <div class="card">
+      <div class="card-title" data-i18n="progress_report">Progress Report</div>
+      <div id="reportView"></div>
+    </div>
+    <div style="text-align:center; margin-top: 14px;">
+      <button class="btn btn-primary" onclick="exportReport()" data-i18n="export_summary">Export Summary for Pediatrician</button>
+    </div>
+    <div class="premium-cta" style="margin-top:20px;">
+      <h3 data-i18n="pro_pdf_title">Want a PDF Report?</h3>
+      <p data-i18n="pro_pdf_desc">Pro users can generate beautiful PDF reports to share with healthcare providers.</p>
+      <button class="btn" onclick="alert('Coming soon! PDF export is a Pro feature.')" data-i18n="pro_pdf_btn">Upgrade for PDF Export</button>
+    </div>
+  </div>
+
+  <!-- ============ JOURNAL ============ -->
+  <div id="sec-journal" class="section">
+    <div class="card">
+      <div class="card-title" data-i18n="journal_title">Journal & Notes</div>
+      <div class="form-group">
+        <textarea id="journalInput" rows="3" data-i18n-placeholder="journal_placeholder" placeholder="Write an observation, a funny moment, or a concern..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="addJournalEntry()" data-i18n="add_entry">Add Entry</button>
+      <div id="journalList" style="margin-top: 16px;"></div>
+    </div>
+    <div class="premium-cta">
+      <h3 data-i18n="pro_photo_title">Photo Diary</h3>
+      <p data-i18n="pro_photo_desc">Pro users can attach photos to journal entries and create a visual memory book.</p>
+      <button class="btn" onclick="alert('Coming soon! Photo diary is a Pro feature.')" data-i18n="pro_photo_btn">Upgrade for Photo Diary</button>
+    </div>
+  </div>
+
+  <!-- ============ RED FLAGS ============ -->
+  <div id="sec-redflags" class="section">
+    <div class="disclaimer" data-i18n="disclaimer">This is NOT a diagnostic tool. It is for informational purposes only. Always consult your pediatrician with any concerns about your child's development.</div>
+    <div class="card">
+      <div class="card-title" data-i18n="redflags_title">When to Talk to a Professional</div>
+      <p style="font-size:14px; color:var(--text-light); margin-bottom:16px;" data-i18n="redflags_intro">Based on your baby's age, here are developmental signs that may warrant a conversation with your pediatrician. Every child develops at their own pace, but these are considered important checkpoints.</p>
+      <div id="redFlagsList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE MODAL -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal">
+    <h3 data-i18n="edit_profile">Baby Profile</h3>
+    <div class="form-group">
+      <label data-i18n="baby_name">Baby's Name</label>
+      <input type="text" id="inputName" placeholder="Baby">
+    </div>
+    <div class="form-group">
+      <label data-i18n="date_of_birth">Date of Birth</label>
+      <input type="date" id="inputDob">
+    </div>
+    <div class="form-group">
+      <label data-i18n="photo_label">Photo (optional)</label>
+      <input type="file" id="inputPhoto" accept="image/*">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="saveProfile()" data-i18n="save">Save</button>
+      <button class="btn btn-secondary" onclick="closeModal('profileModal')" data-i18n="cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="photoFileInput" accept="image/*" style="display:none">
+
+<script>
+/* ===================================================================
+   INTERNATIONALIZATION DATABASE
+   =================================================================== */
+const i18n = {
+  en: {
+    back: "Back",
+    tab_dashboard: "Dashboard",
+    tab_milestones: "Milestones",
+    tab_timeline: "Timeline",
+    tab_report: "Report",
+    tab_journal: "Journal",
+    tab_redflags: "Red Flags",
+    recent_milestones: "Recent Milestones",
+    pro_title: "Upgrade to BabyPath Pro",
+    pro_desc: "Unlock photo diary, detailed analytics, multi-child profiles, and PDF export.",
+    pro_btn: "Upgrade to Pro",
+    all: "All",
+    cat_motor: "Motor Skills",
+    cat_speech: "Speech & Language",
+    cat_cognitive: "Cognitive",
+    cat_social: "Social & Emotional",
+    visual_timeline: "Visual Timeline",
+    disclaimer: "This is NOT a diagnostic tool. It is for informational purposes only. Always consult your pediatrician with any concerns about your child's development.",
+    progress_report: "Progress Report",
+    export_summary: "Export Summary for Pediatrician",
+    pro_pdf_title: "Want a PDF Report?",
+    pro_pdf_desc: "Pro users can generate beautiful PDF reports to share with healthcare providers.",
+    pro_pdf_btn: "Upgrade for PDF Export",
+    journal_title: "Journal & Notes",
+    journal_placeholder: "Write an observation, a funny moment, or a concern...",
+    add_entry: "Add Entry",
+    pro_photo_title: "Photo Diary",
+    pro_photo_desc: "Pro users can attach photos to journal entries and create a visual memory book.",
+    pro_photo_btn: "Upgrade for Photo Diary",
+    redflags_title: "When to Talk to a Professional",
+    redflags_intro: "Based on your baby's age, here are developmental signs that may warrant a conversation with your pediatrician. Every child develops at their own pace, but these are considered important checkpoints.",
+    edit_profile: "Baby Profile",
+    baby_name: "Baby's Name",
+    date_of_birth: "Date of Birth",
+    photo_label: "Photo (optional)",
+    save: "Save",
+    cancel: "Cancel",
+    setup_title: "Welcome to BabyPath!",
+    setup_desc: "Set up your baby's profile to start tracking milestones.",
+    setup_btn: "Set Up Profile",
+    edit_btn: "Edit Profile",
+    age_prefix: "",
+    years: "year",
+    years_pl: "years",
+    months: "month",
+    months_pl: "months",
+    days: "day",
+    days_pl: "days",
+    born: "Born",
+    stat_total: "Milestones Achieved",
+    stat_latest: "Latest Milestone",
+    stat_ontrack: "On Track for Age",
+    stat_days: "Days Since Last",
+    no_milestones: "No milestones logged yet. Go to Milestones tab to start!",
+    note_placeholder: "Add a note...",
+    mo: "mo",
+    status_early: "Early!",
+    status_ontrack: "On Track",
+    status_watch: "Watch",
+    status_overdue: "Overdue",
+    status_upcoming: "Upcoming",
+    now: "Now",
+    legend_motor: "Motor",
+    legend_speech: "Speech",
+    legend_cognitive: "Cognitive",
+    legend_social: "Social",
+    report_ahead: "Ahead",
+    report_ontrack: "On Track",
+    report_attention: "May Need Attention",
+    report_complete: "complete for age",
+    export_title: "BABY DEVELOPMENT SUMMARY",
+    export_generated: "Generated",
+    export_child: "Child",
+    export_age: "Age",
+    export_category: "Category",
+    export_achieved: "Achieved",
+    export_date: "Date",
+    export_note: "Note",
+    export_disclaimer: "DISCLAIMER: This summary is for informational purposes only and is not a diagnostic tool.",
+    journal_empty: "No journal entries yet. Start writing to capture precious moments!",
+    no_redflags_age: "Set up your baby's profile to see age-appropriate developmental checkpoints.",
+    no_redflags_young: "Your baby is still very young. Enjoy this time! Regular check-ups with your pediatrician are always recommended.",
+    redflags_general: "If you have any concerns about your child's development, don't hesitate to talk to your pediatrician. Early intervention can make a big difference.",
+    achieved_on: "Achieved on",
+    newborn: "newborn",
+    pro_analytics_title: "Detailed Analytics",
+    pro_analytics_desc: "Pro users get charts, percentile tracking, and comparison with developmental norms.",
+    pro_analytics_btn: "Upgrade for Analytics",
+    pro_multi_title: "Multiple Children",
+    pro_multi_desc: "Track milestones for all your children in one place.",
+    pro_multi_btn: "Upgrade for Multi-Child"
+  },
+  ru: {
+    back: "Назад",
+    tab_dashboard: "Главная",
+    tab_milestones: "Этапы",
+    tab_timeline: "Шкала",
+    tab_report: "Отчёт",
+    tab_journal: "Дневник",
+    tab_redflags: "Сигналы",
+    recent_milestones: "Недавние достижения",
+    pro_title: "Обновить до BabyPath Pro",
+    pro_desc: "Фотодневник, подробная аналитика, профили нескольких детей и экспорт в PDF.",
+    pro_btn: "Обновить до Pro",
+    all: "Все",
+    cat_motor: "Моторика",
+    cat_speech: "Речь и язык",
+    cat_cognitive: "Когнитивное",
+    cat_social: "Социальное и эмоциональное",
+    visual_timeline: "Визуальная шкала",
+    disclaimer: "Это НЕ диагностический инструмент. Информация предоставлена только в ознакомительных целях. Всегда консультируйтесь с педиатром по вопросам развития вашего ребёнка.",
+    progress_report: "Отчёт о прогрессе",
+    export_summary: "Экспорт для педиатра",
+    pro_pdf_title: "Хотите PDF отчёт?",
+    pro_pdf_desc: "Pro пользователи могут создавать красивые PDF-отчёты для врачей.",
+    pro_pdf_btn: "Обновить для PDF",
+    journal_title: "Дневник и заметки",
+    journal_placeholder: "Запишите наблюдение, забавный момент или беспокойство...",
+    add_entry: "Добавить запись",
+    pro_photo_title: "Фотодневник",
+    pro_photo_desc: "Pro пользователи могут прикреплять фото к записям и создавать книгу воспоминаний.",
+    pro_photo_btn: "Обновить для фото",
+    redflags_title: "Когда обратиться к специалисту",
+    redflags_intro: "На основе возраста вашего ребёнка, вот признаки развития, о которых стоит поговорить с педиатром. Каждый ребёнок развивается в своём темпе, но эти моменты считаются важными.",
+    edit_profile: "Профиль малыша",
+    baby_name: "Имя малыша",
+    date_of_birth: "Дата рождения",
+    photo_label: "Фото (необязательно)",
+    save: "Сохранить",
+    cancel: "Отмена",
+    setup_title: "Добро пожаловать в BabyPath!",
+    setup_desc: "Настройте профиль малыша, чтобы начать отслеживать этапы развития.",
+    setup_btn: "Настроить профиль",
+    edit_btn: "Редактировать",
+    age_prefix: "",
+    years: "год",
+    years_pl: "лет",
+    months: "месяц",
+    months_pl: "мес.",
+    days: "день",
+    days_pl: "дн.",
+    born: "Родился",
+    stat_total: "Достижений",
+    stat_latest: "Последнее достижение",
+    stat_ontrack: "В норме для возраста",
+    stat_days: "Дней с последнего",
+    no_milestones: "Пока нет достижений. Перейдите на вкладку Этапы!",
+    note_placeholder: "Добавить заметку...",
+    mo: "мес",
+    status_early: "Рано!",
+    status_ontrack: "В норме",
+    status_watch: "Внимание",
+    status_overdue: "Просрочено",
+    status_upcoming: "Впереди",
+    now: "Сейчас",
+    legend_motor: "Моторика",
+    legend_speech: "Речь",
+    legend_cognitive: "Когнитивное",
+    legend_social: "Социальное",
+    report_ahead: "Опережает",
+    report_ontrack: "В норме",
+    report_attention: "Нужно внимание",
+    report_complete: "выполнено для возраста",
+    export_title: "СВОДКА РАЗВИТИЯ РЕБЁНКА",
+    export_generated: "Создано",
+    export_child: "Ребёнок",
+    export_age: "Возраст",
+    export_category: "Категория",
+    export_achieved: "Достигнуто",
+    export_date: "Дата",
+    export_note: "Заметка",
+    export_disclaimer: "ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ: Эта сводка предоставлена только в ознакомительных целях и не является диагностическим инструментом.",
+    journal_empty: "Пока нет записей. Начните писать, чтобы сохранить драгоценные моменты!",
+    no_redflags_age: "Настройте профиль малыша, чтобы увидеть рекомендации для возраста.",
+    no_redflags_young: "Ваш малыш ещё совсем маленький. Наслаждайтесь этим временем! Регулярные осмотры у педиатра всегда рекомендуются.",
+    redflags_general: "Если у вас есть какие-либо опасения по поводу развития вашего ребёнка, не стесняйтесь поговорить с педиатром. Раннее вмешательство может многое изменить.",
+    achieved_on: "Достигнуто",
+    newborn: "новорождённый",
+    pro_analytics_title: "Подробная аналитика",
+    pro_analytics_desc: "Pro пользователи получают графики, отслеживание процентилей и сравнение с нормами.",
+    pro_analytics_btn: "Обновить для аналитики",
+    pro_multi_title: "Несколько детей",
+    pro_multi_desc: "Отслеживайте развитие всех ваших детей в одном месте.",
+    pro_multi_btn: "Обновить для мульти-профиля"
+  },
+  ky: {
+    back: "Артка",
+    tab_dashboard: "Башкы",
+    tab_milestones: "Этаптар",
+    tab_timeline: "Шкала",
+    tab_report: "Отчёт",
+    tab_journal: "Күндөлүк",
+    tab_redflags: "Сигналдар",
+    recent_milestones: "Акыркы жетишкендиктер",
+    pro_title: "BabyPath Pro га жаңыртуу",
+    pro_desc: "Фото күндөлүк, толук аналитика, бир нече балдардын профили жана PDF экспорт.",
+    pro_btn: "Pro га жаңыртуу",
+    all: "Баары",
+    cat_motor: "Моторика",
+    cat_speech: "Сүйлөө жана тил",
+    cat_cognitive: "Когнитивдик",
+    cat_social: "Социалдык жана эмоциялык",
+    visual_timeline: "Визуалдык шкала",
+    disclaimer: "Бул диагностикалык курал ЭМЕС. Маалымат гана маалыматтык максатта берилген. Балаңыздын өнүгүүсү боюнча дайыма педиатрга кайрылыңыз.",
+    progress_report: "Прогресс отчёту",
+    export_summary: "Педиатр үчүн экспорт",
+    pro_pdf_title: "PDF отчёт керекпи?",
+    pro_pdf_desc: "Pro колдонуучулар дарыгерлер үчүн PDF-отчёт түзө алышат.",
+    pro_pdf_btn: "PDF үчүн жаңыртуу",
+    journal_title: "Күндөлүк жана жазуулар",
+    journal_placeholder: "Байкоо, күлкүлүү учур же тынчсыздануу жазыңыз...",
+    add_entry: "Жазуу кошуу",
+    pro_photo_title: "Фото күндөлүк",
+    pro_photo_desc: "Pro колдонуучулар жазууларга сүрөт тиркеп, эскерүү китебин түзө алышат.",
+    pro_photo_btn: "Фото үчүн жаңыртуу",
+    redflags_title: "Адиске качан кайрылуу керек",
+    redflags_intro: "Балаңыздын жашына жараша, бул жерде педиатр менен сүйлөшүү керек болгон өнүгүү белгилери. Ар бир бала өз темпинде өнүгөт, бирок бул пункттар маанилүү деп эсептелет.",
+    edit_profile: "Балдын профили",
+    baby_name: "Баланын аты",
+    date_of_birth: "Туулган күнү",
+    photo_label: "Сүрөт (милдеттүү эмес)",
+    save: "Сактоо",
+    cancel: "Жокко чыгаруу",
+    setup_title: "BabyPath'ка кош келиңиз!",
+    setup_desc: "Өнүгүү этаптарын көзөмөлдөө үчүн баланын профилин орнотуңуз.",
+    setup_btn: "Профилди орнотуу",
+    edit_btn: "Өзгөртүү",
+    age_prefix: "",
+    years: "жаш",
+    years_pl: "жаш",
+    months: "ай",
+    months_pl: "ай",
+    days: "күн",
+    days_pl: "күн",
+    born: "Туулган",
+    stat_total: "Жетишкендиктер",
+    stat_latest: "Акыркы жетишкендик",
+    stat_ontrack: "Жашка жараша нормада",
+    stat_days: "Акыркыдан бери күн",
+    no_milestones: "Жетишкендиктер жок. Этаптар бөлүмүнө өтүңүз!",
+    note_placeholder: "Жазуу кошуу...",
+    mo: "ай",
+    status_early: "Эрте!",
+    status_ontrack: "Нормада",
+    status_watch: "Көңүл буруу",
+    status_overdue: "Мөөнөтү өттү",
+    status_upcoming: "Алдыда",
+    now: "Азыр",
+    legend_motor: "Моторика",
+    legend_speech: "Сүйлөө",
+    legend_cognitive: "Когнитивдик",
+    legend_social: "Социалдык",
+    report_ahead: "Алдыда",
+    report_ontrack: "Нормада",
+    report_attention: "Көңүл буруу керек",
+    report_complete: "жашка жараша аткарылган",
+    export_title: "БАЛАНЫН ӨНҮГҮҮ КОРУТУНДУСУ",
+    export_generated: "Түзүлгөн",
+    export_child: "Бала",
+    export_age: "Жашы",
+    export_category: "Категория",
+    export_achieved: "Жетишилген",
+    export_date: "Дата",
+    export_note: "Жазуу",
+    export_disclaimer: "ЖООПКЕРЧИЛИКТЕН БАШ ТАРТУУ: Бул корутунду маалыматтык максатта гана берилген жана диагностикалык курал эмес.",
+    journal_empty: "Жазуулар жок. Баалуу учурларды сактоо үчүн жаза баштаңыз!",
+    no_redflags_age: "Жашка жараша сунуштарды көрүү үчүн баланын профилин орнотуңуз.",
+    no_redflags_young: "Балаңыз дагы эле кичинекей. Бул убакыттан ырахат алыңыз! Педиатрга үзгүлтүксүз кайрылуу сунушталат.",
+    redflags_general: "Балаңыздын өнүгүүсү боюнча кандайдыр бир тынчсыздануу болсо, педиатрга кайрылуудан тартынбаңыз. Эрте кийлигишүү көп нерсени өзгөртө алат.",
+    achieved_on: "Жетишилген",
+    newborn: "жаңы төрөлгөн",
+    pro_analytics_title: "Толук аналитика",
+    pro_analytics_desc: "Pro колдонуучулар графиктерди, пайыздык көзөмөлдү жана нормалар менен салыштырууну алышат.",
+    pro_analytics_btn: "Аналитика үчүн жаңыртуу",
+    pro_multi_title: "Бир нече бала",
+    pro_multi_desc: "Бардык балдарыңыздын өнүгүүсүн бир жерден көзөмөлдөңүз.",
+    pro_multi_btn: "Мульти-профил үчүн жаңыртуу"
+  }
+};
+
+/* ===================================================================
+   MILESTONE DATABASE (3 languages)
+   =================================================================== */
+const milestoneDB = [
+  // ---- MOTOR SKILLS ----
+  { id: "m1", cat: "motor", minMo: 2, maxMo: 4, en: "Holds head up", ru: "Держит голову", ky: "Башын кармайт" },
+  { id: "m2", cat: "motor", minMo: 4, maxMo: 6, en: "Rolls over", ru: "Переворачивается", ky: "Оодарылат" },
+  { id: "m3", cat: "motor", minMo: 6, maxMo: 9, en: "Sits without support", ru: "Сидит без поддержки", ky: "Колдоосуз отурат" },
+  { id: "m4", cat: "motor", minMo: 7, maxMo: 10, en: "Crawls", ru: "Ползает", ky: "Эмгектейт" },
+  { id: "m5", cat: "motor", minMo: 9, maxMo: 12, en: "Pulls to stand", ru: "Встаёт с опорой", ky: "Таянып турат" },
+  { id: "m6", cat: "motor", minMo: 9, maxMo: 15, en: "First steps", ru: "Первые шаги", ky: "Биринчи кадамдар" },
+  { id: "m7", cat: "motor", minMo: 12, maxMo: 18, en: "Walks well", ru: "Хорошо ходит", ky: "Жакшы басат" },
+  { id: "m8", cat: "motor", minMo: 18, maxMo: 24, en: "Runs", ru: "Бегает", ky: "Чуркайт" },
+  { id: "m9", cat: "motor", minMo: 18, maxMo: 24, en: "Kicks a ball", ru: "Пинает мяч", ky: "Топту тебет" },
+  { id: "m10", cat: "motor", minMo: 24, maxMo: 36, en: "Jumps with both feet", ru: "Прыгает двумя ногами", ky: "Эки буту менен секирет" },
+  // ---- SPEECH & LANGUAGE ----
+  { id: "s1", cat: "speech", minMo: 2, maxMo: 6, en: "Coos and babbles", ru: "Гулит и лепечет", ky: "Күүлдөйт жана күбүрөйт" },
+  { id: "s2", cat: "speech", minMo: 6, maxMo: 9, en: "Responds to name", ru: "Откликается на имя", ky: "Атына жооп берет" },
+  { id: "s3", cat: "speech", minMo: 10, maxMo: 14, en: "First word", ru: "Первое слово", ky: "Биринчи сөз" },
+  { id: "s4", cat: "speech", minMo: 12, maxMo: 18, en: "Says 5+ words", ru: "Говорит 5+ слов", ky: "5+ сөз айтат" },
+  { id: "s5", cat: "speech", minMo: 12, maxMo: 18, en: "Points to things", ru: "Указывает на предметы", ky: "Нерселерди көрсөтөт" },
+  { id: "s6", cat: "speech", minMo: 18, maxMo: 24, en: "Says 20+ words", ru: "Говорит 20+ слов", ky: "20+ сөз айтат" },
+  { id: "s7", cat: "speech", minMo: 20, maxMo: 26, en: "Two-word phrases", ru: "Фразы из двух слов", ky: "Эки сөздүк фразалар" },
+  { id: "s8", cat: "speech", minMo: 24, maxMo: 24, en: "Says 50+ words", ru: "Говорит 50+ слов", ky: "50+ сөз айтат" },
+  { id: "s9", cat: "speech", minMo: 24, maxMo: 36, en: "Simple sentences", ru: "Простые предложения", ky: "Жөнөкөй сүйлөмдөр" },
+  { id: "s10", cat: "speech", minMo: 36, maxMo: 36, en: "Strangers understand most speech", ru: "Незнакомые понимают большую часть речи", ky: "Бөтөн адамдар сүйлөгөнүн түшүнөт" },
+  // ---- COGNITIVE ----
+  { id: "c1", cat: "cognitive", minMo: 2, maxMo: 4, en: "Follows objects with eyes", ru: "Следит за предметами глазами", ky: "Көзү менен буюмдарды ээрчийт" },
+  { id: "c2", cat: "cognitive", minMo: 4, maxMo: 6, en: "Explores objects with hands", ru: "Изучает предметы руками", ky: "Колу менен буюмдарды изилдейт" },
+  { id: "c3", cat: "cognitive", minMo: 8, maxMo: 12, en: "Object permanence", ru: "Постоянство объектов", ky: "Объект туруктуулугу" },
+  { id: "c4", cat: "cognitive", minMo: 12, maxMo: 18, en: "Stacks 2+ blocks", ru: "Ставит 2+ кубика", ky: "2+ куб коёт" },
+  { id: "c5", cat: "cognitive", minMo: 18, maxMo: 24, en: "Simple pretend play", ru: "Простая ролевая игра", ky: "Жөнөкөй ролдук оюн" },
+  { id: "c6", cat: "cognitive", minMo: 24, maxMo: 30, en: "Sorts shapes/colors", ru: "Сортирует формы/цвета", ky: "Формаларды/түстөрдү иреттейт" },
+  { id: "c7", cat: "cognitive", minMo: 24, maxMo: 36, en: "Counts to 3", ru: "Считает до 3", ky: "3кө чейин санайт" },
+  { id: "c8", cat: "cognitive", minMo: 30, maxMo: 36, en: 'Understands "mine" and "yours"', ru: 'Понимает «моё» и «твоё»', ky: '"Меники" жана "сеники" түшүнөт' },
+  // ---- SOCIAL & EMOTIONAL ----
+  { id: "e1", cat: "social", minMo: 2, maxMo: 3, en: "Social smile", ru: "Социальная улыбка", ky: "Социалдык жылмаюу" },
+  { id: "e2", cat: "social", minMo: 3, maxMo: 4, en: "Laughs", ru: "Смеётся", ky: "Күлөт" },
+  { id: "e3", cat: "social", minMo: 6, maxMo: 9, en: "Stranger anxiety", ru: "Боязнь чужих", ky: "Бөтөн адамдардан коркуу" },
+  { id: "e4", cat: "social", minMo: 9, maxMo: 12, en: "Waves bye-bye", ru: "Машет «пока»", ky: '"Жакшы кал" деп кол булгайт' },
+  { id: "e5", cat: "social", minMo: 12, maxMo: 18, en: "Shows affection", ru: "Проявляет нежность", ky: "Мээримдүүлүк көрсөтөт" },
+  { id: "e6", cat: "social", minMo: 18, maxMo: 24, en: "Plays alongside other children", ru: "Играет рядом с другими детьми", ky: "Башка балдар менен жанаша ойнойт" },
+  { id: "e7", cat: "social", minMo: 24, maxMo: 30, en: "Shows empathy", ru: "Проявляет сочувствие", ky: "Боорукердик көрсөтөт" },
+  { id: "e8", cat: "social", minMo: 30, maxMo: 36, en: "Takes turns in play", ru: "Играет по очереди", ky: "Кезеги менен ойнойт" }
+];
+
+/* ===================================================================
+   RED FLAGS DATABASE
+   =================================================================== */
+const redFlagsDB = [
+  { ageMo: 3, en: "Does not respond to loud sounds", ru: "Не реагирует на громкие звуки", ky: "Катуу үндөргө жооп бербейт" },
+  { ageMo: 3, en: "Does not follow moving objects with eyes", ru: "Не следит за движущимися предметами глазами", ky: "Кыймылдаган нерселерди көзү менен ээрчибейт" },
+  { ageMo: 3, en: "Does not smile at people", ru: "Не улыбается людям", ky: "Адамдарга жылмайбайт" },
+  { ageMo: 3, en: "Does not bring hands to mouth", ru: "Не подносит руки ко рту", ky: "Колун оозуна алып келбейт" },
+  { ageMo: 6, en: "Does not try to reach for objects", ru: "Не тянется к предметам", ky: "Нерселерге жетүүгө аракет кылбайт" },
+  { ageMo: 6, en: "Shows no affection for caregivers", ru: "Не проявляет привязанности", ky: "Жакындарына мээрим көрсөтпөйт" },
+  { ageMo: 6, en: "Does not respond to sounds around", ru: "Не реагирует на окружающие звуки", ky: "Айланадагы үндөргө жооп бербейт" },
+  { ageMo: 6, en: "Does not make vowel sounds ('ah', 'eh', 'oh')", ru: "Не произносит гласные звуки (а, э, о)", ky: "Үндүү тыбыштарды чыгарбайт (а, э, о)" },
+  { ageMo: 9, en: "Does not bear weight on legs with support", ru: "Не опирается на ножки с поддержкой", ky: "Колдоо менен бутуна салмак салбайт" },
+  { ageMo: 9, en: "Does not sit with help", ru: "Не сидит с помощью", ky: "Жардам менен отурбайт" },
+  { ageMo: 9, en: "Does not babble ('mama', 'baba', 'dada')", ru: "Не лепечет (мама, баба, дада)", ky: "Күбүрөбөйт (мама, баба, дада)" },
+  { ageMo: 9, en: "Does not play back-and-forth games", ru: "Не играет в игры туда-сюда", ky: "Алмашып оюнайт ойнобойт" },
+  { ageMo: 9, en: "Does not respond to own name", ru: "Не откликается на своё имя", ky: "Өз атына жооп бербейт" },
+  { ageMo: 9, en: "Does not seem to recognize familiar people", ru: "Не узнаёт знакомых людей", ky: "Тааныш адамдарды тааныбайт" },
+  { ageMo: 12, en: "Does not crawl", ru: "Не ползает", ky: "Эмгектебейт" },
+  { ageMo: 12, en: "Cannot stand when supported", ru: "Не стоит с поддержкой", ky: "Колдоо менен тура албайт" },
+  { ageMo: 12, en: "Does not search for things that are hidden", ru: "Не ищет спрятанные предметы", ky: "Жашырылган нерселерди издебейт" },
+  { ageMo: 12, en: "Does not say single words like 'mama' or 'dada'", ru: "Не говорит слова вроде «мама» или «дада»", ky: "'Мама' же 'дада' сыяктуу сөздөрдү айтпайт" },
+  { ageMo: 12, en: "Does not learn gestures like waving or shaking head", ru: "Не учит жесты (махать, качать головой)", ky: "Кол булгалоо сыяктуу жаңсоолорду үйрөнбөйт" },
+  { ageMo: 12, en: "Does not point to things", ru: "Не указывает на предметы", ky: "Нерселерди көрсөтпөйт" },
+  { ageMo: 18, en: "Does not point to show things to others", ru: "Не указывает, чтобы показать что-то другим", ky: "Башкаларга нерселерди көрсөтүп жаңсабайт" },
+  { ageMo: 18, en: "Does not know what familiar things are for", ru: "Не знает, для чего знакомые предметы", ky: "Тааныш нерселердин эмне үчүн экенин билбейт" },
+  { ageMo: 18, en: "Does not copy others", ru: "Не подражает другим", ky: "Башкаларга туурабайт" },
+  { ageMo: 18, en: "Does not gain new words", ru: "Не учит новые слова", ky: "Жаңы сөздөрдү үйрөнбөйт" },
+  { ageMo: 18, en: "Does not have at least 6 words", ru: "Не знает хотя бы 6 слов", ky: "Жок дегенде 6 сөз билбейт" },
+  { ageMo: 18, en: "Does not notice or mind when a caregiver leaves or returns", ru: "Не замечает уход или возвращение родителя", ky: "Ата-энесинин кетишин же кайтышын байкабайт" },
+  { ageMo: 24, en: "Does not use two-word phrases", ru: "Не использует фразы из двух слов", ky: "Эки сөздүк фразаларды колдонбойт" },
+  { ageMo: 24, en: "Does not know what to do with common things (brush, phone, fork)", ru: "Не знает, что делать с обычными предметами (щётка, телефон, вилка)", ky: "Кадимки нерселер менен (щётка, телефон, вилка) эмне кылууну билбейт" },
+  { ageMo: 24, en: "Does not copy actions and words", ru: "Не копирует действия и слова", ky: "Кыймылдарды жана сөздөрдү көчүрбөйт" },
+  { ageMo: 24, en: "Does not follow simple instructions", ru: "Не выполняет простые инструкции", ky: "Жөнөкөй нускамаларды аткарбайт" },
+  { ageMo: 24, en: "Does not walk steadily", ru: "Не ходит уверенно", ky: "Туруктуу баспайт" },
+  { ageMo: 24, en: "Loses skills they once had", ru: "Теряет навыки, которые раньше были", ky: "Мурда бар болгон көндүмдөрүн жоготот" },
+  { ageMo: 36, en: "Falls down a lot or has trouble with stairs", ru: "Часто падает или с трудом поднимается по лестнице", ky: "Көп жыгылат же тепкичте кыйналат" },
+  { ageMo: 36, en: "Drools or has very unclear speech", ru: "Текут слюни или речь очень неразборчива", ky: "Шилекейи агат же сүйлөгөнү абдан түшүнүксүз" },
+  { ageMo: 36, en: "Cannot work simple toys (peg boards, simple puzzles, turning handle)", ru: "Не может использовать простые игрушки (доски с колышками, простые пазлы)", ky: "Жөнөкөй оюнчуктарды колдоно албайт (пазлдар, тешикке салуу)" },
+  { ageMo: 36, en: "Does not speak in sentences", ru: "Не говорит предложениями", ky: "Сүйлөмдөр менен сүйлөбөйт" },
+  { ageMo: 36, en: "Does not understand simple instructions", ru: "Не понимает простые инструкции", ky: "Жөнөкөй нускамаларды түшүнбөйт" },
+  { ageMo: 36, en: "Does not play pretend or make-believe", ru: "Не играет в ролевые игры", ky: "Ролдук оюндарды ойнобойт" },
+  { ageMo: 36, en: "Does not want to play with other children or with toys", ru: "Не хочет играть с другими детьми или игрушками", ky: "Башка балдар же оюнчуктар менен ойногусу келбейт" },
+  { ageMo: 36, en: "Does not make eye contact", ru: "Не смотрит в глаза", ky: "Көзүнө карабайт" },
+  { ageMo: 36, en: "Loses skills they once had", ru: "Теряет навыки, которые раньше были", ky: "Мурда бар болгон көндүмдөрүн жоготот" }
+];
+
+/* ===================================================================
+   CATEGORY META
+   =================================================================== */
+const catMeta = {
+  motor:     { emoji: "\u{1F3C3}", color: "var(--primary)", en: "Motor Skills", ru: "Моторика", ky: "Моторика" },
+  speech:    { emoji: "\u{1F5E3}\uFE0F", color: "var(--pink)", en: "Speech & Language", ru: "Речь и язык", ky: "Сүйлөө жана тил" },
+  cognitive: { emoji: "\u{1F9E0}", color: "var(--yellow)", en: "Cognitive", ru: "Когнитивное развитие", ky: "Когнитивдик өнүгүү" },
+  social:    { emoji: "\u2764\uFE0F", color: "var(--green)", en: "Social & Emotional", ru: "Социальное и эмоциональное", ky: "Социалдык жана эмоциялык" }
+};
+
+/* ===================================================================
+   STATE
+   =================================================================== */
+let lang = localStorage.getItem('bp_lang') || 'en';
+let profile = JSON.parse(localStorage.getItem('bp_profile') || 'null');
+let milestoneData = JSON.parse(localStorage.getItem('bp_milestones') || '{}');
+let journal = JSON.parse(localStorage.getItem('bp_journal') || '[]');
+let activeTab = 'dashboard';
+let activeCatFilter = 'all';
+
+/* ===================================================================
+   HELPERS
+   =================================================================== */
+function t(key) { return (i18n[lang] && i18n[lang][key]) || i18n.en[key] || key; }
+
+function getAgeInMonths() {
+  if (!profile || !profile.dob) return null;
+  const dob = new Date(profile.dob);
+  const now = new Date();
+  let months = (now.getFullYear() - dob.getFullYear()) * 12 + (now.getMonth() - dob.getMonth());
+  if (now.getDate() < dob.getDate()) months--;
+  return Math.max(0, months);
+}
+
+function getAgeInDays() {
+  if (!profile || !profile.dob) return null;
+  const dob = new Date(profile.dob);
+  const now = new Date();
+  return Math.floor((now - dob) / (1000 * 60 * 60 * 24));
+}
+
+function formatAge(totalMonths) {
+  if (totalMonths === null || totalMonths === undefined) return '';
+  if (totalMonths < 1) return t('newborn');
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  let parts = [];
+  if (years > 0) parts.push(years + ' ' + (years === 1 ? t('years') : t('years_pl')));
+  if (months > 0) parts.push(months + ' ' + (months === 1 ? t('months') : t('months_pl')));
+  return parts.join(', ');
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString(lang === 'ru' ? 'ru-RU' : lang === 'ky' ? 'ky-KG' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function getMilestoneStatus(ms) {
+  const ageMo = getAgeInMonths();
+  if (ageMo === null) return 'upcoming';
+  const data = milestoneData[ms.id];
+  if (data && data.done) {
+    // check if early
+    if (data.date) {
+      const dob = new Date(profile.dob);
+      const achieveDate = new Date(data.date);
+      const achieveMonths = (achieveDate.getFullYear() - dob.getFullYear()) * 12 + (achieveDate.getMonth() - dob.getMonth());
+      if (achieveMonths < ms.minMo) return 'early';
+    }
+    return 'ontrack';
+  }
+  if (ageMo < ms.minMo) return 'upcoming';
+  if (ageMo >= ms.minMo && ageMo <= ms.maxMo) return 'ontrack';
+  if (ageMo > ms.maxMo) return 'overdue';
+  return 'upcoming';
+}
+
+function getStatusForDisplay(ms) {
+  const status = getMilestoneStatus(ms);
+  const data = milestoneData[ms.id];
+  if (data && data.done) {
+    if (status === 'early') return { cls: 'status-early', text: t('status_early') };
+    return { cls: 'status-ontrack', text: t('status_ontrack') };
+  }
+  if (status === 'upcoming') return { cls: 'status-upcoming', text: t('status_upcoming') };
+  if (status === 'ontrack') return { cls: 'status-ontrack', text: t('status_ontrack') };
+  if (status === 'overdue') return { cls: 'status-overdue', text: t('status_watch') };
+  return { cls: 'status-upcoming', text: '' };
+}
+
+function saveMilestones() { localStorage.setItem('bp_milestones', JSON.stringify(milestoneData)); }
+function saveJournal() { localStorage.setItem('bp_journal', JSON.stringify(journal)); }
+function saveProfile_() { localStorage.setItem('bp_profile', JSON.stringify(profile)); }
+
+/* ===================================================================
+   LANGUAGE
+   =================================================================== */
+function setLang(l) {
+  lang = l;
+  localStorage.setItem('bp_lang', l);
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === l.toUpperCase());
+  });
+  applyI18n();
+  renderAll();
+}
+
+function applyI18n() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang] && i18n[lang][key]) el.textContent = i18n[lang][key];
+    else if (i18n.en[key]) el.textContent = i18n.en[key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (i18n[lang] && i18n[lang][key]) el.placeholder = i18n[lang][key];
+    else if (i18n.en[key]) el.placeholder = i18n.en[key];
+  });
+}
+
+/* ===================================================================
+   TABS
+   =================================================================== */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeTab = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.getElementById('sec-' + activeTab).classList.add('active');
+    renderAll();
+  });
+});
+
+/* CATEGORY FILTER */
+document.querySelectorAll('.cat-filter').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeCatFilter = btn.dataset.cat;
+    document.querySelectorAll('.cat-filter').forEach(b => {
+      b.classList.remove('active', 'btn-primary');
+      b.classList.add('btn-secondary');
+    });
+    btn.classList.add('active', 'btn-primary');
+    btn.classList.remove('btn-secondary');
+    renderMilestones();
+  });
+});
+
+/* ===================================================================
+   PROFILE
+   =================================================================== */
+function renderProfile() {
+  const card = document.getElementById('profileCard');
+  if (!profile) {
+    card.innerHTML = `
+      <div class="profile-setup">
+        <div style="font-size:48px; margin-bottom:12px;">\u{1F476}</div>
+        <div class="profile-name" data-i18n="setup_title">${t('setup_title')}</div>
+        <p data-i18n="setup_desc">${t('setup_desc')}</p>
+        <button class="profile-edit-btn" onclick="openModal('profileModal')" data-i18n="setup_btn">${t('setup_btn')}</button>
+      </div>`;
+    return;
+  }
+  const ageMo = getAgeInMonths();
+  const photoHtml = profile.photo
+    ? `<img src="${profile.photo}" alt="">`
+    : `<span class="profile-photo-placeholder">\u{1F476}</span>`;
+  card.innerHTML = `
+    <div class="profile-inner">
+      <div class="profile-photo" onclick="openModal('profileModal')">${photoHtml}</div>
+      <div class="profile-info">
+        <div class="profile-name">${profile.name || 'Baby'}</div>
+        <div class="profile-age">${formatAge(ageMo)}</div>
+        <div class="profile-dob">${t('born')}: ${formatDate(profile.dob)}</div>
+      </div>
+      <button class="profile-edit-btn" onclick="openModal('profileModal')" data-i18n="edit_btn">${t('edit_btn')}</button>
+    </div>`;
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('show');
+  if (id === 'profileModal' && profile) {
+    document.getElementById('inputName').value = profile.name || '';
+    document.getElementById('inputDob').value = profile.dob || '';
+  }
+}
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+function saveProfile() {
+  const name = document.getElementById('inputName').value.trim();
+  const dob = document.getElementById('inputDob').value;
+  if (!name || !dob) return;
+  if (!profile) profile = {};
+  profile.name = name;
+  profile.dob = dob;
+  const fileInput = document.getElementById('inputPhoto');
+  if (fileInput.files && fileInput.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      profile.photo = e.target.result;
+      saveProfile_();
+      closeModal('profileModal');
+      renderAll();
+    };
+    reader.readAsDataURL(fileInput.files[0]);
+  } else {
+    saveProfile_();
+    closeModal('profileModal');
+    renderAll();
+  }
+}
+
+/* ===================================================================
+   DASHBOARD
+   =================================================================== */
+function renderDashboard() {
+  const ageMo = getAgeInMonths();
+  const completed = milestoneDB.filter(ms => milestoneData[ms.id] && milestoneData[ms.id].done);
+  const total = completed.length;
+
+  // Latest milestone
+  let latest = null;
+  let latestDate = null;
+  completed.forEach(ms => {
+    const d = milestoneData[ms.id].date;
+    if (d) {
+      const dt = new Date(d);
+      if (!latestDate || dt > latestDate) { latestDate = dt; latest = ms; }
+    }
+  });
+
+  // Days since last
+  let daysSince = '-';
+  if (latestDate) {
+    daysSince = Math.floor((new Date() - latestDate) / (1000*60*60*24));
+  }
+
+  // On track percentage
+  let onTrackPct = '-';
+  if (ageMo !== null) {
+    const ageAppropriate = milestoneDB.filter(ms => ms.maxMo <= ageMo);
+    if (ageAppropriate.length > 0) {
+      const done = ageAppropriate.filter(ms => milestoneData[ms.id] && milestoneData[ms.id].done).length;
+      onTrackPct = Math.round((done / ageAppropriate.length) * 100) + '%';
+    }
+  }
+
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-number">${total}</div>
+      <div class="stat-label">${t('stat_total')}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="font-size:16px; color:var(--pink);">${latest ? latest[lang] || latest.en : '-'}</div>
+      <div class="stat-label">${t('stat_latest')}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number" style="color:var(--green);">${onTrackPct}</div>
+      <div class="stat-label">${t('stat_ontrack')}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">${daysSince}</div>
+      <div class="stat-label">${t('stat_days')}</div>
+    </div>`;
+
+  // Recent milestones
+  const recentDiv = document.getElementById('recentMilestones');
+  if (completed.length === 0) {
+    recentDiv.innerHTML = `<p style="color:var(--text-light); font-size:14px; padding:12px 0;">${t('no_milestones')}</p>`;
+    return;
+  }
+  const sorted = completed.filter(ms => milestoneData[ms.id].date)
+    .sort((a, b) => new Date(milestoneData[b.id].date) - new Date(milestoneData[a.id].date))
+    .slice(0, 5);
+  recentDiv.innerHTML = sorted.map(ms => {
+    const cat = catMeta[ms.cat];
+    return `<div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border);">
+      <span style="font-size:20px;">${cat.emoji}</span>
+      <div style="flex:1;">
+        <div style="font-weight:700; font-size:14px;">${ms[lang] || ms.en}</div>
+        <div style="font-size:12px; color:var(--text-light);">${t('achieved_on')} ${formatDate(milestoneData[ms.id].date)}</div>
+      </div>
+      <span class="milestone-status status-ontrack">\u2713</span>
+    </div>`;
+  }).join('');
+}
+
+/* ===================================================================
+   MILESTONES
+   =================================================================== */
+function renderMilestones() {
+  const container = document.getElementById('milestoneList');
+  const cats = activeCatFilter === 'all' ? ['motor', 'speech', 'cognitive', 'social'] : [activeCatFilter];
+  let html = '';
+
+  cats.forEach(cat => {
+    const meta = catMeta[cat];
+    const items = milestoneDB.filter(ms => ms.cat === cat);
+    const doneCount = items.filter(ms => milestoneData[ms.id] && milestoneData[ms.id].done).length;
+
+    html += `<div class="category-header">
+      <span class="emoji">${meta.emoji}</span>
+      <span class="title">${meta[lang] || meta.en}</span>
+      <span class="count">${doneCount}/${items.length}</span>
+    </div>`;
+
+    items.forEach(ms => {
+      const data = milestoneData[ms.id] || {};
+      const done = !!data.done;
+      const statusInfo = getStatusForDisplay(ms);
+      const rangeText = ms.minMo === ms.maxMo
+        ? `${ms.minMo} ${t('mo')}`
+        : `${ms.minMo}-${ms.maxMo} ${t('mo')}`;
+
+      html += `<div class="milestone-item ${done ? 'completed' : ''}" id="mi-${ms.id}">
+        <div class="milestone-check ${done ? 'checked' : ''}" onclick="toggleMilestone('${ms.id}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="milestone-content">
+          <div class="milestone-name">${ms[lang] || ms.en}</div>
+          <div class="milestone-range">${rangeText}
+            <span class="milestone-status ${statusInfo.cls}">${statusInfo.text}</span>
+          </div>
+          <div class="milestone-date-note">
+            <input type="date" value="${data.date || ''}" onchange="setMilestoneDate('${ms.id}', this.value)">
+            <textarea placeholder="${t('note_placeholder')}" oninput="setMilestoneNote('${ms.id}', this.value)">${data.note || ''}</textarea>
+          </div>
+        </div>
+      </div>`;
+    });
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleMilestone(id) {
+  if (!milestoneData[id]) milestoneData[id] = {};
+  milestoneData[id].done = !milestoneData[id].done;
+  if (milestoneData[id].done && !milestoneData[id].date) {
+    milestoneData[id].date = new Date().toISOString().split('T')[0];
+  }
+  saveMilestones();
+  renderMilestones();
+}
+
+function setMilestoneDate(id, date) {
+  if (!milestoneData[id]) milestoneData[id] = {};
+  milestoneData[id].date = date;
+  if (date && !milestoneData[id].done) {
+    milestoneData[id].done = true;
+  }
+  saveMilestones();
+  renderMilestones();
+}
+
+function setMilestoneNote(id, note) {
+  if (!milestoneData[id]) milestoneData[id] = {};
+  milestoneData[id].note = note;
+  saveMilestones();
+}
+
+/* ===================================================================
+   TIMELINE
+   =================================================================== */
+function renderTimeline() {
+  const container = document.getElementById('timelineView');
+  const ageMo = getAgeInMonths();
+  const maxAge = 36;
+  const completed = milestoneDB.filter(ms => milestoneData[ms.id] && milestoneData[ms.id].done && milestoneData[ms.id].date);
+
+  if (completed.length === 0) {
+    container.innerHTML = `<p style="text-align:center; color:var(--text-light); padding:30px;">${t('no_milestones')}</p>`;
+    return;
+  }
+
+  let markersHtml = '';
+  const catColors = { motor: 'color-motor', speech: 'color-speech', cognitive: 'color-cognitive', social: 'color-social' };
+
+  completed.forEach(ms => {
+    const data = milestoneData[ms.id];
+    if (!data.date || !profile || !profile.dob) return;
+    const dob = new Date(profile.dob);
+    const achieveDate = new Date(data.date);
+    const achieveMonths = Math.max(0, (achieveDate.getFullYear() - dob.getFullYear()) * 12 + (achieveDate.getMonth() - dob.getMonth()));
+    const pct = Math.min(100, (achieveMonths / maxAge) * 100);
+    markersHtml += `<div class="timeline-marker ${catColors[ms.cat]}" style="left:${pct}%;">
+      <div class="tooltip">${ms[lang] || ms.en} (${formatDate(data.date)})</div>
+    </div>`;
+  });
+
+  // Now marker
+  let nowHtml = '';
+  if (ageMo !== null) {
+    const nowPct = Math.min(100, (ageMo / maxAge) * 100);
+    nowHtml = `<div class="timeline-now" style="left:${nowPct}%;">
+      <div class="timeline-now-label">${t('now')} (${formatAge(ageMo)})</div>
+    </div>`;
+  }
+
+  const ageLabels = [0, 6, 12, 18, 24, 30, 36];
+
+  container.innerHTML = `
+    <div class="timeline-axis">
+      ${markersHtml}
+      ${nowHtml}
+    </div>
+    <div class="timeline-age-labels">
+      ${ageLabels.map(a => `<span class="timeline-age-label">${a}${t('mo')}</span>`).join('')}
+    </div>
+    <div class="timeline-legend">
+      <div class="legend-item"><div class="legend-dot color-motor"></div>${t('legend_motor')}</div>
+      <div class="legend-item"><div class="legend-dot color-speech"></div>${t('legend_speech')}</div>
+      <div class="legend-item"><div class="legend-dot color-cognitive"></div>${t('legend_cognitive')}</div>
+      <div class="legend-item"><div class="legend-dot color-social"></div>${t('legend_social')}</div>
+    </div>`;
+}
+
+/* ===================================================================
+   REPORT
+   =================================================================== */
+function renderReport() {
+  const container = document.getElementById('reportView');
+  const ageMo = getAgeInMonths();
+  if (ageMo === null) {
+    container.innerHTML = `<p style="text-align:center; color:var(--text-light); padding:20px;">${t('no_redflags_age')}</p>`;
+    return;
+  }
+
+  let html = '';
+  ['motor', 'speech', 'cognitive', 'social'].forEach(cat => {
+    const meta = catMeta[cat];
+    const items = milestoneDB.filter(ms => ms.cat === cat);
+    const ageAppropriate = items.filter(ms => ms.maxMo <= ageMo);
+    const done = ageAppropriate.filter(ms => milestoneData[ms.id] && milestoneData[ms.id].done).length;
+    const total = ageAppropriate.length;
+    const pct = total > 0 ? Math.round((done / total) * 100) : 100;
+
+    let badge, badgeCls, fillCls;
+    if (pct >= 100) { badge = t('report_ahead'); badgeCls = 'badge-ahead'; fillCls = 'fill-blue'; }
+    else if (pct >= 60) { badge = t('report_ontrack'); badgeCls = 'badge-ontrack'; fillCls = 'fill-green'; }
+    else { badge = t('report_attention'); badgeCls = 'badge-attention'; fillCls = 'fill-yellow'; }
+
+    html += `<div class="report-category">
+      <div class="report-cat-header">
+        <span class="report-cat-name">${meta.emoji} ${meta[lang] || meta.en}</span>
+        <span class="report-badge ${badgeCls}">${badge}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill ${fillCls}" style="width:${pct}%"></div></div>
+      <div style="font-size:12px; color:var(--text-light); margin-top:6px; font-weight:600;">${done}/${total} ${t('report_complete')} (${pct}%)</div>
+    </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function exportReport() {
+  const ageMo = getAgeInMonths();
+  let text = `${t('export_title')}\n${'='.repeat(40)}\n`;
+  text += `${t('export_generated')}: ${new Date().toLocaleDateString()}\n`;
+  if (profile) {
+    text += `${t('export_child')}: ${profile.name}\n`;
+    text += `${t('export_age')}: ${formatAge(ageMo)}\n`;
+    text += `${t('born')}: ${formatDate(profile.dob)}\n`;
+  }
+  text += `\n${'='.repeat(40)}\n\n`;
+
+  ['motor', 'speech', 'cognitive', 'social'].forEach(cat => {
+    const meta = catMeta[cat];
+    text += `${meta.emoji} ${meta[lang] || meta.en}\n${'-'.repeat(30)}\n`;
+    const items = milestoneDB.filter(ms => ms.cat === cat);
+    items.forEach(ms => {
+      const data = milestoneData[ms.id] || {};
+      const status = data.done ? '\u2713' : '\u2717';
+      text += `  ${status} ${ms[lang] || ms.en} (${ms.minMo}-${ms.maxMo} ${t('mo')})`;
+      if (data.date) text += ` - ${t('export_date')}: ${formatDate(data.date)}`;
+      if (data.note) text += ` - ${t('export_note')}: ${data.note}`;
+      text += '\n';
+    });
+    text += '\n';
+  });
+
+  text += `${'='.repeat(40)}\n`;
+  text += `${t('export_disclaimer')}\n`;
+
+  // Copy to clipboard and download
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `baby-milestone-report-${new Date().toISOString().split('T')[0]}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* ===================================================================
+   JOURNAL
+   =================================================================== */
+function renderJournal() {
+  const container = document.getElementById('journalList');
+  if (journal.length === 0) {
+    container.innerHTML = `<p style="color:var(--text-light); font-size:14px; padding:12px 0;">${t('journal_empty')}</p>`;
+    return;
+  }
+  container.innerHTML = journal.map((entry, i) => `
+    <div class="journal-entry">
+      <button class="journal-delete" onclick="deleteJournalEntry(${i})">&times;</button>
+      <div class="journal-date">${formatDate(entry.date)}</div>
+      <div class="journal-text">${escapeHtml(entry.text)}</div>
+    </div>`).join('');
+}
+
+function addJournalEntry() {
+  const input = document.getElementById('journalInput');
+  const text = input.value.trim();
+  if (!text) return;
+  journal.unshift({ date: new Date().toISOString().split('T')[0], text });
+  saveJournal();
+  input.value = '';
+  renderJournal();
+}
+
+function deleteJournalEntry(idx) {
+  journal.splice(idx, 1);
+  saveJournal();
+  renderJournal();
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ===================================================================
+   RED FLAGS
+   =================================================================== */
+function renderRedFlags() {
+  const container = document.getElementById('redFlagsList');
+  const ageMo = getAgeInMonths();
+
+  if (ageMo === null) {
+    container.innerHTML = `<p style="color:var(--text-light); font-size:14px; padding:12px 0;">${t('no_redflags_age')}</p>`;
+    return;
+  }
+
+  // Show red flags for current age bracket and below
+  const relevant = redFlagsDB.filter(rf => rf.ageMo <= ageMo + 3);
+
+  if (relevant.length === 0) {
+    container.innerHTML = `<p style="color:var(--text-light); font-size:14px; padding:12px 0;">${t('no_redflags_young')}</p>`;
+    return;
+  }
+
+  // Group by age
+  const grouped = {};
+  relevant.forEach(rf => {
+    if (!grouped[rf.ageMo]) grouped[rf.ageMo] = [];
+    grouped[rf.ageMo].push(rf);
+  });
+
+  let html = '';
+  const sortedAges = Object.keys(grouped).map(Number).sort((a, b) => b - a);
+
+  sortedAges.forEach(age => {
+    const ageLabel = age + ' ' + t('mo');
+    grouped[age].forEach(rf => {
+      html += `<div class="red-flag-item">
+        <div class="flag-age">${ageLabel}</div>
+        <div class="flag-text">${rf[lang] || rf.en}</div>
+      </div>`;
+    });
+  });
+
+  html += `<div style="background:var(--yellow-light); border-radius:var(--radius-sm); padding:14px; margin-top:14px; text-align:center; font-size:13px; font-weight:600; color:#92400e;">
+    ${t('redflags_general')}
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+/* ===================================================================
+   RENDER ALL
+   =================================================================== */
+function renderAll() {
+  applyI18n();
+  renderProfile();
+  if (activeTab === 'dashboard') renderDashboard();
+  if (activeTab === 'milestones') renderMilestones();
+  if (activeTab === 'timeline') renderTimeline();
+  if (activeTab === 'report') renderReport();
+  if (activeTab === 'journal') renderJournal();
+  if (activeTab === 'redflags') renderRedFlags();
+}
+
+/* ===================================================================
+   INIT
+   =================================================================== */
+document.addEventListener('DOMContentLoaded', () => {
+  setLang(lang);
+  renderAll();
+});
+
+// Close modal on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeModal(overlay.id);
+  });
+});
+</script>
+</body>
+</html>

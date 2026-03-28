@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Coloring Book — BabyPath</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+        :root {
+            --bg: #fef6e4; --surface: #ffffff; --primary: #6366f1;
+            --primary-light: #818cf8; --text: #1e293b; --text2: #64748b;
+            --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        html, body { height: 100%; overflow: hidden; }
+        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; touch-action: none; }
+
+        /* ─── TOP BAR ─── */
+        .top-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface); box-shadow: 0 2px 12px rgba(0,0,0,0.06); z-index: 100; flex-shrink: 0; min-height: 52px; }
+        .top-btn { width: 44px; height: 44px; border: none; border-radius: 12px; background: #f1f5f9; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 0.15s, background 0.15s; flex-shrink: 0; }
+        .top-btn:active { transform: scale(0.9); background: #e2e8f0; }
+        .page-title { flex: 1; text-align: center; font-weight: 800; font-size: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* ─── CANVAS AREA ─── */
+        .canvas-wrap { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; background: var(--bg); }
+        #colorCanvas { background: #ffffff; border-radius: 12px; box-shadow: var(--shadow); touch-action: none; max-width: calc(100% - 24px); max-height: 100%; }
+
+        /* ─── COLOR PALETTE ─── */
+        .palette-bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--surface); box-shadow: 0 -2px 12px rgba(0,0,0,0.06); overflow-x: auto; overflow-y: hidden; flex-shrink: 0; z-index: 100; -webkit-overflow-scrolling: touch; }
+        .palette-bar::-webkit-scrollbar { display: none; }
+        .color-btn { width: 52px; height: 52px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; flex-shrink: 0; transition: transform 0.15s, border-color 0.15s; position: relative; }
+        .color-btn:active { transform: scale(0.88); }
+        .color-btn.selected { border-color: var(--text); transform: scale(1.12); box-shadow: 0 0 0 3px rgba(99,102,241,0.3); }
+        .color-btn.white-swatch { border-color: #e2e8f0; }
+        .color-btn.white-swatch.selected { border-color: var(--text); }
+
+        /* ─── PAGE SELECTOR OVERLAY ─── */
+        .page-selector { position: fixed; inset: 0; background: var(--bg); z-index: 200; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+        .page-selector.open { transform: translateY(0); }
+        .ps-header { display: flex; align-items: center; padding: 12px 16px; background: var(--surface); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .ps-header h2 { flex: 1; font-size: 20px; font-weight: 800; }
+        .ps-body { flex: 1; overflow-y: auto; padding: 16px; -webkit-overflow-scrolling: touch; }
+        .ps-category { margin-bottom: 20px; }
+        .ps-category h3 { font-size: 16px; font-weight: 700; color: var(--text2); margin-bottom: 10px; padding-left: 4px; }
+        .ps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
+        .ps-thumb { background: var(--surface); border-radius: 16px; padding: 12px 8px; text-align: center; cursor: pointer; box-shadow: var(--shadow); transition: transform 0.15s; border: 3px solid transparent; }
+        .ps-thumb:active { transform: scale(0.94); }
+        .ps-thumb.current { border-color: var(--primary); }
+        .ps-thumb .emoji { font-size: 42px; display: block; margin-bottom: 4px; }
+        .ps-thumb .label { font-size: 13px; font-weight: 700; color: var(--text); }
+        .ps-thumb .done-badge { font-size: 11px; color: #10b981; font-weight: 800; }
+
+        /* ─── CELEBRATION OVERLAY ─── */
+        .celebration { position: fixed; inset: 0; z-index: 300; pointer-events: none; display: none; }
+        .celebration.active { display: block; }
+        .confetti { position: absolute; width: 10px; height: 10px; border-radius: 2px; animation: confetti-fall linear forwards; }
+        @keyframes confetti-fall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+        .celeb-text { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-size: 64px; animation: celeb-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes celeb-pop { 0% { transform: translate(-50%,-50%) scale(0); } 100% { transform: translate(-50%,-50%) scale(1); } }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <a href="../index.html" class="top-btn" title="Back">🏠</a>
+        <button class="top-btn" id="btnPages" title="Pages">📖</button>
+        <span class="page-title" id="pageTitle">Cat</span>
+        <button class="top-btn" id="btnUndo" title="Undo">↩️</button>
+        <button class="top-btn" id="btnClear" title="Clear">🗑️</button>
+        <button class="top-btn" id="btnSave" title="Save Image">💾</button>
+    </div>
+
+    <div class="canvas-wrap">
+        <canvas id="colorCanvas"></canvas>
+    </div>
+
+    <div class="palette-bar" id="palette"></div>
+
+    <div class="page-selector" id="pageSelector">
+        <div class="ps-header">
+            <h2>Choose a Page</h2>
+            <button class="top-btn" id="btnClosePages">✕</button>
+        </div>
+        <div class="ps-body" id="pagesBody"></div>
+    </div>
+
+    <div class="celebration" id="celebration"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   COLORING BOOK — BabyPath
+   Zone-based coloring for toddlers (ages 1-4)
+   ══════════════════════════════════════════════════════════════ */
+
+// ─── AUDIO ENGINE ───
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() { if (!audioCtx) audioCtx = new AudioCtx(); }
+
+function playFillSound(color) {
+    ensureAudio();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    // Map color index to a pleasant note
+    const notes = [262,294,330,349,392,440,494,523,587,659,698,784,349,440];
+    const idx = COLORS.indexOf(color);
+    o.frequency.value = notes[idx % notes.length] || 440;
+    o.type = 'triangle';
+    g.gain.setValueAtTime(0.18, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+    o.start(); o.stop(audioCtx.currentTime + 0.25);
+}
+
+function playCelebrationSound() {
+    ensureAudio();
+    [0, 150, 300, 450, 600].forEach((delay, i) => {
+        setTimeout(() => {
+            const o = audioCtx.createOscillator();
+            const g = audioCtx.createGain();
+            o.connect(g); g.connect(audioCtx.destination);
+            o.frequency.value = [523, 659, 784, 988, 1047][i];
+            o.type = 'sine';
+            g.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+            o.start(); o.stop(audioCtx.currentTime + 0.35);
+        }, delay);
+    });
+}
+
+// ─── COLORS ───
+const COLORS = [
+    '#EF4444','#F97316','#FACC15','#4ADE80','#16A34A','#38BEF8',
+    '#2563EB','#8B5CF6','#EC4899','#92400E','#1E293B','#FFFFFF','#FDBA9B','#94A3B8'
+];
+const COLOR_NAMES = [
+    'Red','Orange','Yellow','L.Green','D.Green','L.Blue',
+    'D.Blue','Purple','Pink','Brown','Black','White','Peach','Gray'
+];
+
+// ─── CANVAS SETUP ───
+const canvas = document.getElementById('colorCanvas');
+const ctx = canvas.getContext('2d');
+const W = 600, H = 700;
+canvas.width = W; canvas.height = H;
+
+let selectedColor = COLORS[0];
+let currentPageIdx = 0;
+let history = []; // undo stack: { zoneId, prevColor }
+
+// ─── STATE ───
+let zoneColors = {}; // zoneId -> color (null = unfilled/white)
+
+function saveState() {
+    const filled = {};
+    Object.entries(zoneColors).forEach(([k, v]) => { if (v) filled[k] = v; });
+    localStorage.setItem('cb_page_' + currentPageIdx, JSON.stringify(filled));
+    localStorage.setItem('cb_current', currentPageIdx);
+}
+
+function loadPageState(idx) {
+    const saved = localStorage.getItem('cb_page_' + idx);
+    zoneColors = {};
+    if (saved) {
+        const parsed = JSON.parse(saved);
+        Object.entries(parsed).forEach(([k, v]) => { zoneColors[k] = v; });
+    }
+}
+
+// ─── HELPER: build Path2D from drawing commands ───
+function makePath(fn) {
+    const p = new Path2D();
+    fn(p);
+    return p;
+}
+
+// Shortcut for ellipse
+function ellipse(p, cx, cy, rx, ry) {
+    p.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+}
+
+// Shortcut for rounded rect
+function rRect(p, x, y, w, h, r) {
+    p.moveTo(x + r, y);
+    p.lineTo(x + w - r, y); p.quadraticCurveTo(x + w, y, x + w, y + r);
+    p.lineTo(x + w, y + h - r); p.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    p.lineTo(x + r, y + h); p.quadraticCurveTo(x, y + h, x, y + h - r);
+    p.lineTo(x, y + r); p.quadraticCurveTo(x, y, x + r, y);
+    p.closePath();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PAGE DEFINITIONS — 15 pages across 4 categories
+   Each zone: { id, path: Path2D, label }
+   ══════════════════════════════════════════════════════════════ */
+
+const PAGES = [];
+
+// ─────────────────── ANIMALS ───────────────────
+
+// 1. CAT
+PAGES.push({ name: 'Cat', emoji: '🐱', category: 'Animals', zones: [
+    { id: 'cat_body', label: 'Body', path: makePath(p => { ellipse(p, 300, 420, 130, 100); }) },
+    { id: 'cat_head', label: 'Head', path: makePath(p => { ellipse(p, 300, 260, 110, 95); }) },
+    { id: 'cat_earL', label: 'Left Ear', path: makePath(p => { p.moveTo(210, 190); p.lineTo(230, 100); p.lineTo(260, 190); p.closePath(); }) },
+    { id: 'cat_earR', label: 'Right Ear', path: makePath(p => { p.moveTo(340, 190); p.lineTo(370, 100); p.lineTo(390, 190); p.closePath(); }) },
+    { id: 'cat_eyeL', label: 'Left Eye', path: makePath(p => { ellipse(p, 260, 250, 22, 26); }) },
+    { id: 'cat_eyeR', label: 'Right Eye', path: makePath(p => { ellipse(p, 340, 250, 22, 26); }) },
+    { id: 'cat_nose', label: 'Nose', path: makePath(p => { p.moveTo(300, 285); p.lineTo(290, 300); p.lineTo(310, 300); p.closePath(); }) },
+    { id: 'cat_tail', label: 'Tail', path: makePath(p => { p.moveTo(420, 440); p.quadraticCurveTo(500, 380, 480, 300); p.quadraticCurveTo(490, 280, 500, 300); p.quadraticCurveTo(520, 390, 435, 455); p.closePath(); }) },
+    { id: 'cat_pawL', label: 'Left Paw', path: makePath(p => { ellipse(p, 230, 520, 35, 22); }) },
+    { id: 'cat_pawR', label: 'Right Paw', path: makePath(p => { ellipse(p, 370, 520, 35, 22); }) },
+]});
+
+// 2. DOG
+PAGES.push({ name: 'Dog', emoji: '🐶', category: 'Animals', zones: [
+    { id: 'dog_body', label: 'Body', path: makePath(p => { ellipse(p, 300, 400, 140, 110); }) },
+    { id: 'dog_head', label: 'Head', path: makePath(p => { ellipse(p, 300, 240, 105, 95); }) },
+    { id: 'dog_earL', label: 'Left Ear', path: makePath(p => { ellipse(p, 195, 230, 30, 70); }) },
+    { id: 'dog_earR', label: 'Right Ear', path: makePath(p => { ellipse(p, 405, 230, 30, 70); }) },
+    { id: 'dog_eyeL', label: 'Left Eye', path: makePath(p => { ellipse(p, 262, 225, 18, 22); }) },
+    { id: 'dog_eyeR', label: 'Right Eye', path: makePath(p => { ellipse(p, 338, 225, 18, 22); }) },
+    { id: 'dog_nose', label: 'Nose', path: makePath(p => { ellipse(p, 300, 270, 20, 15); }) },
+    { id: 'dog_tongue', label: 'Tongue', path: makePath(p => { p.moveTo(288, 295); p.quadraticCurveTo(280, 340, 300, 345); p.quadraticCurveTo(320, 340, 312, 295); p.closePath(); }) },
+    { id: 'dog_tail', label: 'Tail', path: makePath(p => { p.moveTo(430, 380); p.quadraticCurveTo(500, 320, 490, 260); p.quadraticCurveTo(510, 250, 510, 270); p.quadraticCurveTo(520, 340, 445, 395); p.closePath(); }) },
+    { id: 'dog_legL', label: 'Left Leg', path: makePath(p => { rRect(p, 220, 480, 50, 70, 12); }) },
+    { id: 'dog_legR', label: 'Right Leg', path: makePath(p => { rRect(p, 330, 480, 50, 70, 12); }) },
+]});
+
+// 3. FISH
+PAGES.push({ name: 'Fish', emoji: '🐟', category: 'Animals', zones: [
+    { id: 'fish_body', label: 'Body', path: makePath(p => { ellipse(p, 300, 340, 170, 100); }) },
+    { id: 'fish_tail', label: 'Tail', path: makePath(p => { p.moveTo(460, 340); p.lineTo(550, 270); p.lineTo(550, 410); p.closePath(); }) },
+    { id: 'fish_eye', label: 'Eye', path: makePath(p => { ellipse(p, 210, 320, 24, 24); }) },
+    { id: 'fish_finTop', label: 'Top Fin', path: makePath(p => { p.moveTo(260, 245); p.quadraticCurveTo(300, 160, 350, 245); p.closePath(); }) },
+    { id: 'fish_finBot', label: 'Bottom Fin', path: makePath(p => { p.moveTo(280, 435); p.quadraticCurveTo(310, 500, 340, 435); p.closePath(); }) },
+    { id: 'fish_stripe1', label: 'Stripe 1', path: makePath(p => { p.moveTo(270, 250); p.lineTo(290, 250); p.lineTo(290, 430); p.lineTo(270, 430); p.closePath(); }) },
+    { id: 'fish_stripe2', label: 'Stripe 2', path: makePath(p => { p.moveTo(330, 260); p.lineTo(350, 260); p.lineTo(350, 420); p.lineTo(330, 420); p.closePath(); }) },
+    { id: 'fish_bubble1', label: 'Bubble', path: makePath(p => { ellipse(p, 140, 240, 20, 20); }) },
+    { id: 'fish_bubble2', label: 'Bubble', path: makePath(p => { ellipse(p, 110, 180, 14, 14); }) },
+]});
+
+// 4. BUTTERFLY
+PAGES.push({ name: 'Butterfly', emoji: '🦋', category: 'Animals', zones: [
+    { id: 'bfly_body', label: 'Body', path: makePath(p => { ellipse(p, 300, 360, 20, 100); }) },
+    { id: 'bfly_head', label: 'Head', path: makePath(p => { ellipse(p, 300, 245, 25, 25); }) },
+    { id: 'bfly_wingTL', label: 'Top Left Wing', path: makePath(p => { p.moveTo(280, 300); p.quadraticCurveTo(140, 200, 180, 300); p.quadraticCurveTo(140, 380, 280, 340); p.closePath(); }) },
+    { id: 'bfly_wingTR', label: 'Top Right Wing', path: makePath(p => { p.moveTo(320, 300); p.quadraticCurveTo(460, 200, 420, 300); p.quadraticCurveTo(460, 380, 320, 340); p.closePath(); }) },
+    { id: 'bfly_wingBL', label: 'Bottom Left Wing', path: makePath(p => { p.moveTo(280, 370); p.quadraticCurveTo(160, 400, 190, 460); p.quadraticCurveTo(220, 510, 280, 430); p.closePath(); }) },
+    { id: 'bfly_wingBR', label: 'Bottom Right Wing', path: makePath(p => { p.moveTo(320, 370); p.quadraticCurveTo(440, 400, 410, 460); p.quadraticCurveTo(380, 510, 320, 430); p.closePath(); }) },
+    { id: 'bfly_dotL1', label: 'Left Dot', path: makePath(p => { ellipse(p, 220, 310, 18, 18); }) },
+    { id: 'bfly_dotR1', label: 'Right Dot', path: makePath(p => { ellipse(p, 380, 310, 18, 18); }) },
+    { id: 'bfly_dotL2', label: 'Left Dot 2', path: makePath(p => { ellipse(p, 235, 430, 12, 12); }) },
+    { id: 'bfly_dotR2', label: 'Right Dot 2', path: makePath(p => { ellipse(p, 365, 430, 12, 12); }) },
+]});
+
+// 5. BIRD
+PAGES.push({ name: 'Bird', emoji: '🐦', category: 'Animals', zones: [
+    { id: 'bird_body', label: 'Body', path: makePath(p => { ellipse(p, 300, 360, 120, 90); }) },
+    { id: 'bird_head', label: 'Head', path: makePath(p => { ellipse(p, 300, 240, 70, 65); }) },
+    { id: 'bird_wingL', label: 'Left Wing', path: makePath(p => { p.moveTo(185, 340); p.quadraticCurveTo(90, 300, 100, 380); p.quadraticCurveTo(110, 430, 185, 400); p.closePath(); }) },
+    { id: 'bird_wingR', label: 'Right Wing', path: makePath(p => { p.moveTo(415, 340); p.quadraticCurveTo(510, 300, 500, 380); p.quadraticCurveTo(490, 430, 415, 400); p.closePath(); }) },
+    { id: 'bird_beak', label: 'Beak', path: makePath(p => { p.moveTo(300, 255); p.lineTo(340, 275); p.lineTo(300, 285); p.closePath(); }) },
+    { id: 'bird_eye', label: 'Eye', path: makePath(p => { ellipse(p, 280, 230, 14, 14); }) },
+    { id: 'bird_belly', label: 'Belly', path: makePath(p => { ellipse(p, 300, 390, 60, 50); }) },
+    { id: 'bird_tail', label: 'Tail', path: makePath(p => { p.moveTo(300, 440); p.lineTo(260, 540); p.lineTo(300, 520); p.lineTo(340, 540); p.closePath(); }) },
+    { id: 'bird_legL', label: 'Left Leg', path: makePath(p => { rRect(p, 260, 445, 12, 55, 4); }) },
+    { id: 'bird_legR', label: 'Right Leg', path: makePath(p => { rRect(p, 325, 445, 12, 55, 4); }) },
+]});
+
+// 6. TURTLE
+PAGES.push({ name: 'Turtle', emoji: '🐢', category: 'Animals', zones: [
+    { id: 'turt_shell', label: 'Shell', path: makePath(p => { p.moveTo(150, 380); p.quadraticCurveTo(300, 150, 450, 380); p.closePath(); }) },
+    { id: 'turt_head', label: 'Head', path: makePath(p => { ellipse(p, 490, 370, 50, 45); }) },
+    { id: 'turt_eye', label: 'Eye', path: makePath(p => { ellipse(p, 505, 358, 12, 12); }) },
+    { id: 'turt_belly', label: 'Belly', path: makePath(p => { ellipse(p, 300, 410, 145, 40); }) },
+    { id: 'turt_legFL', label: 'Front Left', path: makePath(p => { ellipse(p, 400, 440, 25, 35); }) },
+    { id: 'turt_legBL', label: 'Back Left', path: makePath(p => { ellipse(p, 200, 440, 25, 35); }) },
+    { id: 'turt_tail', label: 'Tail', path: makePath(p => { p.moveTo(150, 390); p.lineTo(90, 400); p.lineTo(150, 410); p.closePath(); }) },
+    { id: 'turt_pat1', label: 'Shell Pattern 1', path: makePath(p => { ellipse(p, 300, 310, 40, 35); }) },
+    { id: 'turt_pat2', label: 'Shell Pattern 2', path: makePath(p => { ellipse(p, 230, 340, 28, 24); }) },
+    { id: 'turt_pat3', label: 'Shell Pattern 3', path: makePath(p => { ellipse(p, 370, 340, 28, 24); }) },
+]});
+
+// ─────────────────── LETTERS ───────────────────
+
+// 7. Letter A
+PAGES.push({ name: 'Letter A', emoji: '🅰️', category: 'Letters', zones: [
+    { id: 'a_left', label: 'Left Leg', path: makePath(p => { p.moveTo(300, 120); p.lineTo(160, 540); p.lineTo(210, 540); p.lineTo(300, 220); p.closePath(); }) },
+    { id: 'a_right', label: 'Right Leg', path: makePath(p => { p.moveTo(300, 120); p.lineTo(300, 220); p.lineTo(390, 540); p.lineTo(440, 540); p.closePath(); }) },
+    { id: 'a_bar', label: 'Cross Bar', path: makePath(p => { rRect(p, 215, 370, 170, 35, 6); }) },
+    { id: 'a_top', label: 'Top', path: makePath(p => { ellipse(p, 300, 135, 45, 30); }) },
+    { id: 'a_deco1', label: 'Star', path: makePath(p => { ellipse(p, 120, 200, 30, 30); }) },
+    { id: 'a_deco2', label: 'Star', path: makePath(p => { ellipse(p, 480, 200, 30, 30); }) },
+    { id: 'a_deco3', label: 'Star', path: makePath(p => { ellipse(p, 120, 480, 30, 30); }) },
+    { id: 'a_deco4', label: 'Star', path: makePath(p => { ellipse(p, 480, 480, 30, 30); }) },
+]});
+
+// 8. Letter B
+PAGES.push({ name: 'Letter B', emoji: '🅱️', category: 'Letters', zones: [
+    { id: 'b_stem', label: 'Stem', path: makePath(p => { rRect(p, 180, 120, 55, 420, 8); }) },
+    { id: 'b_topBump', label: 'Top Bump', path: makePath(p => { p.moveTo(235, 120); p.quadraticCurveTo(430, 120, 430, 250); p.quadraticCurveTo(430, 340, 235, 340); p.lineTo(235, 120); p.closePath(); }) },
+    { id: 'b_botBump', label: 'Bottom Bump', path: makePath(p => { p.moveTo(235, 340); p.quadraticCurveTo(450, 340, 450, 430); p.quadraticCurveTo(450, 540, 235, 540); p.lineTo(235, 340); p.closePath(); }) },
+    { id: 'b_topHole', label: 'Top Hole', path: makePath(p => { ellipse(p, 310, 230, 50, 50); }) },
+    { id: 'b_botHole', label: 'Bottom Hole', path: makePath(p => { ellipse(p, 320, 440, 55, 45); }) },
+    { id: 'b_deco1', label: 'Heart', path: makePath(p => { ellipse(p, 120, 330, 25, 25); }) },
+    { id: 'b_deco2', label: 'Heart', path: makePath(p => { ellipse(p, 500, 330, 25, 25); }) },
+]});
+
+// 9. Letter C
+PAGES.push({ name: 'Letter C', emoji: '🔵', category: 'Letters', zones: [
+    { id: 'c_outer', label: 'Outer C', path: makePath(p => {
+        p.arc(300, 340, 180, -2.3, 2.3); p.lineTo(300 + 130 * Math.cos(2.3), 340 + 130 * Math.sin(2.3));
+        p.arc(300, 340, 130, 2.3, -2.3, true); p.closePath();
+    }) },
+    { id: 'c_inner', label: 'Inner Space', path: makePath(p => { ellipse(p, 300, 340, 125, 125); }) },
+    { id: 'c_deco1', label: 'Circle', path: makePath(p => { ellipse(p, 140, 160, 30, 30); }) },
+    { id: 'c_deco2', label: 'Circle', path: makePath(p => { ellipse(p, 460, 160, 30, 30); }) },
+    { id: 'c_deco3', label: 'Circle', path: makePath(p => { ellipse(p, 140, 520, 30, 30); }) },
+    { id: 'c_deco4', label: 'Circle', path: makePath(p => { ellipse(p, 460, 520, 30, 30); }) },
+    { id: 'c_deco5', label: 'Circle', path: makePath(p => { ellipse(p, 300, 570, 30, 30); }) },
+]});
+
+// ─────────────────── SHAPES ───────────────────
+
+// 10. STAR
+PAGES.push({ name: 'Star', emoji: '⭐', category: 'Shapes', zones: (function() {
+    const cx = 300, cy = 310, R = 170, r = 75;
+    // Build star points
+    const pts = [];
+    for (let i = 0; i < 5; i++) {
+        const aOuter = -Math.PI / 2 + i * 2 * Math.PI / 5;
+        const aInner = aOuter + Math.PI / 5;
+        pts.push([cx + R * Math.cos(aOuter), cy + R * Math.sin(aOuter)]);
+        pts.push([cx + r * Math.cos(aInner), cy + r * Math.sin(aInner)]);
+    }
+    // Center pentagon
+    const innerPts = [];
+    for (let i = 0; i < 5; i++) {
+        const a = -Math.PI / 2 + i * 2 * Math.PI / 5 + Math.PI / 5;
+        innerPts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+    const zones = [];
+    // Star triangular points (5 triangles)
+    for (let i = 0; i < 5; i++) {
+        const tip = pts[i * 2];
+        const pA = pts[(i * 2 + 9) % 10];
+        const pB = pts[(i * 2 + 1) % 10];
+        zones.push({ id: 'star_p' + i, label: 'Point ' + (i + 1), path: makePath(p => { p.moveTo(tip[0], tip[1]); p.lineTo(pA[0], pA[1]); p.lineTo(pB[0], pB[1]); p.closePath(); }) });
+    }
+    // Center pentagon
+    zones.push({ id: 'star_center', label: 'Center', path: makePath(p => { p.moveTo(innerPts[0][0], innerPts[0][1]); innerPts.slice(1).forEach(pt => p.lineTo(pt[0], pt[1])); p.closePath(); }) });
+    // Decorative circles around
+    zones.push({ id: 'star_d1', label: 'Circle', path: makePath(p => { ellipse(p, 120, 160, 25, 25); }) });
+    zones.push({ id: 'star_d2', label: 'Circle', path: makePath(p => { ellipse(p, 480, 160, 25, 25); }) });
+    zones.push({ id: 'star_d3', label: 'Circle', path: makePath(p => { ellipse(p, 100, 500, 25, 25); }) });
+    zones.push({ id: 'star_d4', label: 'Circle', path: makePath(p => { ellipse(p, 500, 500, 25, 25); }) });
+    return zones;
+})() });
+
+// 11. HEART
+PAGES.push({ name: 'Heart', emoji: '❤️', category: 'Shapes', zones: [
+    { id: 'heart_main', label: 'Heart', path: makePath(p => {
+        p.moveTo(300, 520); p.bezierCurveTo(100, 380, 80, 200, 200, 180);
+        p.quadraticCurveTo(300, 150, 300, 250);
+        p.quadraticCurveTo(300, 150, 400, 180);
+        p.bezierCurveTo(520, 200, 500, 380, 300, 520); p.closePath();
+    }) },
+    { id: 'heart_shine', label: 'Shine', path: makePath(p => { ellipse(p, 230, 240, 30, 35); }) },
+    { id: 'heart_inner', label: 'Inner Heart', path: makePath(p => {
+        p.moveTo(300, 440); p.bezierCurveTo(190, 360, 180, 270, 240, 260);
+        p.quadraticCurveTo(300, 240, 300, 300);
+        p.quadraticCurveTo(300, 240, 360, 260);
+        p.bezierCurveTo(420, 270, 410, 360, 300, 440); p.closePath();
+    }) },
+    { id: 'heart_d1', label: 'Circle', path: makePath(p => { ellipse(p, 130, 400, 22, 22); }) },
+    { id: 'heart_d2', label: 'Circle', path: makePath(p => { ellipse(p, 470, 400, 22, 22); }) },
+    { id: 'heart_d3', label: 'Circle', path: makePath(p => { ellipse(p, 300, 590, 22, 22); }) },
+    { id: 'heart_d4', label: 'Circle', path: makePath(p => { ellipse(p, 130, 560, 22, 22); }) },
+    { id: 'heart_d5', label: 'Circle', path: makePath(p => { ellipse(p, 470, 560, 22, 22); }) },
+]});
+
+// 12. CIRCLE FACE (smiley)
+PAGES.push({ name: 'Smiley', emoji: '😊', category: 'Shapes', zones: [
+    { id: 'smi_face', label: 'Face', path: makePath(p => { ellipse(p, 300, 330, 180, 180); }) },
+    { id: 'smi_eyeL', label: 'Left Eye', path: makePath(p => { ellipse(p, 240, 290, 28, 32); }) },
+    { id: 'smi_eyeR', label: 'Right Eye', path: makePath(p => { ellipse(p, 360, 290, 28, 32); }) },
+    { id: 'smi_mouth', label: 'Mouth', path: makePath(p => {
+        p.moveTo(220, 390); p.quadraticCurveTo(300, 470, 380, 390);
+        p.quadraticCurveTo(300, 440, 220, 390); p.closePath();
+    }) },
+    { id: 'smi_nose', label: 'Nose', path: makePath(p => { ellipse(p, 300, 345, 15, 12); }) },
+    { id: 'smi_cheekL', label: 'Left Cheek', path: makePath(p => { ellipse(p, 190, 370, 22, 16); }) },
+    { id: 'smi_cheekR', label: 'Right Cheek', path: makePath(p => { ellipse(p, 410, 370, 22, 16); }) },
+]});
+
+// ─────────────────── NATURE ───────────────────
+
+// 13. SUN
+PAGES.push({ name: 'Sun', emoji: '☀️', category: 'Nature', zones: (function() {
+    const cx = 300, cy = 340, R = 100;
+    const zones = [];
+    // Center circle
+    zones.push({ id: 'sun_center', label: 'Sun', path: makePath(p => { ellipse(p, cx, cy, R, R); }) });
+    // 8 rays
+    for (let i = 0; i < 8; i++) {
+        const a = i * Math.PI / 4;
+        const cos = Math.cos(a), sin = Math.sin(a);
+        const cosA = Math.cos(a - 0.25), sinA = Math.sin(a - 0.25);
+        const cosB = Math.cos(a + 0.25), sinB = Math.sin(a + 0.25);
+        zones.push({ id: 'sun_ray' + i, label: 'Ray', path: makePath(p => {
+            p.moveTo(cx + (R + 10) * cosA, cy + (R + 10) * sinA);
+            p.lineTo(cx + (R + 90) * cos, cy + (R + 90) * sin);
+            p.lineTo(cx + (R + 10) * cosB, cy + (R + 10) * sinB);
+            p.closePath();
+        }) });
+    }
+    // Eyes and smile on sun
+    zones.push({ id: 'sun_eyeL', label: 'Left Eye', path: makePath(p => { ellipse(p, 265, 320, 16, 20); }) });
+    zones.push({ id: 'sun_eyeR', label: 'Right Eye', path: makePath(p => { ellipse(p, 335, 320, 16, 20); }) });
+    zones.push({ id: 'sun_smile', label: 'Smile', path: makePath(p => { p.moveTo(260, 370); p.quadraticCurveTo(300, 410, 340, 370); p.quadraticCurveTo(300, 395, 260, 370); p.closePath(); }) });
+    return zones;
+})() });
+
+// 14. FLOWER
+PAGES.push({ name: 'Flower', emoji: '🌸', category: 'Nature', zones: (function() {
+    const cx = 300, cy = 280, R = 70;
+    const zones = [];
+    // 6 petals
+    for (let i = 0; i < 6; i++) {
+        const a = i * Math.PI / 3 - Math.PI / 2;
+        const px = cx + (R + 40) * Math.cos(a);
+        const py = cy + (R + 40) * Math.sin(a);
+        zones.push({ id: 'flr_petal' + i, label: 'Petal', path: makePath(p => { ellipse(p, px, py, 48, 48); }) });
+    }
+    // Center
+    zones.push({ id: 'flr_center', label: 'Center', path: makePath(p => { ellipse(p, cx, cy, 45, 45); }) });
+    // Stem
+    zones.push({ id: 'flr_stem', label: 'Stem', path: makePath(p => { rRect(p, 290, 370, 20, 230, 8); }) });
+    // Left leaf
+    zones.push({ id: 'flr_leafL', label: 'Left Leaf', path: makePath(p => {
+        p.moveTo(290, 460); p.quadraticCurveTo(190, 430, 200, 480);
+        p.quadraticCurveTo(210, 510, 290, 480); p.closePath();
+    }) });
+    // Right leaf
+    zones.push({ id: 'flr_leafR', label: 'Right Leaf', path: makePath(p => {
+        p.moveTo(310, 500); p.quadraticCurveTo(410, 470, 400, 520);
+        p.quadraticCurveTo(390, 550, 310, 520); p.closePath();
+    }) });
+    return zones;
+})() });
+
+// 15. TREE
+PAGES.push({ name: 'Tree', emoji: '🌳', category: 'Nature', zones: [
+    { id: 'tree_trunk', label: 'Trunk', path: makePath(p => { rRect(p, 265, 380, 70, 220, 10); }) },
+    { id: 'tree_crownTop', label: 'Top Crown', path: makePath(p => { ellipse(p, 300, 210, 100, 85); }) },
+    { id: 'tree_crownL', label: 'Left Crown', path: makePath(p => { ellipse(p, 230, 310, 90, 75); }) },
+    { id: 'tree_crownR', label: 'Right Crown', path: makePath(p => { ellipse(p, 370, 310, 90, 75); }) },
+    { id: 'tree_crownM', label: 'Middle Crown', path: makePath(p => { ellipse(p, 300, 290, 70, 60); }) },
+    { id: 'tree_apple1', label: 'Apple', path: makePath(p => { ellipse(p, 250, 230, 18, 18); }) },
+    { id: 'tree_apple2', label: 'Apple', path: makePath(p => { ellipse(p, 340, 200, 18, 18); }) },
+    { id: 'tree_apple3', label: 'Apple', path: makePath(p => { ellipse(p, 210, 330, 18, 18); }) },
+    { id: 'tree_apple4', label: 'Apple', path: makePath(p => { ellipse(p, 390, 320, 18, 18); }) },
+    { id: 'tree_grass', label: 'Grass', path: makePath(p => { ellipse(p, 300, 600, 230, 30); }) },
+]});
+
+/* ══════════════════════════════════════════════════════════════
+   RENDERING
+   ══════════════════════════════════════════════════════════════ */
+
+function getPage() { return PAGES[currentPageIdx]; }
+
+function drawPage() {
+    const page = getPage();
+    ctx.clearRect(0, 0, W, H);
+    // Fill background white
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, W, H);
+
+    // Draw each zone fill
+    page.zones.forEach(zone => {
+        const color = zoneColors[zone.id] || '#FFFFFF';
+        ctx.fillStyle = color;
+        ctx.fill(zone.path);
+    });
+
+    // Draw all outlines on top (thick black lines)
+    ctx.strokeStyle = '#1E293B';
+    ctx.lineWidth = 3.5;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+    page.zones.forEach(zone => {
+        ctx.stroke(zone.path);
+    });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   INTERACTION — tap/click to fill zone
+   ══════════════════════════════════════════════════════════════ */
+
+function getCanvasPoint(e) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = W / rect.width;
+    const scaleY = H / rect.height;
+    let clientX, clientY;
+    if (e.touches && e.touches.length) {
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+    };
+}
+
+function handleTap(e) {
+    e.preventDefault();
+    const pt = getCanvasPoint(e);
+    const page = getPage();
+
+    // Check zones in reverse order (topmost drawn last = highest priority)
+    for (let i = page.zones.length - 1; i >= 0; i--) {
+        const zone = page.zones[i];
+        if (ctx.isPointInPath(zone.path, pt.x, pt.y)) {
+            const prevColor = zoneColors[zone.id] || null;
+            zoneColors[zone.id] = selectedColor;
+            history.push({ zoneId: zone.id, prevColor });
+            drawPage();
+            playFillSound(selectedColor);
+            saveState();
+            checkCompletion();
+            return;
+        }
+    }
+}
+
+canvas.addEventListener('pointerdown', handleTap, { passive: false });
+
+function checkCompletion() {
+    const page = getPage();
+    const allFilled = page.zones.every(z => zoneColors[z.id] && zoneColors[z.id] !== '#FFFFFF');
+    if (allFilled) {
+        triggerCelebration();
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CELEBRATION
+   ══════════════════════════════════════════════════════════════ */
+
+function triggerCelebration() {
+    const el = document.getElementById('celebration');
+    el.innerHTML = '';
+    el.classList.add('active');
+
+    // Confetti pieces
+    const confettiColors = ['#EF4444','#FACC15','#4ADE80','#38BEF8','#8B5CF6','#EC4899','#F97316'];
+    for (let i = 0; i < 60; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.top = '-10px';
+        c.style.background = confettiColors[i % confettiColors.length];
+        c.style.width = (6 + Math.random() * 10) + 'px';
+        c.style.height = (6 + Math.random() * 10) + 'px';
+        c.style.animationDuration = (2 + Math.random() * 2) + 's';
+        c.style.animationDelay = (Math.random() * 0.8) + 's';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.appendChild(c);
+    }
+
+    // Big emoji
+    const txt = document.createElement('div');
+    txt.className = 'celeb-text';
+    txt.textContent = '🎉';
+    el.appendChild(txt);
+
+    playCelebrationSound();
+
+    setTimeout(() => { el.classList.remove('active'); el.innerHTML = ''; }, 3500);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PALETTE
+   ══════════════════════════════════════════════════════════════ */
+
+function buildPalette() {
+    const bar = document.getElementById('palette');
+    bar.innerHTML = '';
+    COLORS.forEach((color, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'color-btn' + (color === selectedColor ? ' selected' : '') + (color === '#FFFFFF' ? ' white-swatch' : '');
+        btn.style.background = color;
+        btn.title = COLOR_NAMES[i];
+        btn.setAttribute('aria-label', COLOR_NAMES[i]);
+        btn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            selectedColor = color;
+            bar.querySelectorAll('.color-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+        });
+        bar.appendChild(btn);
+    });
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PAGE SELECTOR
+   ══════════════════════════════════════════════════════════════ */
+
+function buildPageSelector() {
+    const body = document.getElementById('pagesBody');
+    body.innerHTML = '';
+    const categories = ['Animals', 'Letters', 'Shapes', 'Nature'];
+    categories.forEach(cat => {
+        const pages = PAGES.map((p, i) => ({ ...p, idx: i })).filter(p => p.category === cat);
+        if (!pages.length) return;
+
+        const sec = document.createElement('div');
+        sec.className = 'ps-category';
+
+        const catEmojis = { Animals: '🐾', Letters: '🔤', Shapes: '🔷', Nature: '🌿' };
+        const h3 = document.createElement('h3');
+        h3.textContent = (catEmojis[cat] || '') + ' ' + cat;
+        sec.appendChild(h3);
+
+        const grid = document.createElement('div');
+        grid.className = 'ps-grid';
+
+        pages.forEach(pg => {
+            const thumb = document.createElement('div');
+            thumb.className = 'ps-thumb' + (pg.idx === currentPageIdx ? ' current' : '');
+
+            // Check if page is complete
+            const saved = localStorage.getItem('cb_page_' + pg.idx);
+            let complete = false;
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                complete = pg.zones.every(z => parsed[z.id] && parsed[z.id] !== '#FFFFFF');
+            }
+            // Also check current page live state
+            if (pg.idx === currentPageIdx) {
+                complete = pg.zones.every(z => zoneColors[z.id] && zoneColors[z.id] !== '#FFFFFF');
+            }
+
+            thumb.innerHTML = `<span class="emoji">${pg.emoji}</span><span class="label">${pg.name}</span>${complete ? '<span class="done-badge">✓ Done</span>' : ''}`;
+            thumb.addEventListener('click', () => {
+                saveState();
+                currentPageIdx = pg.idx;
+                loadPageState(currentPageIdx);
+                history = [];
+                drawPage();
+                updateTitle();
+                closePagesPanel();
+            });
+            grid.appendChild(thumb);
+        });
+
+        sec.appendChild(grid);
+        body.appendChild(sec);
+    });
+}
+
+function openPagesPanel() {
+    buildPageSelector();
+    document.getElementById('pageSelector').classList.add('open');
+}
+function closePagesPanel() {
+    document.getElementById('pageSelector').classList.remove('open');
+}
+
+function updateTitle() {
+    const page = getPage();
+    document.getElementById('pageTitle').textContent = page.emoji + ' ' + page.name;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   TOOLBAR BUTTONS
+   ══════════════════════════════════════════════════════════════ */
+
+document.getElementById('btnPages').addEventListener('click', openPagesPanel);
+document.getElementById('btnClosePages').addEventListener('click', closePagesPanel);
+
+document.getElementById('btnUndo').addEventListener('click', () => {
+    if (!history.length) return;
+    const action = history.pop();
+    if (action.prevColor) {
+        zoneColors[action.zoneId] = action.prevColor;
+    } else {
+        delete zoneColors[action.zoneId];
+    }
+    drawPage();
+    saveState();
+});
+
+document.getElementById('btnClear').addEventListener('click', () => {
+    const page = getPage();
+    page.zones.forEach(z => { delete zoneColors[z.id]; });
+    history = [];
+    drawPage();
+    saveState();
+});
+
+document.getElementById('btnSave').addEventListener('click', () => {
+    // Create a high-res export
+    const exportCanvas = document.createElement('canvas');
+    exportCanvas.width = W;
+    exportCanvas.height = H;
+    const ectx = exportCanvas.getContext('2d');
+    const page = getPage();
+
+    ectx.fillStyle = '#FFFFFF';
+    ectx.fillRect(0, 0, W, H);
+
+    page.zones.forEach(zone => {
+        const color = zoneColors[zone.id] || '#FFFFFF';
+        ectx.fillStyle = color;
+        ectx.fill(zone.path);
+    });
+
+    ectx.strokeStyle = '#1E293B';
+    ectx.lineWidth = 3.5;
+    ectx.lineJoin = 'round';
+    ectx.lineCap = 'round';
+    page.zones.forEach(zone => {
+        ectx.stroke(zone.path);
+    });
+
+    const link = document.createElement('a');
+    link.download = 'coloring-' + page.name.toLowerCase().replace(/\s+/g, '-') + '.png';
+    link.href = exportCanvas.toDataURL('image/png');
+    link.click();
+});
+
+/* ══════════════════════════════════════════════════════════════
+   RESIZE HANDLING
+   ══════════════════════════════════════════════════════════════ */
+
+function resizeCanvas() {
+    const wrap = document.querySelector('.canvas-wrap');
+    const maxW = wrap.clientWidth - 24;
+    const maxH = wrap.clientHeight - 12;
+    const aspect = W / H;
+
+    let displayW, displayH;
+    if (maxW / maxH > aspect) {
+        displayH = maxH;
+        displayW = maxH * aspect;
+    } else {
+        displayW = maxW;
+        displayH = maxW / aspect;
+    }
+
+    canvas.style.width = displayW + 'px';
+    canvas.style.height = displayH + 'px';
+}
+
+window.addEventListener('resize', resizeCanvas);
+
+/* ══════════════════════════════════════════════════════════════
+   INIT
+   ══════════════════════════════════════════════════════════════ */
+
+(function init() {
+    // Restore last page
+    const savedPage = localStorage.getItem('cb_current');
+    if (savedPage !== null) {
+        const idx = parseInt(savedPage, 10);
+        if (idx >= 0 && idx < PAGES.length) currentPageIdx = idx;
+    }
+
+    loadPageState(currentPageIdx);
+    buildPalette();
+    updateTitle();
+    resizeCanvas();
+    drawPage();
+
+    // Prevent iOS bounce/zoom
+    document.addEventListener('touchmove', e => { if (e.target === canvas) e.preventDefault(); }, { passive: false });
+})();
+</script>
+</body>
+</html>
