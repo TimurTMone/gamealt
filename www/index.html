@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>BabyPath</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #fef9f0;
+            --surface: #ffffff;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-bg: #eef2ff;
+            --green: #10b981;
+            --green-bg: #ecfdf5;
+            --pink: #ec4899;
+            --pink-bg: #fdf2f8;
+            --warm: #f59e0b;
+            --text: #1e293b;
+            --text2: #64748b;
+            --border: #e2e8f0;
+            --radius: 16px;
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Nunito', -apple-system, sans-serif;
+            min-height: 100vh;
+            padding-top: var(--safe-top);
+            padding-bottom: calc(var(--safe-bottom) + 70px);
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* ─── HEADER ─── */
+        .header {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .header h1 span {
+            background: linear-gradient(135deg, var(--primary), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            font-size: 13px;
+            color: var(--text2);
+            margin-top: 2px;
+        }
+
+        /* ─── TOOL GRID ─── */
+        .section-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text2);
+            padding: 20px 20px 8px;
+        }
+
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            padding: 0 16px 12px;
+        }
+
+        .tool {
+            background: white;
+            border-radius: var(--radius);
+            padding: 20px 14px;
+            text-align: center;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid var(--border);
+            transition: transform 0.15s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tool:active { transform: scale(0.96); }
+
+        .tool .t-icon {
+            font-size: 40px;
+            margin-bottom: 2px;
+        }
+
+        .tool .t-name {
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .tool .t-desc {
+            font-size: 11px;
+            color: var(--text2);
+            line-height: 1.3;
+        }
+
+        .tool .t-badge {
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: white;
+        }
+
+        .badge-free { background: var(--green); }
+        .badge-new { background: var(--pink); }
+
+        /* ─── GUIDES LIST ─── */
+        .guides {
+            padding: 0 16px 16px;
+        }
+
+        .guide-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.15s;
+        }
+
+        .guide-item:active { transform: scale(0.98); }
+
+        .guide-item .g-icon { font-size: 32px; flex-shrink: 0; }
+
+        .guide-item .g-info { flex: 1; }
+        .guide-item .g-name { font-size: 14px; font-weight: 800; }
+        .guide-item .g-desc { font-size: 11px; color: var(--text2); line-height: 1.3; }
+
+        .guide-item .g-arrow { color: #ccc; font-size: 18px; }
+
+        /* ─── BOTTOM TAB BAR ─── */
+        .tab-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding-bottom: var(--safe-bottom);
+            z-index: 100;
+        }
+
+        .tab {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px 0 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text2);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
+
+        .tab.active { color: var(--primary); }
+
+        .tab .tab-icon { font-size: 22px; margin-bottom: 2px; }
+
+        /* ─── VIEWS ─── */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        /* ─── SETTINGS ─── */
+        .settings {
+            padding: 20px 16px;
+        }
+
+        .setting-group {
+            background: white;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .setting-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .setting-row:last-child { border: none; }
+
+        .setting-row .sr-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .setting-row .sr-icon { font-size: 20px; }
+        .setting-row .sr-arrow { color: #ccc; }
+
+        .lang-pills {
+            display: flex;
+            gap: 8px;
+        }
+
+        .lang-pill {
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 2px solid var(--border);
+            background: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .lang-pill.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .app-version {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text2);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ====== VIEW: HOME ====== -->
+<div class="view active" id="view-home">
+    <div class="header">
+        <h1>🍼 <span>BabyPath</span></h1>
+        <p>Evidence-based tools for new parents</p>
+    </div>
+
+    <div class="section-label">Interactive Tools</div>
+    <div class="tools">
+        <a class="tool" href="games/speech-buddy.html">
+            <span class="t-badge badge-free">FREE</span>
+            <div class="t-icon">🗣️</div>
+            <div class="t-name">Speech Buddy</div>
+            <div class="t-desc">Learn to talk in 3 languages</div>
+        </a>
+        <a class="tool" href="games/coloring-book.html">
+            <span class="t-badge badge-free">FREE</span>
+            <div class="t-icon">🖍️</div>
+            <div class="t-name">Coloring Book</div>
+            <div class="t-desc">15 pages, tap to color</div>
+        </a>
+        <a class="tool" href="games/kid-zone.html">
+            <span class="t-badge badge-free">FREE</span>
+            <div class="t-icon">🎨</div>
+            <div class="t-name">Kid Zone</div>
+            <div class="t-desc">Safe play mode</div>
+        </a>
+        <a class="tool" href="games/milestone-tracker.html">
+            <span class="t-badge badge-new">NEW</span>
+            <div class="t-icon">📊</div>
+            <div class="t-name">Milestones</div>
+            <div class="t-desc">Track development</div>
+        </a>
+    </div>
+
+    <div class="section-label">Printable Guides</div>
+    <div class="guides">
+        <a class="guide-item" href="guides/first-50-words.html">
+            <div class="g-icon">📋</div>
+            <div class="g-info">
+                <div class="g-name">First 50 Words Checklist</div>
+                <div class="g-desc">Trilingual word tracker with parent tips</div>
+            </div>
+            <div class="g-arrow">›</div>
+        </a>
+        <a class="guide-item" href="guides/speech-delay-guide.html">
+            <div class="g-icon">📖</div>
+            <div class="g-info">
+                <div class="g-name">Speech Delay Guide</div>
+                <div class="g-desc">10 strategies for when your child isn't talking yet</div>
+            </div>
+            <div class="g-arrow">›</div>
+        </a>
+        <a class="guide-item" href="guides/bilingual-handbook.html">
+            <div class="g-icon">🌍</div>
+            <div class="g-info">
+                <div class="g-name">Bilingual Parenting Handbook</div>
+                <div class="g-desc">100 words in EN/RU/KY + daily plan</div>
+            </div>
+            <div class="g-arrow">›</div>
+        </a>
+        <a class="guide-item" href="guides/daily-routine-cards.html">
+            <div class="g-icon">🧸</div>
+            <div class="g-info">
+                <div class="g-name">Daily Routine Cards</div>
+                <div class="g-desc">5 printable cards for meals, bath, bedtime</div>
+            </div>
+            <div class="g-arrow">›</div>
+        </a>
+    </div>
+</div>
+
+<!-- ====== VIEW: SETTINGS ====== -->
+<div class="view" id="view-settings">
+    <div class="header">
+        <h1>Settings</h1>
+    </div>
+    <div class="settings">
+        <div class="section-label">Language</div>
+        <div class="setting-group">
+            <div class="setting-row">
+                <div class="sr-left"><span class="sr-icon">🌍</span> App Language</div>
+                <div class="lang-pills">
+                    <div class="lang-pill active" onclick="setLang('en')">EN</div>
+                    <div class="lang-pill" onclick="setLang('ru')">РУ</div>
+                    <div class="lang-pill" onclick="setLang('ky')">КЫР</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-label">Account</div>
+        <div class="setting-group">
+            <div class="setting-row" onclick="alert('Coming soon — RevenueCat integration')">
+                <div class="sr-left"><span class="sr-icon">⭐</span> Upgrade to Pro</div>
+                <div class="sr-arrow">›</div>
+            </div>
+            <div class="setting-row" onclick="alert('Coming soon')">
+                <div class="sr-left"><span class="sr-icon">👶</span> Child Profile</div>
+                <div class="sr-arrow">›</div>
+            </div>
+            <div class="setting-row" onclick="alert('Coming soon')">
+                <div class="sr-left"><span class="sr-icon">🔔</span> Reminders</div>
+                <div class="sr-arrow">›</div>
+            </div>
+        </div>
+
+        <div class="section-label">About</div>
+        <div class="setting-group">
+            <div class="setting-row">
+                <div class="sr-left"><span class="sr-icon">📚</span> Our Methodology</div>
+                <div class="sr-arrow">›</div>
+            </div>
+            <div class="setting-row">
+                <div class="sr-left"><span class="sr-icon">🔒</span> Privacy Policy</div>
+                <div class="sr-arrow">›</div>
+            </div>
+            <div class="setting-row">
+                <div class="sr-left"><span class="sr-icon">📧</span> Contact Us</div>
+                <div class="sr-arrow">›</div>
+            </div>
+        </div>
+
+        <div class="app-version">BabyPath v1.0.0 — Built with ❤️ by parents</div>
+    </div>
+</div>
+
+<!-- ====== TAB BAR ====== -->
+<div class="tab-bar">
+    <button class="tab active" onclick="showTab('home')">
+        <div class="tab-icon">🏠</div>
+        Home
+    </button>
+    <button class="tab" onclick="window.location.href='games/speech-buddy.html'">
+        <div class="tab-icon">🗣️</div>
+        Speech
+    </button>
+    <button class="tab" onclick="window.location.href='games/milestone-tracker.html'">
+        <div class="tab-icon">📊</div>
+        Milestones
+    </button>
+    <button class="tab" onclick="showTab('settings')">
+        <div class="tab-icon">⚙️</div>
+        Settings
+    </button>
+</div>
+
+<script>
+function showTab(name) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}
+
+function setLang(l) {
+    localStorage.setItem('babypath_lang', l);
+    document.querySelectorAll('.lang-pill').forEach(p => p.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}
+</script>
+</body>
+</html>
