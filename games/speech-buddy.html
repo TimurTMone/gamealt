@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Speech Buddy — Evidence-Based Speech Therapy</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; -webkit-tap-highlight-color: transparent; }
+
+        :root {
+            --bg: #fef6e4;
+            --surface: #ffffff;
+            --primary: #f582ae;
+            --primary2: #ff8fab;
+            --secondary: #8bd3dd;
+            --accent: #f3d2c1;
+            --green: #7ec8a0;
+            --purple: #b8a9c9;
+            --orange: #f6a560;
+            --yellow: #ffd166;
+            --text: #2d334a;
+            --text2: #7a7f9a;
+            --radius: 20px;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Nunito', -apple-system, sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* ─── NAV ─── */
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background: white;
+            border-bottom: 2px solid #f0e6d3;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 10px; }
+
+        .back-btn {
+            background: var(--accent);
+            border: none;
+            width: 38px; height: 38px;
+            border-radius: 12px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-title { font-size: 18px; font-weight: 900; color: var(--primary); }
+        .nav-badge {
+            background: var(--green);
+            color: white;
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+        .lang-btn {
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 2px solid #eee;
+            background: white;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .icon-btn {
+            background: var(--accent);
+            border: none;
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ─── VIEWS ─── */
+        .view { display: none; }
+        .view.active { display: block; }
+
+        .container { max-width: 720px; margin: 0 auto; padding: 0 16px; }
+
+        /* ─── STAGE SELECTOR (HOME) ─── */
+        .home-hero {
+            text-align: center;
+            padding: 24px 16px 8px;
+        }
+
+        .home-hero h1 { font-size: 26px; font-weight: 900; }
+        .home-hero p { font-size: 13px; color: var(--text2); margin-top: 4px; line-height: 1.5; }
+
+        .evidence-ribbon {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #e8f5e9, #f1f8e9);
+            border: 1px solid #c8e6c9;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #2e7d32;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .stage-cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            padding: 16px 0;
+        }
+
+        .stage-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid;
+        }
+
+        .stage-card:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .stage-card:active { transform: scale(0.98); }
+
+        .stage-card .st-emoji { font-size: 40px; flex-shrink: 0; }
+        .stage-card .st-info { flex: 1; }
+        .stage-card .st-name { font-size: 16px; font-weight: 800; }
+        .stage-card .st-desc { font-size: 12px; color: var(--text2); line-height: 1.4; margin-top: 2px; }
+        .stage-card .st-meta { display: flex; gap: 8px; margin-top: 6px; }
+
+        .st-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-weight: 700;
+        }
+
+        .stage-card .st-arrow { font-size: 20px; color: #ccc; }
+
+        .stage-card.s1 { border-color: var(--yellow); }
+        .stage-card.s2 { border-color: var(--orange); }
+        .stage-card.s3 { border-color: var(--secondary); }
+        .stage-card.s4 { border-color: var(--purple); }
+
+        .s1 .st-tag { background: #fff8e1; color: #f57f17; }
+        .s2 .st-tag { background: #fff3e0; color: #e65100; }
+        .s3 .st-tag { background: #e0f7fa; color: #00838f; }
+        .s4 .st-tag { background: #f3e5f5; color: #7b1fa2; }
+
+        /* ─── ROUTINE CHIPS ─── */
+        .routine-section { padding: 8px 0 16px; }
+        .routine-section h3 { font-size: 14px; font-weight: 800; margin-bottom: 10px; color: var(--text2); }
+
+        .routine-chips {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .routine-chip {
+            background: white;
+            border: 2px solid #eee;
+            border-radius: 30px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .routine-chip:hover { border-color: var(--primary); }
+        .routine-chip:active { transform: scale(0.95); }
+
+        /* ─── SUB NAV (inside word view) ─── */
+        .sub-nav {
+            display: flex;
+            gap: 6px;
+            padding: 10px 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .sub-btn {
+            padding: 7px 16px;
+            border-radius: 20px;
+            border: 2px solid #eee;
+            background: white;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .sub-btn.active { background: var(--secondary); color: white; border-color: var(--secondary); }
+
+        /* ─── PARENT TIP BANNER ─── */
+        .parent-tip {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin: 12px 0;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .parent-tip .tip-icon { font-size: 24px; flex-shrink: 0; }
+
+        .parent-tip .tip-body { flex: 1; }
+        .parent-tip .tip-label { font-size: 10px; font-weight: 800; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; }
+        .parent-tip .tip-text { font-size: 13px; line-height: 1.5; color: var(--text); margin-top: 2px; }
+        .parent-tip .tip-ref { font-size: 10px; color: var(--text2); margin-top: 4px; font-style: italic; }
+
+        /* ─── WORD CARDS ─── */
+        .word-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 14px;
+            padding: 8px 0 20px;
+        }
+
+        .word-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+            border: 3px solid transparent;
+            position: relative;
+            min-height: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .word-card:hover { transform: scale(1.05); }
+        .word-card:active { transform: scale(0.95); }
+        .word-card.spoken { border-color: var(--primary); box-shadow: 0 0 20px rgba(245,130,174,0.3); animation: pop 0.4s ease; }
+
+        @keyframes pop { 0%{transform:scale(0.95)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
+
+        .word-emoji { font-size: 48px; margin-bottom: 6px; }
+        .word-label { font-size: 15px; font-weight: 800; }
+        .word-sublabel { font-size: 11px; color: var(--text2); margin-top: 1px; }
+
+        .word-card .sound-tag {
+            position: absolute;
+            top: 6px;
+            left: 6px;
+            background: var(--yellow);
+            color: #5d4037;
+            font-size: 9px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .word-card .speaker { position: absolute; top: 6px; right: 8px; font-size: 14px; opacity: 0.3; }
+
+        .mastery-dots { display: flex; gap: 3px; margin-top: 6px; }
+        .mastery-dot { width: 6px; height: 6px; border-radius: 50%; background: #e0e0e0; }
+        .mastery-dot.filled { background: var(--green); }
+
+        /* ─── INLINE COACHING TIP (shown on tap) ─── */
+        .coaching-popup {
+            position: fixed;
+            bottom: 0; left: 0;
+            width: 100%;
+            background: white;
+            border-top: 2px solid var(--accent);
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            z-index: 200;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 -4px 30px rgba(0,0,0,0.1);
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .coaching-popup.show { transform: translateY(0); }
+
+        .coaching-popup .cp-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #aaa;
+        }
+
+        .coaching-popup .cp-word { font-size: 28px; font-weight: 900; margin-bottom: 2px; }
+        .coaching-popup .cp-emoji { font-size: 48px; }
+        .coaching-popup .cp-sound { font-size: 13px; color: var(--text2); margin-bottom: 10px; }
+        .coaching-popup .cp-tip-label { font-size: 11px; font-weight: 800; color: var(--green); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 10px; }
+        .coaching-popup .cp-tip-text { font-size: 14px; line-height: 1.6; margin-top: 4px; }
+        .coaching-popup .cp-play-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ─── SOUND PRACTICE ─── */
+        .sound-practice {
+            text-align: center;
+            padding: 30px 16px;
+        }
+
+        .sound-card-big {
+            background: white;
+            border-radius: 30px;
+            padding: 40px 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+            max-width: 400px;
+            margin: 0 auto 20px;
+        }
+
+        .sound-card-big .sc-emoji { font-size: 72px; }
+        .sound-card-big .sc-sound { font-size: 42px; font-weight: 900; color: var(--primary); margin: 8px 0; letter-spacing: 4px; }
+        .sound-card-big .sc-tip { font-size: 13px; color: var(--text2); line-height: 1.5; }
+
+        .sound-nav-btns {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 16px 0;
+        }
+
+        .snd-btn {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            border: 2px solid #eee;
+            background: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .snd-btn.primary { background: var(--primary); color: white; border-color: var(--primary); width: 60px; height: 60px; font-size: 24px; }
+
+        /* ─── MIC ─── */
+        .mic-section {
+            text-align: center;
+            padding: 16px;
+        }
+
+        .mic-btn {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary2));
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(245,130,174,0.4);
+            transition: transform 0.2s;
+        }
+
+        .mic-btn.listening { animation: mic-pulse 1s ease-in-out infinite; }
+
+        @keyframes mic-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(245,130,174,0.4)} 50%{box-shadow:0 0 0 15px rgba(245,130,174,0)} }
+
+        .vol-bar { width: 180px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin: 12px auto; }
+        .vol-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--primary)); border-radius: 4px; width: 0%; transition: width 0.1s; }
+
+        .mic-label { font-size: 13px; color: var(--text2); font-weight: 600; }
+
+        /* ─── FIND IT ─── */
+        .find-prompt { text-align: center; padding: 20px 16px 0; }
+        .find-prompt .fp-q { font-size: 20px; font-weight: 800; }
+
+        .find-prompt .fp-listen {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 10px;
+            animation: gentle-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes gentle-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+        .find-score { text-align: center; font-size: 13px; font-weight: 700; color: var(--text2); padding: 6px; }
+
+        /* ─── CELEBRATION ─── */
+        .celeb-text {
+            position: fixed;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 36px;
+            font-weight: 900;
+            color: var(--primary);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.05);
+            z-index: 501;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+            opacity: 0;
+            text-align: center;
+        }
+
+        .celeb-text.show { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+
+        .star-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 500;
+            font-size: 24px;
+        }
+
+        /* ─── METHODOLOGY VIEW ─── */
+        .method-content {
+            padding: 20px 0;
+        }
+
+        .method-content h2 { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+        .method-content h3 { font-size: 16px; font-weight: 800; margin: 20px 0 8px; color: var(--primary); }
+
+        .method-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+        }
+
+        .method-card .mc-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+        .method-card .mc-body { font-size: 13px; color: var(--text2); line-height: 1.6; }
+        .method-card .mc-ref { font-size: 11px; color: var(--purple); margin-top: 6px; font-style: italic; }
+
+        .principle-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .principle-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+            line-height: 1.5;
+            display: flex;
+            gap: 10px;
+        }
+
+        .principle-list li:last-child { border: none; }
+        .principle-list .pl-num { font-weight: 900; color: var(--primary); font-size: 16px; min-width: 24px; }
+
+        /* ─── MILESTONES ─── */
+        .milestone-group { margin-bottom: 20px; }
+        .milestone-group h4 { font-size: 14px; font-weight: 800; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+
+        .milestone-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+        }
+
+        .milestone-item:last-child { border: none; }
+
+        .ms-check {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .ms-check.checked { background: var(--green); border-color: var(--green); color: white; }
+
+        /* ─── DASHBOARD ─── */
+        .dash-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .dash-stat {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .dash-stat .ds-icon { font-size: 24px; }
+        .dash-stat .ds-val { font-size: 26px; font-weight: 900; color: var(--primary); }
+        .dash-stat .ds-lbl { font-size: 10px; color: var(--text2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .dash-card {
+            background: white;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .dash-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 10px; }
+
+        .progress-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 0;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 13px;
+        }
+
+        .progress-row:last-child { border: none; }
+        .progress-row .pr-name { flex: 1; font-weight: 600; }
+        .pr-bar-bg { width: 80px; height: 7px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .pr-bar { height: 100%; border-radius: 4px; }
+        .pr-pct { font-size: 12px; font-weight: 700; color: var(--text2); width: 32px; text-align: right; }
+
+        /* ─── PREMIUM ─── */
+        .premium-cta {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 16px 0;
+        }
+
+        .premium-cta h3 { font-size: 18px; font-weight: 900; margin-bottom: 4px; }
+        .premium-cta p { font-size: 12px; opacity: 0.85; margin-bottom: 12px; line-height: 1.5; }
+
+        .premium-cta button {
+            background: white;
+            color: #6c5ce7;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        /* ─── AD ─── */
+        .ad-slot {
+            background: rgba(0,0,0,0.02);
+            border: 1px dashed rgba(0,0,0,0.08);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 11px;
+            height: 60px;
+            margin: 12px 0;
+            position: relative;
+        }
+
+        .ad-slot::before { content: 'Ad'; position: absolute; top: 3px; right: 7px; font-size: 9px; color: #ddd; }
+
+        /* ─── SESSION TIMER ─── */
+        .session-timer {
+            position: fixed;
+            bottom: 14px;
+            right: 14px;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text2);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            z-index: 90;
+        }
+
+        /* ─── RED FLAG BOX ─── */
+        .red-flag {
+            background: #fff3e0;
+            border: 1px solid #ffe0b2;
+            border-left: 4px solid #ff9800;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .red-flag h4 { font-size: 14px; font-weight: 800; color: #e65100; margin-bottom: 6px; }
+        .red-flag ul { padding-left: 18px; font-size: 13px; color: var(--text); line-height: 1.8; }
+
+        @media (max-width: 500px) {
+            .word-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .nav-right { gap: 4px; }
+            .lang-btn { padding: 4px 8px; font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- CELEBRATION -->
+<div class="celeb-text" id="celeb-text"></div>
+<div id="celebration"></div>
+
+<!-- COACHING POPUP -->
+<div class="coaching-popup" id="coaching-popup">
+    <button class="cp-close" onclick="closeCoaching()">✕</button>
+    <div style="text-align:center">
+        <div class="cp-emoji" id="cp-emoji"></div>
+        <div class="cp-word" id="cp-word"></div>
+        <div class="cp-sound" id="cp-sound"></div>
+        <button class="cp-play-btn" id="cp-play-btn" onclick="speakCurrentWord()">🔊 Hear it</button>
+    </div>
+    <div class="cp-tip-label">🧠 How to practice this word</div>
+    <div class="cp-tip-text" id="cp-tip"></div>
+    <div class="cp-tip-label" style="margin-top:12px;">👂 What to accept</div>
+    <div class="cp-tip-text" id="cp-accept"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+    <div class="nav-left">
+        <button class="back-btn" onclick="goBack()">←</button>
+        <span class="nav-title">🗣️ Speech Buddy</span>
+        <span class="nav-badge">EVIDENCE-BASED</span>
+    </div>
+    <div class="nav-right">
+        <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">РУ</button>
+        <button class="lang-btn" data-lang="ky" onclick="setLang('ky')">КЫР</button>
+        <button class="icon-btn" onclick="showView('milestones')" title="Milestones">📋</button>
+        <button class="icon-btn" onclick="showView('method')" title="Our Method">🔬</button>
+        <button class="icon-btn" onclick="showView('dashboard')" title="Dashboard">📊</button>
+    </div>
+</nav>
+
+<!-- ========== VIEW: HOME ========== -->
+<div class="view active" id="view-home">
+    <div class="container">
+        <div class="home-hero">
+            <h1>Help Your Child Talk</h1>
+            <p>Structured, evidence-based speech practice designed around how children actually learn language.</p>
+            <div class="evidence-ribbon" onclick="showView('method')">
+                📚 Based on ASHA, Hanen, and AAC Core Vocabulary research →
+            </div>
+        </div>
+
+        <div class="parent-tip">
+            <div class="tip-icon">💡</div>
+            <div class="tip-body">
+                <div class="tip-label">Session Tip</div>
+                <div class="tip-text" id="home-tip">Keep sessions short — 5 to 10 minutes. Follow your child's interest. If they're drawn to animals, start there!</div>
+                <div class="tip-ref">Hanen Centre: "It Takes Two to Talk" — follow the child's lead</div>
+            </div>
+        </div>
+
+        <h3 style="font-size:14px;font-weight:800;color:var(--text2);margin-bottom:4px;">Developmental Stages</h3>
+        <div class="stage-cards" id="stage-cards"></div>
+
+        <div class="routine-section">
+            <h3>🕐 Practice by Daily Routine</h3>
+            <div class="routine-chips" id="routine-chips"></div>
+        </div>
+
+        <div class="ad-slot">📢 Banner Ad</div>
+
+        <div class="premium-cta">
+            <h3>⭐ Speech Buddy Pro</h3>
+            <p>Unlock 200+ words, therapist video guides per word, detailed analytics, multi-child profiles, and offline mode.</p>
+            <button onclick="showPremium()">Upgrade — $4.99/mo</button>
+        </div>
+    </div>
+</div>
+
+<!-- ========== VIEW: WORDS ========== -->
+<div class="view" id="view-words">
+    <div class="container">
+        <div class="parent-tip" id="words-tip-banner"></div>
+        <div class="sub-nav" id="mode-nav">
+            <button class="sub-btn active" data-mode="explore" onclick="setMode('explore')">👆 Explore</button>
+            <button class="sub-btn" data-mode="sounds" onclick="setMode('sounds')">🔤 Sound Practice</button>
+            <button class="sub-btn" data-mode="find" onclick="setMode('find')">🔍 Find It</button>
+            <button class="sub-btn" data-mode="say" onclick="setMode('say')">🎤 Say It</button>
+        </div>
+
+        <!-- EXPLORE -->
+        <div id="mode-explore">
+            <div class="word-grid" id="word-grid"></div>
+        </div>
+
+        <!-- SOUND PRACTICE -->
+        <div id="mode-sounds" style="display:none">
+            <div class="sound-practice" id="sound-practice"></div>
+        </div>
+
+        <!-- FIND IT -->
+        <div id="mode-find" style="display:none">
+            <div class="find-prompt" id="find-prompt">
+                <div class="fp-q" id="find-q"></div>
+                <button class="fp-listen" onclick="speakFindWord()">🔊 Listen Again</button>
+            </div>
+            <div class="find-score" id="find-score"></div>
+            <div class="word-grid" id="find-grid"></div>
+        </div>
+
+        <!-- SAY IT -->
+        <div id="mode-say" style="display:none">
+            <div class="sound-practice">
+                <div class="sound-card-big" id="say-card">
+                    <div class="sc-emoji" id="say-emoji">🐱</div>
+                    <div class="sc-sound" id="say-word">Cat</div>
+                    <div class="sc-tip" id="say-phonetic"></div>
+                </div>
+                <button class="cp-play-btn" onclick="speakSayWord()" style="margin-bottom:14px;">🔊 Hear it</button>
+                <div class="mic-section">
+                    <button class="mic-btn" id="mic-btn" onclick="toggleMic()">🎤</button>
+                    <div class="vol-bar"><div class="vol-fill" id="vol-fill"></div></div>
+                    <div class="mic-label" id="mic-label">Tap mic, then try to say the word!</div>
+                </div>
+                <div class="sound-nav-btns">
+                    <button class="snd-btn" onclick="prevSayWord()">←</button>
+                    <button class="snd-btn primary" onclick="speakSayWord()">🔊</button>
+                    <button class="snd-btn" onclick="nextSayWord()">→</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-slot">📢 In-Game Ad</div>
+    </div>
+</div>
+
+<!-- ========== VIEW: METHODOLOGY ========== -->
+<div class="view" id="view-method">
+    <div class="container">
+        <div class="method-content">
+            <h2>🔬 Our Methodology</h2>
+            <p style="color:var(--text2);font-size:13px;margin-bottom:16px;">Speech Buddy is built on decades of peer-reviewed speech-language pathology research. Here's the science behind every feature.</p>
+
+            <div class="method-card">
+                <div class="mc-title">🎯 Core Vocabulary Approach</div>
+                <div class="mc-body">We prioritize <strong>core words</strong> (want, more, go, stop, help, all done) over content words (cat, banana). Research shows just 50 core words make up ~80% of what we say daily. These functional words give your child the power to communicate needs immediately.</div>
+                <div class="mc-ref">Banajee, M., DiCarlo, C., & Stricklin, S. (2003). "Core Vocabulary Determination for Toddlers." AAC Journal.</div>
+            </div>
+
+            <div class="method-card">
+                <div class="mc-title">🧠 Naturalistic Developmental Behavioral Interventions (NDBI)</div>
+                <div class="mc-body">Words are taught within <strong>daily routines</strong> (mealtime, bath, play) — not in isolation. Research shows children learn language best in meaningful, motivating contexts where they're naturally engaged.</div>
+                <div class="mc-ref">Schreibman, L. et al. (2015). "Naturalistic Developmental Behavioral Interventions." Journal of Autism and Developmental Disorders.</div>
+            </div>
+
+            <div class="method-card">
+                <div class="mc-title">👂 Hanen "It Takes Two to Talk" Principles</div>
+                <div class="mc-body">Our parent coaching follows the <strong>OWL strategy</strong>: Observe what your child is interested in, Wait for them to communicate, Listen to their attempts. We model words — never demand "Say ___!"</div>
+                <div class="mc-ref">Pepper, J. & Weitzman, E. (2004). "It Takes Two to Talk." The Hanen Centre.</div>
+            </div>
+
+            <div class="method-card">
+                <div class="mc-title">🔤 Phonological Development Hierarchy</div>
+                <div class="mc-body">Words are organized by <strong>sound difficulty</strong>. Early developing sounds (/p/, /b/, /m/, /d/, /n/, /t/, /w/, /h/) come first. We don't expect a 2-year-old to say "rabbit" perfectly — "wabbit" is developmentally appropriate.</div>
+                <div class="mc-ref">Sander, E. (1972). "When Are Speech Sounds Learned?" Journal of Speech and Hearing Disorders.</div>
+            </div>
+
+            <div class="method-card">
+                <div class="mc-title">🌍 Multilingual Advantage</div>
+                <div class="mc-body">We support English, Russian, and Kyrgyz because research confirms that <strong>bilingualism does NOT cause speech delays</strong>. Count vocabulary across ALL languages. Continue using every home language — it strengthens cognitive development.</div>
+                <div class="mc-ref">Petitto, L.A. et al. (2001). "Bilingual signed and spoken language acquisition." PNAS. ASHA Position Statement on Bilingualism.</div>
+            </div>
+
+            <h3>Our 7 Principles</h3>
+            <ul class="principle-list">
+                <li><span class="pl-num">1</span> <span><strong>Model, don't demand.</strong> Say the word naturally — never force "Say cat!" This creates pressure and resistance. Simply model: "Look, a cat! Cat."</span></li>
+                <li><span class="pl-num">2</span> <span><strong>Accept approximations.</strong> "Ba" for ball, "muh" for more — these ARE words. Celebrate every attempt, then model the full word back.</span></li>
+                <li><span class="pl-num">3</span> <span><strong>Repetition is everything.</strong> Children need to hear a word 50-100+ times before producing it. This app tracks exposure to help you stay consistent.</span></li>
+                <li><span class="pl-num">4</span> <span><strong>Follow their lead.</strong> If your child reaches for the dog, talk about the dog — not the cat you planned to practice.</span></li>
+                <li><span class="pl-num">5</span> <span><strong>Keep it short.</strong> 5-10 minutes is ideal. End while they're still engaged, not after they've lost interest.</span></li>
+                <li><span class="pl-num">6</span> <span><strong>Use all senses.</strong> Pair words with gestures, sounds, touch. "Splash!" during bath, "Mmm, yummy!" during eating.</span></li>
+                <li><span class="pl-num">7</span> <span><strong>Routines are your superpower.</strong> Predictable daily activities (meals, bath, bedtime) are the #1 context for language learning.</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- ========== VIEW: MILESTONES ========== -->
+<div class="view" id="view-milestones">
+    <div class="container">
+        <div style="padding:20px 0;">
+            <h2 style="font-size:22px;font-weight:900;">📋 Milestone Tracker</h2>
+            <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">Track your child's communication development. Check off skills as you observe them. This is NOT a diagnostic tool — see a professional if concerned.</p>
+
+            <div id="milestone-list"></div>
+
+            <div class="red-flag">
+                <h4>🚩 When to See a Professional</h4>
+                <ul>
+                    <li>No babbling by 12 months</li>
+                    <li>No gestures (pointing, waving) by 12 months</li>
+                    <li>No single words by 16 months</li>
+                    <li>No two-word phrases by 24 months</li>
+                    <li>Loss of previously acquired words at any age</li>
+                    <li>Not responding to their name consistently by 12 months</li>
+                </ul>
+                <p style="font-size:12px;color:var(--text2);margin-top:10px;">
+                    <strong>Source:</strong> ASHA (American Speech-Language-Hearing Association).
+                    Early intervention is most effective before age 3. Trust your instincts — you know your child best.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ========== VIEW: DASHBOARD ========== -->
+<div class="view" id="view-dashboard">
+    <div class="container" style="padding-top:20px;">
+        <h2 style="font-size:22px;font-weight:900;margin-bottom:4px;">📊 Parent Dashboard</h2>
+        <p style="font-size:13px;color:var(--text2);margin-bottom:16px;">Track your child's practice and progress over time.</p>
+        <div class="dash-stats" id="dash-stats"></div>
+        <div class="dash-card"><h3>📈 Stage Progress</h3><div id="dash-progress"></div></div>
+        <div class="dash-card"><h3>🕐 Recent Sessions</h3><div id="dash-sessions"></div></div>
+        <div class="ad-slot">📢 Dashboard Ad</div>
+        <div class="premium-cta">
+            <h3>⭐ Speech Buddy Pro</h3>
+            <p>Detailed per-word analytics, exportable reports for your SLP, therapist video tips, and multi-child support.</p>
+            <button onclick="showPremium()">Upgrade — $4.99/mo</button>
+        </div>
+    </div>
+</div>
+
+<div class="session-timer" id="session-timer">⏱ 0:00</div>
+
+<script>
+// ============================================================
+//  WORD DATABASE — organized by developmental stage
+//  Based on: ASHA milestones, AAC Core Vocabulary research,
+//  Sander (1972) phonological development order
+// ============================================================
+const STAGES = [
+    {
+        id: 's1',
+        emoji: '🔤',
+        name: { en: 'Sounds & Babbling', ru: 'Звуки и лепет', ky: 'Үндөр жана кобурашуу' },
+        desc: { en: 'Pre-words: vowels, consonant-vowel combos, and animal sounds. The building blocks of speech.', ru: 'Доречевой этап: гласные, слоги и звуки животных. Основа речи.', ky: 'Сөзгө чейин: үндүүлөр, муундар жана жаныбар үндөрү.' },
+        age: '8-14mo',
+        color: 'var(--yellow)',
+        tip: {
+            en: 'At this stage, celebrate ALL sounds. Babbling IS communication. Copy your child\'s sounds back to them — this teaches turn-taking, the foundation of conversation.',
+            ru: 'На этом этапе радуйтесь ЛЮБЫМ звукам. Лепет — это общение. Повторяйте звуки ребёнка — это учит чередованию, основе разговора.',
+            ky: 'Бул этапта БАРДЫК үндөргө кубаныңыз. Кобурашуу — бул баарлашуу.'
+        },
+        tipRef: 'Stark, R.E. (1980). "Stages of Speech Development." — Pre-linguistic communication milestones',
+        words: [
+            { emoji:'🔊', en:'ba-ba', ru:'ба-ба', ky:'ба-ба', target:'/b/', tip:{en:'Bounce a ball: "ba-ba-ba!" with each bounce. Exaggerate the /b/ sound with big lip movements.',ru:'Бросайте мяч: "ба-ба-ба!" при каждом ударе. Утрируйте звук /б/.',ky:'Топту ыргыт: "ба-ба-ба!" деп айтыңыз.'}, accept:{en:'"ba", "buh", or any /b/ sound',ru:'"ба", "бу" или любой звук с /б/',ky:'"ба" же /б/ менен башталган ар кандай үн'} },
+            { emoji:'👩', en:'ma-ma', ru:'ма-ма', ky:'ма-ма', target:'/m/', tip:{en:'Point to mama and say "ma-ma" slowly, face to face. /m/ is one of the first sounds babies make because it requires simple lip closure.',ru:'Покажите на маму и скажите "ма-ма" медленно, лицом к лицу.',ky:'"ма-ма" деп жай айтып, апасын көрсөтүңүз.'}, accept:{en:'"ma", "mmm", any /m/ sound',ru:'"ма", "ммм"',ky:'"ма", "ммм"'} },
+            { emoji:'👨', en:'da-da', ru:'да-да', ky:'да-да', target:'/d/', tip:{en:'Point to papa: "da-da!" /d/ is an early tongue-tip sound. Tap the table rhythmically: "da-da-da!"',ru:'Покажите на папу: "да-да!" Стучите по столу ритмично.',ky:'"да-да" деп папасын көрсөтүңүз.'}, accept:{en:'"da", "duh"',ru:'"да"',ky:'"да"'} },
+            { emoji:'🐮', en:'moo', ru:'му', ky:'муу', target:'/m/', tip:{en:'Show a cow picture/toy. Say "mooooo" with a long vowel. Animal sounds are often first words because they\'re fun and repetitive!',ru:'Покажите корову: "муууу" с длинной гласной.',ky:'Уйду көрсөтүп: "мууу" деп узун айтыңыз.'}, accept:{en:'"moo", "muh", "mm"',ru:'"му", "мм"',ky:'"му", "мм"'} },
+            { emoji:'🐶', en:'woof', ru:'гав', ky:'ав', target:'/w/', tip:{en:'Point at dogs everywhere! "Woof woof!" Pair with the sign for dog (pat your leg).',ru:'Показывайте на собак: "Гав-гав!" Сопровождайте жестом.',ky:'Иттерди көрсөтүңүз: "Ав-ав!"'}, accept:{en:'"wuh", "oof", "buh"',ru:'"ав", "га"',ky:'"ав"'} },
+            { emoji:'🐱', en:'meow', ru:'мяу', ky:'мяу', target:'/m/', tip:{en:'"Meow!" — exaggerate the /m/ and the vowel. Cats are motivating for most toddlers!',ru:'"Мяу!" — утрируйте звук /м/ и гласную.',ky:'"Мяу!" деп /м/ үнүн чоңойтуңуз.'}, accept:{en:'"mow", "mee", "ma"',ru:'"мя", "ма"',ky:'"мя", "ма"'} },
+            { emoji:'🐑', en:'baa', ru:'бее', ky:'маа', target:'/b/', tip:{en:'"Baaaa!" — hold the vowel long. Great for practicing /b/ and open mouth vowels.',ru:'"Беее!" — тяните гласную.',ky:'"Мааа!" деп узун айтыңыз.'}, accept:{en:'"ba", "bah"',ru:'"бе"',ky:'"ма"'} },
+            { emoji:'🚗', en:'vroom', ru:'вжжж', ky:'вжжж', target:'/v/', tip:{en:'Push a toy car: "Vroooom!" Great for lip-teeth sounds. Even "broom" is good!',ru:'Катайте машинку: "Вжжж!" Хорошо для губно-зубных звуков.',ky:'Машинаны түрт: "Вжжж!"'}, accept:{en:'"broom", "vvv", "mmm"',ru:'"вж", "бр"',ky:'"вж"'} },
+        ]
+    },
+    {
+        id: 's2',
+        emoji: '⭐',
+        name: { en: 'First Core Words', ru: 'Первые ключевые слова', ky: 'Биринчи негизги сөздөр' },
+        desc: { en: 'The most powerful functional words: more, all done, go, help, want. These let your child communicate needs RIGHT NOW.', ru: 'Самые важные слова: ещё, всё, иди, помоги, хочу. Они дают ребёнку возможность общаться прямо сейчас.', ky: 'Эң маанилүү сөздөр: дагы, бүттү, бар, жардам, керек.' },
+        age: '12-18mo',
+        color: 'var(--orange)',
+        tip: {
+            en: 'Core words make up ~80% of daily communication. "More" alone opens a world: more milk, more play, more book. Model these in EVERY routine — meals, play, bath.',
+            ru: 'Ключевые слова составляют ~80% ежедневного общения. Одно слово "ещё" открывает целый мир.',
+            ky: 'Негизги сөздөр күнүмдүк баарлашуунун ~80% түзөт.'
+        },
+        tipRef: 'Banajee, DiCarlo & Stricklin (2003) — AAC Core Vocabulary for Toddlers',
+        words: [
+            { emoji:'🔄', en:'More', ru:'Ещё', ky:'Дагы', target:'/m/', tip:{en:'THE most important first word. During meals, give a tiny portion, wait, then model "more?" with the sign (fingertips touching). Wait 5 seconds for ANY response.',ru:'Самое важное первое слово. Во время еды дайте маленькую порцию, подождите, скажите "ещё?" с жестом.',ky:'Эң маанилүү биринчи сөз. Тамак учурунда "дагы?" деп сураңыз.'}, accept:{en:'"mo", "muh", reaching, signing',ru:'"ещ", "е", жест',ky:'"да", жест'} },
+            { emoji:'✋', en:'All done', ru:'Всё', ky:'Бүттү', target:'/d/', tip:{en:'Model at the end of EVERY activity. Wave hands: "All done!" — eating done, bath done, play done. Pair with hands-up gesture.',ru:'Говорите в конце КАЖДОГО действия. Махните руками: "Всё!" — еда, купание, игра.',ky:'Ар бир ишти бүткөндө "Бүттү!" деп колуңузду көтөрүңүз.'}, accept:{en:'"duh", "da", "ah duh", hand wave',ru:'"вс", "всё", жест',ky:'"бү", жест'} },
+            { emoji:'👆', en:'Up', ru:'Вверх', ky:'Жогору', target:'/ʌ/', tip:{en:'When child reaches up to be held: pause, model "Up!" with arms raised. Wait for any attempt before picking up.',ru:'Когда ребёнок тянет руки: пауза, скажите "Вверх!" с поднятыми руками.',ky:'Бала колун созгондо: "Жогору!" деп айтыңыз.'}, accept:{en:'"uh", "buh", reaching up',ru:'"вв", руки вверх',ky:'"жо", колун созуу'} },
+            { emoji:'🚪', en:'Open', ru:'Открой', ky:'Ач', target:'/p/', tip:{en:'Use with doors, containers, books. Hold the item, model "Open!" and wait before opening. Creates natural communication opportunity.',ru:'Используйте с дверями, коробками, книгами. Держите предмет, скажите "Открой!" и подождите.',ky:'Эшиктер, кутулар менен колдонуңуз. "Ач!" деп айтып, күтүңүз.'}, accept:{en:'"oh", "boh", "puh"',ru:'"от", "кой"',ky:'"ач"'} },
+            { emoji:'🏃', en:'Go', ru:'Иди', ky:'Бар', target:'/ɡ/', tip:{en:'"Ready, set... GO!" — pause before "go" every time. Use with cars, balls, slides. The anticipation teaches them to fill the gap.',ru:'"Раз, два... ИДИ!" — пауза перед "иди". Используйте с машинками, мячами.',ky:'"Даяр, баштадык... БАР!" — "бар" алдында тыным.'}, accept:{en:'"guh", "doh", "bah"',ru:'"ди", "и"',ky:'"ба"'} },
+            { emoji:'🛑', en:'Stop', ru:'Стоп', ky:'Токто', target:'/t/', tip:{en:'Play chase/tickle games: run then "STOP!" Use hand-out gesture. Start-stop games teach turn-taking and anticipation.',ru:'Играйте в догонялки: бегите, потом "СТОП!" Жест — рука вперёд.',ky:'Кууш оюнунда: чуркаңыз, анан "ТОКТО!" деп жест кылыңыз.'}, accept:{en:'"tah", "da", hand out',ru:'"то", "оп", жест',ky:'"то", жест'} },
+            { emoji:'🙏', en:'Help', ru:'Помоги', ky:'Жардам', target:'/h/', tip:{en:'When child struggles with a toy/container: don\'t rush to help. Model "help!" and wait. This teaches them to request assistance.',ru:'Когда ребёнок не может что-то: не спешите. Скажите "Помоги!" и подождите.',ky:'Бала кыйналганда: "Жардам!" деп айтып, күтүңүз.'}, accept:{en:'"heh", "huh", reaching out',ru:'"по", "мо"',ky:'"жа"'} },
+            { emoji:'👋', en:'Hi', ru:'Привет', ky:'Салам', target:'/h/', tip:{en:'Wave and say "Hi!" to everyone — people, toys, animals in books. It\'s social, motivating, and uses an early sound /h/.',ru:'Махайте и говорите "Привет!" всем — людям, игрушкам, картинкам.',ky:'"Салам!" деп баарына кол булгалаңыз.'}, accept:{en:'"ha", "hi", waving',ru:'"при", "ив", жест',ky:'"са", кол булгалоо'} },
+            { emoji:'👋', en:'Bye', ru:'Пока', ky:'Жакшы кал', target:'/b/', tip:{en:'Wave "Bye!" every time someone/something leaves. Pair with blowing a kiss. Great /b/ practice.',ru:'Махайте "Пока!" каждый раз. Сопровождайте воздушным поцелуем.',ky:'"Жакшы кал!" деп кол булгалаңыз.'}, accept:{en:'"ba", "bah", waving',ru:'"па", "ка", жест',ky:'"жа", кол булгалоо'} },
+            { emoji:'❤️', en:'Want', ru:'Хочу', ky:'Керек', target:'/w/', tip:{en:'Hold up two items: "Want this? Or this?" Model "want [item]." This teaches requesting — a huge communication milestone.',ru:'Покажите два предмета: "Хочешь это? Или это?" Учит просить.',ky:'Эки нерсени көрсөтүңүз: "Бул керекпи? Же бул?"'}, accept:{en:'"wah", "wuh", reaching/pointing',ru:'"хо", "чу", указание',ky:'"ке", көрсөтүү'} },
+            { emoji:'✅', en:'Yes', ru:'Да', ky:'Ооба', target:'/j/', tip:{en:'Ask simple questions your child can nod to: "Want milk? Yes!" Model the head nod with the word.',ru:'Задавайте простые вопросы: "Хочешь молоко? Да!" Кивайте.',ky:'Жөнөкөй суроолорду берип, баш ийкеңиз: "Ооба!"'}, accept:{en:'nodding, "yah", "dah"',ru:'кивок, "да"',ky:'баш ийкөө, "оо"'} },
+            { emoji:'❌', en:'No', ru:'Нет', ky:'Жок', target:'/n/', tip:{en:'Offer something they don\'t want: "Want broccoli? No!" Shake head. /n/ is an early sound — easy to produce.',ru:'Предложите то, что не хочет: "Хочешь брокколи? Нет!" Покачайте головой.',ky:'Каалабаган нерсени сунуштаңыз: "Жок!" деп баш чайкаңыз.'}, accept:{en:'"nah", "nuh", head shake',ru:'"не", "нет", покачивание',ky:'"жо", баш чайкоо'} },
+        ]
+    },
+    {
+        id: 's3',
+        emoji: '🌟',
+        name: { en: 'First Nouns & Verbs', ru: 'Первые существительные и глаголы', ky: 'Биринчи зат жана этиш' },
+        desc: { en: 'People, food, animals, body parts, and daily actions. Building a vocabulary of 50+ words.', ru: 'Люди, еда, животные, части тела и действия. Словарь 50+ слов.', ky: 'Адамдар, тамак, жаныбарлар, дене бөлүктөрү жана аракеттер.' },
+        age: '16-24mo',
+        color: 'var(--secondary)',
+        tip: {
+            en: 'By 24 months, most children have 50+ words. For late talkers, focus on words that are FUNCTIONAL — words your child NEEDS in daily life, not just ones they can label.',
+            ru: 'К 24 месяцам большинство детей знают 50+ слов. Для детей с задержкой — фокус на НУЖНЫХ словах.',
+            ky: '24 айга чейин балдардын көбүнүн 50+ сөзү болот.'
+        },
+        tipRef: 'ASHA milestone guidelines — Expressive language at 24 months',
+        words: [
+            { emoji:'👩', en:'Mama', ru:'Мама', ky:'Апа', target:'/m/', tip:{en:'Point to mama in photos, mirror, in person. "Mama!" /m/ is usually the first consonant because it requires just lip closure.',ru:'Показывайте на маму на фото, в зеркале.',ky:'Сүрөттөрдөн, күзгүдөн апасын көрсөтүңүз.'}, accept:{en:'"ma", "mama"',ru:'"ма", "мама"',ky:'"ма", "апа"'} },
+            { emoji:'👨', en:'Papa', ru:'Папа', ky:'Ата', target:'/p/', tip:{en:'"Papa!" — another early word. /p/ requires the same lip closure as /m/ but with a burst of air. Practice during face-to-face play.',ru:'"Папа!" — ещё одно раннее слово. Тренируйте во время игры лицом к лицу.',ky:'"Ата!" деп бетме-бет оюн учурунда айтыңыз.'}, accept:{en:'"pa", "papa", "dada"',ru:'"па", "папа"',ky:'"ата", "та"'} },
+            { emoji:'🥛', en:'Milk', ru:'Молоко', ky:'Сүт', target:'/m/', tip:{en:'Before pouring milk, hold the cup and model "Milk!" Wait for any attempt. Use during every meal.',ru:'Перед тем как налить, держите чашку и скажите "Молоко!" Ждите попытки.',ky:'Куюу алдында кесени кармап "Сүт!" деңиз.'}, accept:{en:'"mi", "muh", "mik"',ru:'"мо", "моко"',ky:'"сү"'} },
+            { emoji:'💧', en:'Water', ru:'Вода', ky:'Суу', target:'/w/', tip:{en:'Model at EVERY drink opportunity. Point to water: "Water!" During bath: "Water! Splash!"',ru:'Говорите при КАЖДОМ питье. "Вода! Плюх!"',ky:'Ар бир суу ичкенде: "Суу!" деп айтыңыз.'}, accept:{en:'"wa", "wawa", "tuh"',ru:'"во", "да"',ky:'"су"'} },
+            { emoji:'🍌', en:'Banana', ru:'Банан', ky:'Банан', target:'/b/', tip:{en:'"Banana!" — a fun word with repeating syllables (ba-na-na). Let them see, touch, smell it while you model the word.',ru:'"Банан!" — весёлое слово с повторяющимися слогами.',ky:'"Банан!" — кайталануучу муундар менен кызыктуу сөз.'}, accept:{en:'"ba", "nana", "bana"',ru:'"ба", "нан"',ky:'"ба", "нан"'} },
+            { emoji:'⚽', en:'Ball', ru:'Мяч', ky:'Топ', target:'/b/', tip:{en:'Roll a ball back and forth: "Ball! Roll the ball!" /b/ is early and ball is highly motivating. Pause before rolling — wait for any attempt.',ru:'Катайте мяч: "Мяч! Кати мяч!" Пауза перед каждым броском.',ky:'Топту тогулатып: "Топ! Топту тогулат!" деңиз.'}, accept:{en:'"ba", "bah", "baw"',ru:'"мя", "мяч"',ky:'"то"'} },
+            { emoji:'🐶', en:'Dog', ru:'Собака', ky:'Ит', target:'/d/', tip:{en:'Point at real dogs, toy dogs, book dogs. "Dog! Woof woof!" Pair the label with the sound they may already say.',ru:'Показывайте собак: "Собака! Гав-гав!" Связывайте с уже знакомым звуком.',ky:'Иттерди көрсөтүңүз: "Ит! Ав-ав!"'}, accept:{en:'"dah", "doh", "goggie"',ru:'"ба", "бака", "гав"',ky:'"ит"'} },
+            { emoji:'🐱', en:'Cat', ru:'Кошка', ky:'Мышык', target:'/k/', tip:{en:'"Cat! Meow!" — /k/ is a slightly later sound. If they say "tat" instead of "cat", that\'s perfect — it shows they\'re trying!',ru:'"Кошка! Мяу!" — /к/ развивается чуть позже. "Кока" вместо "кошка" — это прогресс!',ky:'"Мышык! Мяу!" — /к/ кийинчерээк чыгат.'}, accept:{en:'"ka", "tat", "titty"',ru:'"ко", "кока", "мяу"',ky:'"мы", "мяу"'} },
+            { emoji:'🍽️', en:'Eat', ru:'Кушать', ky:'Же', target:'/iː/', tip:{en:'Before EVERY meal: "Time to eat! Eat!" Point to mouth. Pair with rubbing tummy gesture.',ru:'Перед КАЖДОЙ едой: "Кушать!" Покажите на рот.',ky:'Ар бир тамактан мурун: "Же!" деп оозуңузду көрсөтүңүз.'}, accept:{en:'"ee", "eat", mouth pointing',ru:'"ку", "ам"',ky:'"же"'} },
+            { emoji:'😴', en:'Sleep', ru:'Спать', ky:'Укта', target:'/s/', tip:{en:'At bedtime: "Time to sleep!" Put teddy to sleep. /s/ is a later sound — "seep" or "teep" are fine.',ru:'Перед сном: "Спать!" Уложите мишку. "Пать" вместо "спать" — нормально.',ky:'Уктоо алдында: "Укта!" деп оюнчукту жаткырыңыз.'}, accept:{en:'"tee", "seep", eyes closed gesture',ru:'"пать", "пи"',ky:'"та"'} },
+            { emoji:'👁️', en:'Eye', ru:'Глаз', ky:'Көз', target:'/aɪ/', tip:{en:'Play "Where\'s your eye?" Touch your own eye first: "Eye!" Then gently touch theirs. Body part games teach both words and comprehension.',ru:'Играйте "Где глаз?" Покажите свой: "Глаз!" Потом их.',ky:'"Көзүң кайда?" оюнун ойноңуз. Көзүңүздү көрсөтүңүз.'}, accept:{en:'"eye", "ah"',ru:'"газ", "аз"',ky:'"кө"'} },
+            { emoji:'👃', en:'Nose', ru:'Нос', ky:'Мурун', target:'/n/', tip:{en:'"Boop! Nose!" — touch their nose gently. /n/ is an early sound. Make it silly and fun.',ru:'"Буп! Нос!" — нежно коснитесь носа. Сделайте это смешным.',ky:'"Буп! Мурун!" деп мурунуна тийиңиз.'}, accept:{en:'"no", "noh"',ru:'"нос", "но"',ky:'"му"'} },
+        ]
+    },
+    {
+        id: 's4',
+        emoji: '🚀',
+        name: { en: 'Word Combinations', ru: 'Словосочетания', ky: 'Сөз айкалыштары' },
+        desc: { en: 'Two-word phrases: "more milk", "mama go", "big dog". The leap from words to sentences.', ru: 'Фразы из двух слов: "ещё молоко", "мама иди", "большая собака".', ky: 'Эки сөздүк фразалар: "дагы сүт", "апа бар", "чоң ит".' },
+        age: '20-30mo',
+        color: 'var(--purple)',
+        tip: {
+            en: 'Use the "+1 rule": add one word to whatever your child says. If they say "milk", you say "more milk!" If they say "dog", you say "big dog!" This naturally models the next step.',
+            ru: 'Правило "+1": добавляйте одно слово. Если ребёнок говорит "молоко", вы: "ещё молоко!"',
+            ky: '"+1 эреже": баланын айтканына бир сөз кошуңуз.'
+        },
+        tipRef: 'Pepper & Weitzman (2004) — Hanen "It Takes Two to Talk" expansion technique',
+        words: [
+            { emoji:'🥛', en:'More milk', ru:'Ещё молоко', ky:'Дагы сүт', target:'combo', tip:{en:'At meals, model the FULL phrase: "More milk!" This is the most common first word combination. Use the "more" sign while saying it.',ru:'За едой моделируйте полную фразу: "Ещё молоко!" Самое частое первое словосочетание.',ky:'Тамак учурунда: "Дагы сүт!" деп толук фразаны айтыңыз.'}, accept:{en:'"mo mi", "more muh"',ru:'"ещё мо", "ещё"',ky:'"да сү"'} },
+            { emoji:'⚽', en:'Want ball', ru:'Хочу мяч', ky:'Топ керек', target:'combo', tip:{en:'Hold the ball, model "Want ball?" — pause, wait. If they reach, say "Want ball! Here\'s the ball!"',ru:'Держите мяч: "Хочешь мяч?" — пауза. Если тянутся: "Хочу мяч! Вот мяч!"',ky:'Топту кармап: "Топ керекпи?" — тыным. Колун созсо: "Топ керек!"'}, accept:{en:'"wah ba", "want ba"',ru:'"хочу мя"',ky:'"то ке"'} },
+            { emoji:'👩🏃', en:'Mama go', ru:'Мама иди', ky:'Апа бар', target:'combo', tip:{en:'When leaving: "Mama go! Bye!" or when playing: "Ready? Mama go!" Great for combining a person + action.',ru:'При уходе: "Мама иди! Пока!" Хорошо для комбинации человек + действие.',ky:'Кеткенде: "Апа бар! Жакшы кал!" деп айтыңыз.'}, accept:{en:'"mama doh", "ma go"',ru:'"мама ди", "мама"',ky:'"апа ба"'} },
+            { emoji:'🐶', en:'Big dog', ru:'Большая собака', ky:'Чоң ит', target:'combo', tip:{en:'Compare sizes! "Big dog! Little dog!" Use hands to show big/little. Adjective + noun combos expand descriptive language.',ru:'Сравнивайте размеры! "Большая собака! Маленькая!" Руками показывайте.',ky:'Чоңдуктарды салыштырыңыз! "Чоң ит! Кичине ит!"'}, accept:{en:'"bi dah", "big doh"',ru:'"бо бака"',ky:'"чо ит"'} },
+            { emoji:'😴', en:'Night night', ru:'Баю-бай', ky:'Жукта-жукта', target:'combo', tip:{en:'Bedtime routine: tuck in teddy, doll, each toy: "Night night, bear! Night night, bunny!" Repetitive and comforting.',ru:'Перед сном укладывайте каждую игрушку: "Баю-бай, мишка! Баю-бай, зайка!"',ky:'Уктоо алдында ар бир оюнчукту жаткырыңыз: "Жукта-жукта!"'}, accept:{en:'"ni ni", "nai nai"',ru:'"бай-бай", "бай"',ky:'"жу-жу"'} },
+            { emoji:'🍎', en:'Yummy apple', ru:'Вкусное яблоко', ky:'Даамдуу алма', target:'combo', tip:{en:'During snack: "Mmm, yummy apple!" Rub tummy. Combines a descriptor with a noun — and teaches the concept of describing.',ru:'Во время перекуса: "Ммм, вкусное яблоко!" Погладьте животик.',ky:'Тамак учурунда: "Ммм, даамдуу алма!" деп курсагыңызды сылаңыз.'}, accept:{en:'"yum ah", "mmm app"',ru:'"вку яб", "ам"',ky:'"дам ал"'} },
+        ]
+    }
+];
+
+const ROUTINES = [
+    { id:'meal', emoji:'🍽️', name:{en:'Mealtime',ru:'Приём пищи',ky:'Тамак убактысы'}, stageFilter:null },
+    { id:'play', emoji:'🎮', name:{en:'Playtime',ru:'Игра',ky:'Оюн убактысы'}, stageFilter:null },
+    { id:'bath', emoji:'🛁', name:{en:'Bath Time',ru:'Купание',ky:'Жуунуу убактысы'}, stageFilter:null },
+    { id:'bed',  emoji:'🌙', name:{en:'Bedtime',ru:'Перед сном',ky:'Уктоо убактысы'}, stageFilter:null },
+    { id:'out',  emoji:'☀️', name:{en:'Outside',ru:'На улице',ky:'Сыртта'}, stageFilter:null },
+];
+
+const CELEBRATIONS = {
+    en: ['Great job!','Awesome!','You did it!','Super!','Wonderful!','Bravo!','Yes!','Amazing!'],
+    ru: ['Молодец!','Отлично!','Супер!','Ура!','Здорово!','Браво!','Класс!','Умница!'],
+    ky: ['Жарайсың!','Мыкты!','Супер!','Ура!','Баракелде!','Браво!','Сонун!','Азаматсың!'],
+};
+
+const MILESTONES = [
+    { group:{en:'Pre-Linguistic (6-12 months)',ru:'Доречевые (6-12 мес.)',ky:'Сөзгө чейинки (6-12 ай)'}, items:[
+        {en:'Makes eye contact during interactions',ru:'Устанавливает зрительный контакт',ky:'Мамиле учурунда көз карашы бар'},
+        {en:'Responds to their name',ru:'Реагирует на своё имя',ky:'Атын укканда жооп берет'},
+        {en:'Babbles with consonant-vowel combos (ba-ba, da-da)',ru:'Лепечет слогами (ба-ба, да-да)',ky:'Муундар менен кобурайт (ба-ба, да-да)'},
+        {en:'Points to things they want',ru:'Показывает на то, что хочет',ky:'Каалаган нерсесин көрсөтөт'},
+        {en:'Waves hi or bye',ru:'Машет привет или пока',ky:'Салам же коштошуу кол булгалайт'},
+        {en:'Understands "no"',ru:'Понимает "нет"',ky:'"Жок" деп түшүнөт'},
+    ]},
+    { group:{en:'First Words (12-18 months)',ru:'Первые слова (12-18 мес.)',ky:'Биринчи сөздөр (12-18 ай)'}, items:[
+        {en:'Says 1-3 real words (mama, dada, or others)',ru:'Говорит 1-3 слова (мама, папа и др.)',ky:'1-3 сөз айтат (апа, ата ж.б.)'},
+        {en:'Uses gestures to communicate (reaching, giving)',ru:'Использует жесты (тянется, даёт)',ky:'Жаңсоолор менен баарлашат'},
+        {en:'Understands simple instructions ("Give me the ball")',ru:'Понимает простые инструкции ("Дай мяч")',ky:'Жөнөкөй нускоолорду түшүнөт'},
+        {en:'Tries to imitate words',ru:'Пытается повторять слова',ky:'Сөздөрдү кайталоого аракет кылат'},
+        {en:'Points to familiar objects when named',ru:'Показывает знакомые предметы',ky:'Аталган тааныш нерселерди көрсөтөт'},
+    ]},
+    { group:{en:'Growing Vocabulary (18-24 months)',ru:'Рост словаря (18-24 мес.)',ky:'Сөздүк кору өсүшү (18-24 ай)'}, items:[
+        {en:'Says 20-50+ words',ru:'Говорит 20-50+ слов',ky:'20-50+ сөз айтат'},
+        {en:'Starts combining two words ("more milk", "mama go")',ru:'Начинает сочетать два слова',ky:'Эки сөздү бириктире баштайт'},
+        {en:'Points to body parts when asked',ru:'Показывает части тела по просьбе',ky:'Суралганда дене бөлүктөрүн көрсөтөт'},
+        {en:'Follows two-step instructions',ru:'Выполняет двухшаговые инструкции',ky:'Эки кадамдуу нускоолорду аткарат'},
+        {en:'Uses words more than gestures',ru:'Больше слов, чем жестов',ky:'Жаңсоолордон көбүрөөк сөздөрдү колдонот'},
+    ]},
+];
+
+// ============================================================
+//  STATE
+// ============================================================
+let lang = 'en';
+let currentStageIdx = -1;
+let currentMode = 'explore';
+let viewStack = ['home'];
+
+// Find It state
+let findTarget = null;
+let findCorrect = 0;
+let findTotal = 0;
+
+// Say It state
+let sayWordIdx = 0;
+let micStream = null;
+let micAnalyser = null;
+let micActive = false;
+
+// Sound Practice state
+let soundIdx = 0;
+
+// Session tracking
+let sessionStart = Date.now();
+let sessionWords = {};
+
+// ============================================================
+//  PERSISTENCE (localStorage)
+// ============================================================
+function getProgress() { return JSON.parse(localStorage.getItem('sb_progress') || '{}'); }
+function saveProgress(key) {
+    const p = getProgress();
+    if (!p[key]) p[key] = { count: 0, last: 0 };
+    p[key].count++;
+    p[key].last = Date.now();
+    localStorage.setItem('sb_progress', JSON.stringify(p));
+    sessionWords[key] = (sessionWords[key] || 0) + 1;
+}
+function getMastery(key) { return Math.min(5, (getProgress()[key]?.count || 0)); }
+
+function getMilestoneChecks() { return JSON.parse(localStorage.getItem('sb_milestones') || '{}'); }
+function setMilestoneCheck(key, val) {
+    const m = getMilestoneChecks();
+    m[key] = val;
+    localStorage.setItem('sb_milestones', JSON.stringify(m));
+}
+
+function saveSessions() {
+    const sessions = JSON.parse(localStorage.getItem('sb_sessions') || '[]');
+    const dur = Math.round((Date.now() - sessionStart) / 1000);
+    if (Object.keys(sessionWords).length > 0) {
+        sessions.push({ date: Date.now(), lang, dur, words: Object.keys(sessionWords).length, taps: Object.values(sessionWords).reduce((a,b)=>a+b,0) });
+        localStorage.setItem('sb_sessions', JSON.stringify(sessions.slice(-50)));
+    }
+}
+window.addEventListener('beforeunload', saveSessions);
+
+// ============================================================
+//  SPEECH SYNTHESIS
+// ============================================================
+function speak(text, lc) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.75;
+    u.pitch = 1.1;
+    const map = { en:'en-US', ru:'ru-RU', ky:'ky' };
+    u.lang = map[lc] || 'en-US';
+    const voices = window.speechSynthesis.getVoices();
+    let v = voices.find(x => x.lang === map[lc]) || voices.find(x => x.lang.startsWith(lc));
+    if (!v && lc === 'ky') v = voices.find(x => x.lang.startsWith('tr')) || voices.find(x => x.lang.startsWith('ru'));
+    if (v) u.voice = v;
+    window.speechSynthesis.speak(u);
+}
+window.speechSynthesis?.getVoices();
+window.speechSynthesis?.addEventListener('voiceschanged', ()=>{});
+
+// ============================================================
+//  AUDIO
+// ============================================================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() { if(!audioCtx) audioCtx=new AudioCtx(); if(audioCtx.state==='suspended') audioCtx.resume(); }
+
+function playTone(f,d,t){ensureAudio();const c=audioCtx,n=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.setValueAtTime(0.1,n);g.gain.exponentialRampToValueAtTime(0.001,n+d);o.connect(g).connect(c.destination);o.start(n);o.stop(n+d);}
+function playSuccess(){ensureAudio();const c=audioCtx,n=c.currentTime;[523,659,784].forEach((f,i)=>{const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0.08,n+i*0.1);g.gain.exponentialRampToValueAtTime(0.001,n+i*0.1+0.2);o.connect(g).connect(c.destination);o.start(n+i*0.1);o.stop(n+i*0.1+0.2);});}
+function playTap(){playTone(500+Math.random()*200,0.08);}
+function playWrong(){playTone(200,0.15,'triangle');}
+
+// ============================================================
+//  CELEBRATION
+// ============================================================
+function celebrate(text) {
+    const el = document.getElementById('celeb-text');
+    el.textContent = text || CELEBRATIONS[lang][Math.floor(Math.random()*CELEBRATIONS[lang].length)];
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+    setTimeout(()=>el.classList.remove('show'), 1200);
+    const c = document.getElementById('celebration');
+    for(let i=0;i<10;i++){
+        const s=document.createElement('div');s.className='star-particle';
+        s.textContent=['⭐','🌟','✨','💫','❤️','🎉'][Math.floor(Math.random()*6)];
+        s.style.left=(15+Math.random()*70)+'%';s.style.top=(20+Math.random()*30)+'%';
+        s.style.fontSize=(18+Math.random()*18)+'px';c.appendChild(s);
+        s.animate([{transform:'scale(0) rotate(0)',opacity:1},{transform:`scale(1) translateY(${-40-Math.random()*80}px) rotate(${Math.random()*360}deg)`,opacity:0}],{duration:700+Math.random()*400,easing:'ease-out'}).onfinish=()=>s.remove();
+    }
+}
+
+// ============================================================
+//  VIEWS
+// ============================================================
+function showView(name) {
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById(`view-${name}`).classList.add('active');
+    closeCoaching();
+    if (name==='home') { viewStack=['home']; renderHome(); }
+    else { if(viewStack[viewStack.length-1]!==name) viewStack.push(name); }
+    if (name==='milestones') renderMilestones();
+    if (name==='dashboard') renderDashboard();
+}
+
+function goBack() {
+    if(viewStack.length>1){viewStack.pop();showView(viewStack[viewStack.length-1]);}
+    else window.location.href='../index.html';
+}
+
+function setLang(l) {
+    saveSessions(); lang=l; sessionStart=Date.now(); sessionWords={};
+    document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
+    if(currentStageIdx>=0) openStage(currentStageIdx); else renderHome();
+}
+
+// ============================================================
+//  HOME
+// ============================================================
+function renderHome() {
+    currentStageIdx = -1;
+    const tips = [
+        {en:'Keep sessions short — 5 to 10 minutes. Follow your child\'s interest!',ru:'Сессии 5-10 минут. Следуйте за интересом ребёнка!',ky:'5-10 мүнөт гана ойноңуз. Баланын кызыгуусун ээрчиңиз!'},
+        {en:'Model, don\'t demand. Say "Ball!" naturally — never "Say ball!"',ru:'Моделируйте, не требуйте. Скажите "Мяч!" естественно.',ky:'Моделдеңиз, талап кылбаңыз. "Топ!" деп табигый айтыңыз.'},
+        {en:'Celebrate ANY attempt. "Ba" for ball is a word! Repeat back: "Ball! Yes, ball!"',ru:'Радуйтесь ЛЮБОЙ попытке. "Ба" вместо "бал" — это слово!',ky:'БАРДЫК аракетке кубаныңыз. "Ба" деп "топ" дегени — сөз!'},
+    ];
+    const tip = tips[Math.floor(Math.random()*tips.length)];
+    document.getElementById('home-tip').textContent = tip[lang];
+
+    // Stage cards
+    const sc = document.getElementById('stage-cards');
+    sc.innerHTML = '';
+    STAGES.forEach((stage, i) => {
+        const prog = getProgress();
+        const total = stage.words.length;
+        const seen = stage.words.filter((_,wi)=>prog[`s${i}_${wi}`]).length;
+        const pct = total>0?Math.round(seen/total*100):0;
+
+        const card = document.createElement('div');
+        card.className = `stage-card ${stage.id}`;
+        card.onclick = () => openStage(i);
+        card.innerHTML = `
+            <div class="st-emoji">${stage.emoji}</div>
+            <div class="st-info">
+                <div class="st-name">${stage.name[lang]||stage.name.en}</div>
+                <div class="st-desc">${stage.desc[lang]||stage.desc.en}</div>
+                <div class="st-meta">
+                    <span class="st-tag">${stage.age}</span>
+                    <span class="st-tag">${seen}/${total} words · ${pct}%</span>
+                </div>
+            </div>
+            <div class="st-arrow">→</div>
+        `;
+        sc.appendChild(card);
+    });
+
+    // Routine chips
+    const rc = document.getElementById('routine-chips');
+    rc.innerHTML = '';
+    ROUTINES.forEach(r => {
+        const chip = document.createElement('div');
+        chip.className = 'routine-chip';
+        chip.textContent = `${r.emoji} ${r.name[lang]||r.name.en}`;
+        chip.onclick = () => { /* Future: filter words by routine context */ alert('Coming in Premium! Practice words organized by daily routines.'); };
+        rc.appendChild(chip);
+    });
+}
+
+// ============================================================
+//  OPEN STAGE → WORD VIEW
+// ============================================================
+function openStage(idx) {
+    currentStageIdx = idx;
+    const stage = STAGES[idx];
+    showView('words');
+
+    // Tip banner
+    const tb = document.getElementById('words-tip-banner');
+    tb.innerHTML = `
+        <div class="tip-icon">💡</div>
+        <div class="tip-body">
+            <div class="tip-label">Stage Tip — ${stage.name[lang]||stage.name.en}</div>
+            <div class="tip-text">${stage.tip[lang]||stage.tip.en}</div>
+            <div class="tip-ref">${stage.tipRef}</div>
+        </div>
+    `;
+
+    setMode('explore');
+}
+
+function getCurrentWords() { return currentStageIdx>=0 ? STAGES[currentStageIdx].words : []; }
+
+// ============================================================
+//  MODE SWITCHING
+// ============================================================
+function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.sub-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+    ['explore','sounds','find','say'].forEach(m=>{ document.getElementById(`mode-${m}`).style.display = m===mode?'':'none'; });
+    if (mode==='explore') renderExplore();
+    if (mode==='sounds') renderSoundPractice();
+    if (mode==='find') startFindRound();
+    if (mode==='say') startSayMode();
+}
+
+// ============================================================
+//  EXPLORE MODE
+// ============================================================
+let currentWordForCoaching = null;
+
+function renderExplore() {
+    const words = getCurrentWords();
+    const grid = document.getElementById('word-grid');
+    grid.innerHTML = '';
+    words.forEach((w, i) => {
+        const card = document.createElement('div');
+        card.className = 'word-card';
+        const label = w[lang]||w.en;
+        const key = `s${currentStageIdx}_${i}`;
+        const mastery = getMastery(key);
+        let dots = '<div class="mastery-dots">';
+        for(let d=0;d<5;d++) dots+=`<div class="mastery-dot${d<mastery?' filled':''}"></div>`;
+        dots+='</div>';
+        card.innerHTML = `
+            ${w.target&&w.target!=='combo'?`<div class="sound-tag">${w.target}</div>`:''}
+            <span class="speaker">🔊</span>
+            <div class="word-emoji">${w.emoji}</div>
+            <div class="word-label">${label}</div>
+            ${dots}
+        `;
+        card.onclick = () => tapExploreWord(i, card);
+        grid.appendChild(card);
+    });
+}
+
+function tapExploreWord(idx, cardEl) {
+    const words = getCurrentWords();
+    const w = words[idx];
+    const label = w[lang]||w.en;
+    const key = `s${currentStageIdx}_${idx}`;
+
+    ensureAudio(); playTap(); speak(label, lang);
+    cardEl.classList.add('spoken');
+    setTimeout(()=>cardEl.classList.remove('spoken'),600);
+    saveProgress(key);
+    setTimeout(()=>renderExplore(),300);
+
+    // Show coaching popup
+    showCoaching(w);
+
+    if(Math.random()<0.3) setTimeout(()=>celebrate(),400);
+}
+
+function showCoaching(word) {
+    currentWordForCoaching = word;
+    const label = word[lang]||word.en;
+    document.getElementById('cp-emoji').textContent = word.emoji;
+    document.getElementById('cp-word').textContent = label;
+    document.getElementById('cp-sound').textContent = word.target ? `Target sound: ${word.target}` : '';
+    document.getElementById('cp-tip').textContent = word.tip[lang]||word.tip.en;
+    document.getElementById('cp-accept').textContent = word.accept[lang]||word.accept.en;
+    document.getElementById('coaching-popup').classList.add('show');
+}
+
+function closeCoaching() { document.getElementById('coaching-popup').classList.remove('show'); currentWordForCoaching=null; }
+
+function speakCurrentWord() {
+    if(currentWordForCoaching) speak(currentWordForCoaching[lang]||currentWordForCoaching.en, lang);
+}
+
+// ============================================================
+//  SOUND PRACTICE MODE
+// ============================================================
+function renderSoundPractice() {
+    const words = getCurrentWords();
+    if(!words.length) return;
+    soundIdx = Math.min(soundIdx, words.length-1);
+    const w = words[soundIdx];
+    const label = w[lang]||w.en;
+    const container = document.getElementById('sound-practice');
+    container.innerHTML = `
+        <div class="sound-card-big">
+            <div class="sc-emoji">${w.emoji}</div>
+            <div class="sc-sound">${label}</div>
+            <div class="sc-tip">${w.tip[lang]||w.tip.en}</div>
+        </div>
+        <button class="cp-play-btn" onclick="speakSoundWord()">🔊 Hear it slowly</button>
+        <div class="parent-tip" style="text-align:left;max-width:400px;margin:16px auto;">
+            <div class="tip-icon">👂</div>
+            <div class="tip-body">
+                <div class="tip-label">Accept these attempts</div>
+                <div class="tip-text">${w.accept[lang]||w.accept.en}</div>
+            </div>
+        </div>
+        <div class="mic-section">
+            <button class="mic-btn ${micActive?'listening':''}" id="mic-btn-sound" onclick="toggleMic()">🎤</button>
+            <div class="vol-bar"><div class="vol-fill" id="vol-fill"></div></div>
+            <div class="mic-label" id="mic-label">${lang==='ru'?'Нажми на микрофон и попробуй!':lang==='ky'?'Микрофонду бас жана аракет кыл!':'Tap mic, then try to say it!'}</div>
+        </div>
+        <div class="sound-nav-btns">
+            <button class="snd-btn" onclick="prevSound()">←</button>
+            <button class="snd-btn primary" onclick="speakSoundWord()">🔊</button>
+            <button class="snd-btn" onclick="nextSound()">→</button>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:8px;">${soundIdx+1} / ${words.length}</div>
+    `;
+}
+
+function speakSoundWord(){ const w=getCurrentWords()[soundIdx]; if(w) speak(w[lang]||w.en, lang); }
+function nextSound(){ soundIdx=(soundIdx+1)%getCurrentWords().length; stopMic(); renderSoundPractice(); setTimeout(speakSoundWord,300); }
+function prevSound(){ soundIdx=(soundIdx-1+getCurrentWords().length)%getCurrentWords().length; stopMic(); renderSoundPractice(); setTimeout(speakSoundWord,300); }
+
+// ============================================================
+//  FIND IT MODE
+// ============================================================
+function startFindRound() {
+    const words = getCurrentWords();
+    if(words.length<2) return;
+    const ti = Math.floor(Math.random()*words.length);
+    findTarget = { ...words[ti], idx: ti };
+    const num = Math.min(4, words.length);
+    const choices = [findTarget];
+    const used = new Set([ti]);
+    while(choices.length<num){ const r=Math.floor(Math.random()*words.length); if(!used.has(r)){used.add(r); choices.push({...words[r],idx:r});} }
+    for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
+
+    const tl = findTarget[lang]||findTarget.en;
+    const q = lang==='ru'?`Найди: ${tl}!`:lang==='ky'?`Тап: ${tl}!`:`Find the ${tl}!`;
+    document.getElementById('find-q').textContent = q;
+    document.getElementById('find-score').textContent = `✅ ${findCorrect} / ${findTotal}`;
+
+    const grid = document.getElementById('find-grid');
+    grid.innerHTML = '';
+    choices.forEach(w=>{
+        const card=document.createElement('div'); card.className='word-card';
+        card.innerHTML=`<div class="word-emoji">${w.emoji}</div><div class="word-label">${w[lang]||w.en}</div>`;
+        card.onclick=()=>{
+            findTotal++;
+            if(w.idx===findTarget.idx){ card.style.borderColor='var(--green)'; card.style.animation='pop 0.4s'; findCorrect++; playSuccess(); celebrate(); saveProgress(`s${currentStageIdx}_${w.idx}`); setTimeout(startFindRound,1200); }
+            else{ card.style.borderColor='#e74c3c'; card.style.animation='shake 0.4s'; playWrong(); setTimeout(()=>{card.style.borderColor='transparent';card.style.animation='';},400); }
+            document.getElementById('find-score').textContent=`✅ ${findCorrect} / ${findTotal}`;
+        };
+        grid.appendChild(card);
+    });
+    setTimeout(()=>speak(tl,lang),400);
+}
+
+function speakFindWord(){ if(findTarget) speak(findTarget[lang]||findTarget.en, lang); }
+
+// ============================================================
+//  SAY IT MODE
+// ============================================================
+function startSayMode(){ sayWordIdx=0; renderSayWord(); }
+
+function renderSayWord(){
+    const words=getCurrentWords(); if(!words.length) return;
+    const w=words[sayWordIdx]; const label=w[lang]||w.en;
+    document.getElementById('say-emoji').textContent=w.emoji;
+    document.getElementById('say-word').textContent=label;
+    document.getElementById('say-phonetic').textContent=w.accept?`Accept: ${w.accept[lang]||w.accept.en}`:'';
+}
+
+function speakSayWord(){ const w=getCurrentWords()[sayWordIdx]; if(w) speak(w[lang]||w.en, lang); }
+function nextSayWord(){ sayWordIdx=(sayWordIdx+1)%getCurrentWords().length; stopMic(); renderSayWord(); setTimeout(speakSayWord,300); }
+function prevSayWord(){ sayWordIdx=(sayWordIdx-1+getCurrentWords().length)%getCurrentWords().length; stopMic(); renderSayWord(); setTimeout(speakSayWord,300); }
+
+// ============================================================
+//  MICROPHONE
+// ============================================================
+async function toggleMic(){ micActive ? stopMic() : startMic(); }
+
+async function startMic(){
+    try{
+        const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+        micStream=stream; micActive=true;
+        document.querySelectorAll('.mic-btn').forEach(b=>b.classList.add('listening'));
+        ensureAudio();
+        const src=audioCtx.createMediaStreamSource(stream);
+        micAnalyser=audioCtx.createAnalyser(); micAnalyser.fftSize=256;
+        src.connect(micAnalyser);
+        monitorMic();
+    } catch(e){
+        const lbl=document.getElementById('mic-label');
+        if(lbl) lbl.textContent=lang==='ru'?'Нет доступа к микрофону':'Could not access microphone';
+    }
+}
+
+function stopMic(){
+    micActive=false;
+    document.querySelectorAll('.mic-btn').forEach(b=>b.classList.remove('listening'));
+    const vf=document.getElementById('vol-fill'); if(vf) vf.style.width='0%';
+    if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}
+}
+
+let celebCooldown=false;
+function monitorMic(){
+    if(!micActive||!micAnalyser) return;
+    const data=new Uint8Array(micAnalyser.frequencyBinCount);
+    micAnalyser.getByteFrequencyData(data);
+    const avg=data.reduce((a,b)=>a+b,0)/data.length;
+    const vol=Math.min(100,avg*1.5);
+    const vf=document.getElementById('vol-fill'); if(vf) vf.style.width=vol+'%';
+    if(vol>25 && !celebCooldown){
+        celebCooldown=true; playSuccess(); celebrate();
+        // Save progress for whatever word is showing
+        if(currentMode==='say') saveProgress(`s${currentStageIdx}_${sayWordIdx}`);
+        if(currentMode==='sounds') saveProgress(`s${currentStageIdx}_${soundIdx}`);
+        const lbl=document.getElementById('mic-label'); if(lbl) lbl.textContent='🎉🎉🎉';
+        setTimeout(()=>{celebCooldown=false; if(lbl) lbl.textContent=lang==='ru'?'Попробуй ещё!':lang==='ky'?'Дагы аракет кыл!':'Try again!';},2500);
+    }
+    requestAnimationFrame(monitorMic);
+}
+
+// ============================================================
+//  MILESTONES
+// ============================================================
+function renderMilestones(){
+    const checks=getMilestoneChecks();
+    const container=document.getElementById('milestone-list');
+    container.innerHTML='';
+    MILESTONES.forEach((grp,gi)=>{
+        const div=document.createElement('div'); div.className='milestone-group';
+        div.innerHTML=`<h4>${grp.group[lang]||grp.group.en}</h4>`;
+        grp.items.forEach((item,ii)=>{
+            const key=`ms_${gi}_${ii}`;
+            const checked=!!checks[key];
+            const row=document.createElement('div'); row.className='milestone-item';
+            row.innerHTML=`
+                <div class="ms-check ${checked?'checked':''}" data-key="${key}" onclick="toggleMilestone(this,'${key}')">${checked?'✓':''}</div>
+                <span>${item[lang]||item.en}</span>
+            `;
+            div.appendChild(row);
+        });
+        container.appendChild(div);
+    });
+}
+
+function toggleMilestone(el, key){
+    const checks=getMilestoneChecks();
+    const newVal=!checks[key];
+    setMilestoneCheck(key, newVal);
+    el.classList.toggle('checked',newVal);
+    el.textContent=newVal?'✓':'';
+}
+
+// ============================================================
+//  DASHBOARD
+// ============================================================
+function renderDashboard(){
+    const prog=getProgress();
+    const sessions=JSON.parse(localStorage.getItem('sb_sessions')||'[]');
+    const totalWords=Object.keys(prog).length;
+    const totalTaps=Object.values(prog).reduce((a,p)=>a+p.count,0);
+    const totalTime=sessions.reduce((a,s)=>a+s.dur,0);
+    const timeStr=totalTime>3600?`${Math.floor(totalTime/3600)}h ${Math.round((totalTime%3600)/60)}m`:`${Math.round(totalTime/60)}m`;
+
+    document.getElementById('dash-stats').innerHTML=`
+        <div class="dash-stat"><div class="ds-icon">📝</div><div class="ds-val">${totalWords}</div><div class="ds-lbl">Words Practiced</div></div>
+        <div class="dash-stat"><div class="ds-icon">👆</div><div class="ds-val">${totalTaps}</div><div class="ds-lbl">Total Taps</div></div>
+        <div class="dash-stat"><div class="ds-icon">🎯</div><div class="ds-val">${sessions.length}</div><div class="ds-lbl">Sessions</div></div>
+        <div class="dash-stat"><div class="ds-icon">⏱️</div><div class="ds-val">${timeStr}</div><div class="ds-lbl">Total Time</div></div>
+    `;
+
+    const pd=document.getElementById('dash-progress'); pd.innerHTML='';
+    STAGES.forEach((stage,si)=>{
+        const total=stage.words.length;
+        const seen=stage.words.filter((_,wi)=>prog[`s${si}_${wi}`]).length;
+        const pct=total?Math.round(seen/total*100):0;
+        pd.innerHTML+=`<div class="progress-row"><span>${stage.emoji}</span><span class="pr-name">${stage.name[lang]||stage.name.en}</span><div class="pr-bar-bg"><div class="pr-bar" style="width:${pct}%;background:${stage.color}"></div></div><span class="pr-pct">${pct}%</span></div>`;
+    });
+
+    const sd=document.getElementById('dash-sessions');
+    const recent=sessions.slice(-5).reverse();
+    sd.innerHTML = recent.length===0 ? `<div style="font-size:13px;color:var(--text2);">${lang==='ru'?'Нет сессий. Начните играть!':'No sessions yet!'}</div>` :
+        recent.map(s=>`<div class="progress-row"><span>📅</span><span class="pr-name">${new Date(s.date).toLocaleDateString()} — ${Math.round(s.dur/60)}min, ${s.words} words</span><span class="pr-pct">${s.lang.toUpperCase()}</span></div>`).join('');
+}
+
+// ============================================================
+//  PREMIUM
+// ============================================================
+function showPremium(){
+    alert('⭐ Speech Buddy Pro\n\n• 200+ words across all stages\n• Routine-based practice (mealtime, bath, etc.)\n• Therapist video tips per word\n• Exportable reports for your SLP\n• Multi-child profiles\n• Offline mode\n\n$4.99/month or $39.99/year\n\n[Payment integration point]');
+}
+
+// ============================================================
+//  SESSION TIMER
+// ============================================================
+setInterval(()=>{
+    const e=Math.floor((Date.now()-sessionStart)/1000);
+    document.getElementById('session-timer').textContent=`⏱ ${Math.floor(e/60)}:${(e%60).toString().padStart(2,'0')}`;
+},1000);
+
+// ============================================================
+//  INIT
+// ============================================================
+renderHome();
+</script>
+</body>
+</html>

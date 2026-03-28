@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Magic Keyboard — Kid Zone</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            font-family: -apple-system, sans-serif;
+            cursor: none;
+        }
+
+        /* ─── MAIN CANVAS ─── */
+        #world {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+
+        /* ─── CUSTOM CURSOR ─── */
+        #cursor {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+            font-size: 40px;
+            transition: transform 0.1s;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+        }
+
+        /* ─── BIG KEY DISPLAY ─── */
+        #big-key {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 180px;
+            font-weight: 900;
+            z-index: 500;
+            pointer-events: none;
+            text-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s;
+            opacity: 0;
+        }
+
+        #big-key.pop {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        /* ─── FLOATING ENTITIES ─── */
+        .floater {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            font-size: 48px;
+            animation: float-up 4s ease-out forwards;
+        }
+
+        @keyframes float-up {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            20% { transform: scale(1.2) rotate(20deg); opacity: 1; }
+            100% { transform: scale(0.5) translateY(-300px) rotate(360deg); opacity: 0; }
+        }
+
+        .splat {
+            position: fixed;
+            pointer-events: none;
+            z-index: 50;
+            border-radius: 50%;
+            animation: splat-anim 3s ease-out forwards;
+        }
+
+        @keyframes splat-anim {
+            0% { transform: scale(0); opacity: 0.8; }
+            20% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* ─── RAINBOW TRAIL ─── */
+        .trail-dot {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 90;
+        }
+
+        /* ─── FIREWORKS ─── */
+        .firework-particle {
+            position: fixed;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 200;
+        }
+
+        /* ─── PARENT CONTROLS ─── */
+        .parent-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 36px;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .parent-bar:hover { opacity: 1; }
+
+        .parent-bar .info {
+            color: rgba(255,255,255,0.7);
+            font-size: 11px;
+        }
+
+        .parent-bar button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.7);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .parent-bar button:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        /* ─── AD BAR (for parent) ─── */
+        .parent-ad {
+            position: fixed;
+            top: 36px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .parent-bar:hover + .parent-ad,
+        .parent-ad:hover {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .parent-ad .ad-slot {
+            width: 468px;
+            max-width: 90vw;
+            height: 50px;
+            background: rgba(20,20,35,0.9);
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 11px;
+            position: relative;
+        }
+
+        .parent-ad .ad-slot::before {
+            content: 'Ad';
+            position: absolute;
+            top: 2px;
+            right: 6px;
+            font-size: 8px;
+            color: rgba(255,255,255,0.2);
+        }
+
+        /* ─── WELCOME SCREEN ─── */
+        #welcome {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            z-index: 5000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+
+        #welcome.hidden { display: none; }
+
+        .welcome-emoji {
+            font-size: 80px;
+            animation: wobble 2s ease-in-out infinite;
+        }
+
+        @keyframes wobble {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        .welcome-title {
+            font-size: 42px;
+            font-weight: 900;
+            color: white;
+            margin: 16px 0 8px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+        }
+
+        .welcome-sub {
+            font-size: 16px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 12px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .welcome-note {
+            font-size: 12px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 24px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .welcome-btn {
+            padding: 18px 50px;
+            font-size: 22px;
+            font-weight: 800;
+            color: #764ba2;
+            background: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            margin: 8px;
+        }
+
+        .welcome-btn:hover { transform: scale(1.05); }
+        .welcome-btn:active { transform: scale(0.95); }
+
+        .welcome-btn.secondary {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 16px;
+            padding: 12px 30px;
+            box-shadow: none;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* ─── EXIT MODAL ─── */
+        #exit-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+        }
+
+        #exit-modal.show { display: flex; }
+
+        .exit-box {
+            background: #1c1c2e;
+            border-radius: 20px;
+            padding: 32px;
+            text-align: center;
+            max-width: 350px;
+        }
+
+        .exit-box h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+
+        .exit-box p {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .exit-box input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            background: #0a0a0f;
+            color: #fff;
+            font-size: 24px;
+            text-align: center;
+            letter-spacing: 8px;
+            margin-bottom: 16px;
+            outline: none;
+        }
+
+        .exit-box input:focus { border-color: #6c5ce7; }
+
+        .exit-box .exit-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .exit-box button {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .exit-box button:hover { transform: scale(1.03); }
+
+        .exit-box .cancel-btn {
+            background: #2a2a40;
+            color: #aaa;
+        }
+
+        .exit-box .confirm-btn {
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: #fff;
+        }
+
+        .exit-error {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-bottom: 10px;
+            min-height: 18px;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="world"></canvas>
+
+<!-- Custom cursor -->
+<div id="cursor">🌟</div>
+
+<!-- Big key display -->
+<div id="big-key"></div>
+
+<!-- Parent controls bar (invisible until hover at top) -->
+<div class="parent-bar" id="parent-bar">
+    <span class="info">🔒 Kid Zone Active — Hover here for controls</span>
+    <div style="display:flex;gap:8px;">
+        <button onclick="toggleFullscreen()">⛶ Fullscreen</button>
+        <button onclick="showExitModal()">🔓 Exit (PIN)</button>
+    </div>
+</div>
+
+<!--
+    MONETIZATION: Parent-facing banner ad.
+    Only visible when parent hovers the top bar.
+    Non-intrusive — kid never sees it.
+-->
+<div class="parent-ad">
+    <div class="ad-slot" id="ad-kidzone-banner">📢 Parent-Facing Ad — 468x50</div>
+</div>
+
+<!-- Welcome screen -->
+<div id="welcome">
+    <div class="welcome-emoji">🎨</div>
+    <div class="welcome-title">Magic Keyboard!</div>
+    <div class="welcome-sub">
+        Every key makes something magical happen!<br>
+        Press anything — it's all safe and fun!
+    </div>
+    <div class="welcome-note">
+        🔒 All keyboard input is safely captured. No keys will affect your other apps.
+        Hover the top of the screen for parent controls and exit PIN.
+    </div>
+    <button class="welcome-btn" onclick="startKidZone(false)">🎨 Start Playing!</button>
+    <button class="welcome-btn secondary" onclick="startKidZone(true)">⛶ Start Fullscreen</button>
+</div>
+
+<!-- Exit modal -->
+<div id="exit-modal">
+    <div class="exit-box">
+        <h2>🔒 Parent Exit</h2>
+        <p>Enter 4-digit PIN to exit kid zone.<br>Default PIN: <strong>1234</strong></p>
+        <div class="exit-error" id="exit-error"></div>
+        <input type="password" id="pin-input" maxlength="4" placeholder="····" autocomplete="off">
+        <div class="exit-btns">
+            <button class="cancel-btn" onclick="hideExitModal()">Cancel</button>
+            <button class="confirm-btn" onclick="tryExit()">Exit</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============ CONFIG ============
+const EXIT_PIN = '1234'; // Parents can change this
+let isActive = false;
+
+// ============ CANVAS SETUP ============
+const canvas = document.getElementById('world');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ============ AUDIO ============
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function ensureAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+// Musical scale (C major + some fun notes)
+const NOTE_FREQS = {
+    'a': 262, 'b': 294, 'c': 330, 'd': 349, 'e': 392, 'f': 440, 'g': 494,
+    'h': 523, 'i': 587, 'j': 659, 'k': 698, 'l': 784, 'm': 880, 'n': 988,
+    'o': 1047, 'p': 523, 'q': 587, 'r': 659, 's': 349, 't': 392,
+    'u': 440, 'v': 494, 'w': 262, 'x': 330, 'y': 392, 'z': 523,
+    '1': 262, '2': 294, '3': 330, '4': 349, '5': 392,
+    '6': 440, '7': 494, '8': 523, '9': 587, '0': 659,
+    ' ': 784
+};
+
+function playNote(key) {
+    ensureAudio();
+    const c = audioCtx, now = c.currentTime;
+    const freq = NOTE_FREQS[key.toLowerCase()] || (300 + Math.random() * 500);
+
+    // Main tone
+    const osc = c.createOscillator();
+    const gain = c.createGain();
+    osc.type = ['sine', 'triangle', 'sine'][Math.floor(Math.random() * 3)];
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+    osc.connect(gain).connect(c.destination);
+    osc.start(now);
+    osc.stop(now + 0.5);
+
+    // Harmony (subtle)
+    const osc2 = c.createOscillator();
+    const gain2 = c.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(freq * 1.5, now);
+    gain2.gain.setValueAtTime(0.05, now);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+    osc2.connect(gain2).connect(c.destination);
+    osc2.start(now);
+    osc2.stop(now + 0.3);
+}
+
+function playBoop() {
+    ensureAudio();
+    const c = audioCtx, now = c.currentTime;
+    const osc = c.createOscillator(), g = c.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(600 + Math.random() * 400, now);
+    g.gain.setValueAtTime(0.15, now);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+    osc.connect(g).connect(c.destination);
+    osc.start(now);
+    osc.stop(now + 0.15);
+}
+
+function playSpaceBurst() {
+    ensureAudio();
+    const c = audioCtx, now = c.currentTime;
+    [0, 0.08, 0.16, 0.24].forEach((d, i) => {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = [523, 659, 784, 1047][i];
+        g.gain.setValueAtTime(0.1, now + d);
+        g.gain.exponentialRampToValueAtTime(0.001, now + d + 0.2);
+        osc.connect(g).connect(c.destination);
+        osc.start(now + d);
+        osc.stop(now + d + 0.2);
+    });
+}
+
+// ============ VISUAL ELEMENTS ============
+const ANIMALS = ['🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🐦','🐤','🦆','🦅','🦉','🦇','🐺','🐗','🐴','🦄','🐝','🐛','🦋','🐌','🐞','🐙','🦑','🦀','🐠','🐟','🐬','🐳','🐋','🦈','🐊','🐘','🦏','🦛','🐪','🦒','🐅','🐆','🦍','🦧'];
+const SPACE_EMOJIS = ['🌟','⭐','💫','✨','🌈','🎆','🎇','🎉','🎊','💥','🔥','❄️','🌸','🌺','🌻','🎵','🎶','🎸','🥁','🎺'];
+const NUMBER_COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#96CEB4','#FFEAA7','#DDA0DD','#98D8C8','#F7DC6F','#BB8FCE','#85C1E9'];
+const CURSORS = ['🌟','🦄','🎨','🌈','🔮','💎','🍭','🎪','🚀','🌙'];
+
+let bgHue = 0;
+let floaters = [];
+let trailDots = [];
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+let cursorEmoji = '🌟';
+let cursorIndex = 0;
+
+// ============ BACKGROUND ============
+function drawBackground() {
+    bgHue = (bgHue + 0.1) % 360;
+
+    // Gradient background
+    const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    grad.addColorStop(0, `hsl(${bgHue}, 60%, 30%)`);
+    grad.addColorStop(0.5, `hsl(${(bgHue + 60) % 360}, 50%, 25%)`);
+    grad.addColorStop(1, `hsl(${(bgHue + 120) % 360}, 60%, 30%)`);
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Subtle stars
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    for (let i = 0; i < 50; i++) {
+        const sx = (Math.sin(i * 127.1 + bgHue * 0.01) * 0.5 + 0.5) * canvas.width;
+        const sy = (Math.cos(i * 311.7 + bgHue * 0.005) * 0.5 + 0.5) * canvas.height;
+        const sr = 1 + Math.sin(Date.now() / 1000 + i) * 1;
+        ctx.beginPath();
+        ctx.arc(sx, sy, Math.max(0.5, sr), 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// ============ SPAWN EFFECTS ============
+function spawnFloater(x, y, emoji) {
+    const el = document.createElement('div');
+    el.className = 'floater';
+    el.textContent = emoji;
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    el.style.fontSize = (30 + Math.random() * 40) + 'px';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 4000);
+}
+
+function spawnSplat(x, y, color) {
+    const el = document.createElement('div');
+    el.className = 'splat';
+    el.style.left = (x - 40) + 'px';
+    el.style.top = (y - 40) + 'px';
+    el.style.width = el.style.height = (60 + Math.random() * 60) + 'px';
+    el.style.background = `radial-gradient(circle, ${color}, ${color}88, transparent)`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 3000);
+}
+
+function spawnFirework(x, y) {
+    const colors = ['#FF6B6B','#4ECDC4','#45B7D1','#FFEAA7','#DDA0DD','#FFB8D0','#98D8C8'];
+    const count = 20 + Math.floor(Math.random() * 15);
+
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'firework-particle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.width = p.style.height = (4 + Math.random() * 6) + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        document.body.appendChild(p);
+
+        const angle = (i / count) * Math.PI * 2;
+        const speed = 80 + Math.random() * 150;
+        const dx = Math.cos(angle) * speed;
+        const dy = Math.sin(angle) * speed;
+
+        p.animate([
+            { transform: 'translate(0,0) scale(1)', opacity: 1 },
+            { transform: `translate(${dx}px,${dy + 50}px) scale(0)`, opacity: 0 }
+        ], { duration: 800 + Math.random() * 500, easing: 'ease-out' }).onfinish = () => p.remove();
+    }
+}
+
+function spawnTrailDot(x, y) {
+    const el = document.createElement('div');
+    el.className = 'trail-dot';
+    el.style.left = x + 'px';
+    el.style.top = y + 'px';
+    const size = 8 + Math.random() * 12;
+    el.style.width = el.style.height = size + 'px';
+    el.style.background = `hsl(${bgHue + Math.random() * 60}, 80%, 60%)`;
+    el.style.transform = 'translate(-50%, -50%)';
+    document.body.appendChild(el);
+
+    el.animate([
+        { opacity: 0.6, transform: 'translate(-50%,-50%) scale(1)' },
+        { opacity: 0, transform: 'translate(-50%,-50%) scale(0)' }
+    ], { duration: 600 }).onfinish = () => el.remove();
+}
+
+function showBigKey(char) {
+    const el = document.getElementById('big-key');
+    el.textContent = char;
+    el.style.color = `hsl(${Math.random() * 360}, 80%, 60%)`;
+    el.classList.remove('pop');
+    // Force reflow
+    void el.offsetWidth;
+    el.classList.add('pop');
+    setTimeout(() => el.classList.remove('pop'), 400);
+}
+
+// ============ KEY HANDLERS ============
+function handleKeyEffect(e) {
+    if (!isActive) return;
+
+    // Allow typing in PIN input for parent exit
+    if (document.getElementById('exit-modal').classList.contains('show')) return;
+
+    // Prevent ALL default behavior — this is the safety layer
+    e.preventDefault();
+    e.stopPropagation();
+
+    const key = e.key;
+    const rx = Math.random() * window.innerWidth;
+    const ry = 100 + Math.random() * (window.innerHeight - 200);
+
+    ensureAudio();
+
+    if (key === ' ') {
+        // SPACE = Big burst!
+        playSpaceBurst();
+        for (let i = 0; i < 8; i++) {
+            const sx = mouseX + (Math.random() - 0.5) * 300;
+            const sy = mouseY + (Math.random() - 0.5) * 300;
+            spawnFloater(sx, sy, SPACE_EMOJIS[Math.floor(Math.random() * SPACE_EMOJIS.length)]);
+        }
+        spawnFirework(mouseX, mouseY);
+        showBigKey('🎆');
+    } else if (key === 'Enter') {
+        // ENTER = Rainbow wave
+        playSpaceBurst();
+        for (let i = 0; i < 12; i++) {
+            setTimeout(() => {
+                const x = (i / 12) * window.innerWidth;
+                spawnFirework(x, window.innerHeight / 2);
+            }, i * 80);
+        }
+        showBigKey('🌈');
+    } else if (key === 'Backspace') {
+        // Backspace = Everything bounces (visual shake)
+        playBoop();
+        document.body.style.transition = 'transform 0.1s';
+        document.body.style.transform = 'scale(0.98)';
+        setTimeout(() => { document.body.style.transform = 'scale(1)'; }, 100);
+        // Spawn bouncy things
+        for (let i = 0; i < 5; i++) {
+            spawnFloater(Math.random() * window.innerWidth, Math.random() * window.innerHeight, '🏀');
+        }
+    } else if (key.match(/^[0-9]$/)) {
+        // Numbers = colored fireworks
+        const num = parseInt(key);
+        playNote(key);
+        spawnFirework(rx, ry);
+        spawnSplat(rx, ry, NUMBER_COLORS[num]);
+        showBigKey(key);
+    } else if (key.match(/^[a-zA-Z]$/)) {
+        // Letters = spawn animal + musical note
+        const animal = ANIMALS[key.toLowerCase().charCodeAt(0) - 97] || ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+        playNote(key);
+        spawnFloater(rx, ry, animal);
+        spawnSplat(rx, ry, `hsl(${Math.random() * 360}, 70%, 55%)`);
+        showBigKey(key.toUpperCase());
+
+        // Change cursor periodically
+        cursorIndex = (cursorIndex + 1) % CURSORS.length;
+        if (cursorIndex === 0) {
+            document.getElementById('cursor').textContent = CURSORS[Math.floor(Math.random() * CURSORS.length)];
+        }
+    } else if (key === 'ArrowUp' || key === 'ArrowDown' || key === 'ArrowLeft' || key === 'ArrowRight') {
+        // Arrows = spawn directional rockets
+        const arrows = { ArrowUp: '🚀', ArrowDown: '💧', ArrowLeft: '👈', ArrowRight: '👉' };
+        playBoop();
+        spawnFloater(mouseX, mouseY, arrows[key]);
+    } else if (key === 'Tab') {
+        // Tab = change background theme
+        bgHue = (bgHue + 60) % 360;
+        playNote('c');
+        showBigKey('🎨');
+    } else {
+        // Any other key
+        playBoop();
+        spawnFloater(rx, ry, SPACE_EMOJIS[Math.floor(Math.random() * SPACE_EMOJIS.length)]);
+    }
+}
+
+// ============ MOUSE HANDLERS ============
+function handleMouseMove(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    const cursor = document.getElementById('cursor');
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+
+    if (isActive) {
+        spawnTrailDot(mouseX, mouseY);
+    }
+}
+
+function handleClick(e) {
+    if (!isActive) return;
+    e.preventDefault();
+
+    ensureAudio();
+    playBoop();
+
+    // Paint splat at click location
+    spawnSplat(e.clientX, e.clientY, `hsl(${Math.random() * 360}, 80%, 55%)`);
+    spawnFirework(e.clientX, e.clientY);
+
+    // Big emoji pop
+    const emoji = ANIMALS[Math.floor(Math.random() * ANIMALS.length)];
+    spawnFloater(e.clientX, e.clientY, emoji);
+}
+
+function handleDblClick(e) {
+    if (!isActive) return;
+    e.preventDefault();
+
+    ensureAudio();
+    playSpaceBurst();
+
+    // Mega explosion
+    for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+            spawnFirework(
+                e.clientX + (Math.random() - 0.5) * 200,
+                e.clientY + (Math.random() - 0.5) * 200
+            );
+        }, i * 100);
+    }
+}
+
+// ============ SAFETY: CAPTURE EVERYTHING ============
+function blockEvent(e) {
+    if (!isActive) return;
+    e.preventDefault();
+    e.stopPropagation();
+    return false;
+}
+
+function setupSafety() {
+    // Capture ALL keyboard events
+    window.addEventListener('keydown', handleKeyEffect, true);
+    window.addEventListener('keyup', blockEvent, true);
+    window.addEventListener('keypress', blockEvent, true);
+
+    // Block dangerous shortcuts
+    window.addEventListener('keydown', e => {
+        if (!isActive) return;
+        if (document.getElementById('exit-modal').classList.contains('show')) return;
+        // Let through NOTHING except our own handling
+        if (e.metaKey || e.ctrlKey) {
+            e.preventDefault();
+            e.stopPropagation();
+            // Still make it fun — show a lock emoji
+            playBoop();
+            showBigKey('🔒');
+        }
+    }, true);
+
+    // Mouse events
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('click', handleClick);
+    window.addEventListener('dblclick', handleDblClick);
+    window.addEventListener('contextmenu', blockEvent);
+
+    // Prevent closing/navigation
+    window.addEventListener('beforeunload', e => {
+        if (!isActive) return;
+        e.preventDefault();
+        e.returnValue = 'Kid Zone is active! Use the parent exit button.';
+    });
+
+    // Block drag
+    window.addEventListener('dragstart', blockEvent, true);
+    window.addEventListener('drop', blockEvent, true);
+}
+
+// ============ FULLSCREEN ============
+function toggleFullscreen() {
+    if (document.fullscreenElement) {
+        document.exitFullscreen();
+    } else {
+        document.documentElement.requestFullscreen().catch(() => {});
+    }
+}
+
+// ============ EXIT MODAL ============
+function showExitModal() {
+    document.getElementById('exit-modal').classList.add('show');
+    document.getElementById('pin-input').value = '';
+    document.getElementById('exit-error').textContent = '';
+
+    // Temporarily allow typing in PIN field
+    const pinInput = document.getElementById('pin-input');
+    pinInput.addEventListener('keydown', e => e.stopPropagation(), true);
+    pinInput.focus();
+}
+
+function hideExitModal() {
+    document.getElementById('exit-modal').classList.remove('show');
+}
+
+function tryExit() {
+    const pin = document.getElementById('pin-input').value;
+    if (pin === EXIT_PIN) {
+        isActive = false;
+        if (document.fullscreenElement) document.exitFullscreen();
+        window.location.href = '../index.html';
+    } else {
+        document.getElementById('exit-error').textContent = 'Wrong PIN! Try again.';
+        document.getElementById('pin-input').value = '';
+        document.getElementById('pin-input').focus();
+    }
+}
+
+// ============ START ============
+function startKidZone(fullscreen) {
+    ensureAudio();
+    isActive = true;
+    document.getElementById('welcome').classList.add('hidden');
+
+    if (fullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
+    }
+}
+
+// ============ ANIMATION LOOP ============
+function loop() {
+    drawBackground();
+    requestAnimationFrame(loop);
+}
+
+// ============ IDLE ANIMATIONS ============
+let idleTimer = 0;
+setInterval(() => {
+    if (!isActive) return;
+    idleTimer++;
+
+    // Every 8 seconds, spawn a random floating thing to keep it alive
+    if (idleTimer % 8 === 0) {
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        spawnFloater(x, y, ANIMALS[Math.floor(Math.random() * ANIMALS.length)]);
+    }
+}, 1000);
+
+// ============ INIT ============
+setupSafety();
+loop();
+</script>
+</body>
+</html>

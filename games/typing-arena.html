@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Word Warrior — Typing Arena</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+
+        body {
+            background: #06060f;
+            color: #e8e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* ─── GAME CANVAS AREA ─── */
+        #game-area {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Background grid */
+        #game-area::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image:
+                linear-gradient(rgba(108,92,231,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(108,92,231,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+        }
+
+        /* ─── TOP BAR ─── */
+        .top-bar {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: rgba(6,6,15,0.9);
+            border-bottom: 1px solid rgba(108,92,231,0.2);
+            z-index: 50;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #aaa;
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover { border-color: #6c5ce7; color: #fff; }
+
+        .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .stat-box .label {
+            font-size: 10px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-box .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+        }
+
+        .stat-box .value.fire {
+            color: #fd79a8;
+            text-shadow: 0 0 20px rgba(253,121,168,0.5);
+        }
+
+        /* ─── LIVES ─── */
+        .lives {
+            display: flex;
+            gap: 4px;
+        }
+
+        .life {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+
+        .life.lost {
+            opacity: 0.2;
+            transform: scale(0.8);
+        }
+
+        /* ─── COMBO ─── */
+        .combo-display {
+            position: absolute;
+            top: 60px;
+            right: 20px;
+            text-align: right;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .combo-display.active { opacity: 1; }
+
+        .combo-count {
+            font-size: 48px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #fdcb6e, #e17055);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .combo-label {
+            font-size: 14px;
+            color: #fdcb6e;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .combo-mult {
+            font-size: 16px;
+            color: #e17055;
+            font-weight: 700;
+        }
+
+        /* ─── FALLING WORDS ─── */
+        .word-entity {
+            position: absolute;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 8px;
+            background: rgba(20,20,40,0.8);
+            border: 2px solid rgba(108,92,231,0.4);
+            white-space: nowrap;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            z-index: 10;
+        }
+
+        .word-entity.active {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 20px rgba(108,92,231,0.3);
+        }
+
+        .word-entity.boss {
+            font-size: 26px;
+            border-color: #e17055;
+            box-shadow: 0 0 30px rgba(225,112,85,0.3);
+            animation: boss-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes boss-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(225,112,85,0.3); }
+            50% { box-shadow: 0 0 40px rgba(225,112,85,0.5); }
+        }
+
+        .word-entity .typed { color: #00b894; }
+        .word-entity .untyped { color: #8888aa; }
+
+        /* ─── VIRTUAL KEYBOARD ─── */
+        .keyboard-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(6,6,15,0.95);
+            border-top: 1px solid rgba(108,92,231,0.2);
+            padding: 10px 10px 15px;
+            z-index: 50;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+            margin-bottom: 4px;
+        }
+
+        .key {
+            width: 44px;
+            height: 40px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid rgba(255,255,255,0.08);
+            transition: all 0.1s;
+            position: relative;
+        }
+
+        .key .finger-dot {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+        }
+
+        .key.pressed {
+            transform: scale(0.92);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .key.highlight {
+            border-color: rgba(255,255,255,0.4);
+            transform: scale(1.05);
+        }
+
+        .key.space { width: 240px; }
+
+        /* Finger color scheme */
+        .finger-lpinky  { background: rgba(231,76,60,0.15); }  .finger-lpinky .finger-dot { background: #e74c3c; }
+        .finger-lring   { background: rgba(230,126,34,0.15); } .finger-lring .finger-dot { background: #e67e22; }
+        .finger-lmiddle  { background: rgba(241,196,15,0.15); } .finger-lmiddle .finger-dot { background: #f1c40f; }
+        .finger-lindex  { background: rgba(46,204,113,0.15); } .finger-lindex .finger-dot { background: #2ecc71; }
+        .finger-rindex  { background: rgba(26,188,156,0.15); } .finger-rindex .finger-dot { background: #1abc9c; }
+        .finger-rmiddle   { background: rgba(52,152,219,0.15); } .finger-rmiddle .finger-dot { background: #3498db; }
+        .finger-rring   { background: rgba(155,89,182,0.15); } .finger-rring .finger-dot { background: #9b59b6; }
+        .finger-rpinky  { background: rgba(253,121,168,0.15); } .finger-rpinky .finger-dot { background: #fd79a8; }
+        .finger-thumb   { background: rgba(108,92,231,0.15); } .finger-thumb .finger-dot { background: #6c5ce7; }
+
+        .key.highlight.finger-lpinky  { border-color: #e74c3c; box-shadow: 0 0 15px rgba(231,76,60,0.4); }
+        .key.highlight.finger-lring   { border-color: #e67e22; box-shadow: 0 0 15px rgba(230,126,34,0.4); }
+        .key.highlight.finger-lmiddle  { border-color: #f1c40f; box-shadow: 0 0 15px rgba(241,196,15,0.4); }
+        .key.highlight.finger-lindex  { border-color: #2ecc71; box-shadow: 0 0 15px rgba(46,204,113,0.4); }
+        .key.highlight.finger-rindex  { border-color: #1abc9c; box-shadow: 0 0 15px rgba(26,188,156,0.4); }
+        .key.highlight.finger-rmiddle   { border-color: #3498db; box-shadow: 0 0 15px rgba(52,152,219,0.4); }
+        .key.highlight.finger-rring   { border-color: #9b59b6; box-shadow: 0 0 15px rgba(155,89,182,0.4); }
+        .key.highlight.finger-rpinky  { border-color: #fd79a8; box-shadow: 0 0 15px rgba(253,121,168,0.4); }
+
+        /* ─── FINGER GUIDE ─── */
+        .finger-guide {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            font-size: 10px;
+        }
+
+        .finger-guide-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .finger-guide-item.active { opacity: 1; }
+
+        .fg-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ─── SCREENS ─── */
+        .screen-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(6,6,15,0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .screen-overlay.hidden { display: none; }
+
+        .screen-title {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #6c5ce7, #fd79a8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .screen-sub {
+            color: #888;
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
+        .screen-emoji { font-size: 64px; margin-bottom: 16px; }
+
+        .big-btn {
+            padding: 16px 48px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            border: none;
+            border-radius: 14px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin: 8px;
+        }
+
+        .big-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 30px rgba(108,92,231,0.4);
+        }
+
+        .difficulty-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .diff-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(108,92,231,0.3);
+            background: rgba(108,92,231,0.05);
+            color: #aaa;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .diff-btn.active {
+            border-color: #6c5ce7;
+            color: #fff;
+            background: rgba(108,92,231,0.2);
+        }
+
+        .diff-btn:hover { border-color: #6c5ce7; }
+
+        /* ─── GAME OVER STATS ─── */
+        .go-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 24px 0;
+            max-width: 350px;
+        }
+
+        .go-stat {
+            background: rgba(108,92,231,0.08);
+            border: 1px solid rgba(108,92,231,0.2);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .go-stat .val {
+            font-size: 32px;
+            font-weight: 900;
+            font-family: 'JetBrains Mono', monospace;
+            color: #a29bfe;
+        }
+
+        .go-stat .lbl {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* ─── IN-GAME AD ─── */
+        .ingame-ad {
+            position: absolute;
+            bottom: 175px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 40;
+        }
+
+        .ingame-ad .ad-slot {
+            width: 468px;
+            max-width: 90vw;
+            height: 50px;
+            background: rgba(20,20,35,0.8);
+            border: 1px dashed rgba(108,92,231,0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 11px;
+        }
+
+        .ingame-ad .ad-slot::before {
+            content: 'Ad';
+            position: absolute;
+            top: 2px;
+            right: 6px;
+            font-size: 8px;
+            color: #444;
+        }
+
+        /* ─── PARTICLES ─── */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 30;
+        }
+
+        /* ─── WAVE BANNER ─── */
+        .wave-banner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 56px;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 40px rgba(108,92,231,0.6);
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            text-align: center;
+        }
+
+        .wave-banner.show { opacity: 1; }
+
+        .wave-banner .wave-sub {
+            font-size: 18px;
+            color: #a29bfe;
+            text-shadow: none;
+        }
+
+        /* ─── DEFENSE LINE ─── */
+        .defense-line {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, rgba(231,76,60,0.6), transparent);
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .defense-line::before {
+            content: '🛡️ DEFENSE LINE';
+            position: absolute;
+            right: 20px;
+            top: -16px;
+            font-size: 10px;
+            color: rgba(231,76,60,0.5);
+            letter-spacing: 1px;
+        }
+
+        /* ─── WPM METER ─── */
+        .wpm-meter {
+            position: absolute;
+            top: 55px;
+            left: 20px;
+            z-index: 50;
+        }
+
+        .wpm-bar {
+            width: 150px;
+            height: 6px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .wpm-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #00b894, #fdcb6e, #e17055);
+            transition: width 0.3s;
+        }
+
+        .wpm-label {
+            font-size: 10px;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        @media (max-width: 600px) {
+            .key { width: 30px; height: 34px; font-size: 10px; }
+            .key.space { width: 150px; }
+            .keyboard-container { padding: 6px 4px 10px; }
+            .finger-guide { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="game-area">
+    <!-- TOP BAR -->
+    <div class="top-bar">
+        <div class="top-left">
+            <button class="back-btn" onclick="window.location.href='../index.html'">← Back</button>
+            <div class="stat-box">
+                <div>
+                    <div class="label">Score</div>
+                    <div class="value" id="score">0</div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div>
+                    <div class="label">WPM</div>
+                    <div class="value" id="wpm">0</div>
+                </div>
+            </div>
+            <div class="stat-box">
+                <div>
+                    <div class="label">Accuracy</div>
+                    <div class="value" id="accuracy">100%</div>
+                </div>
+            </div>
+        </div>
+        <div class="lives" id="lives">
+            <span class="life">❤️</span>
+            <span class="life">❤️</span>
+            <span class="life">❤️</span>
+            <span class="life">❤️</span>
+            <span class="life">❤️</span>
+        </div>
+    </div>
+
+    <!-- COMBO DISPLAY -->
+    <div class="combo-display" id="combo-display">
+        <div class="combo-count" id="combo-count">0</div>
+        <div class="combo-label">COMBO</div>
+        <div class="combo-mult" id="combo-mult">x1</div>
+    </div>
+
+    <!-- WPM METER -->
+    <div class="wpm-meter">
+        <div class="wpm-bar"><div class="wpm-fill" id="wpm-fill" style="width:0%"></div></div>
+        <div class="wpm-label">Speed</div>
+    </div>
+
+    <!-- WAVE BANNER -->
+    <div class="wave-banner" id="wave-banner">
+        <div id="wave-text">WAVE 1</div>
+        <div class="wave-sub" id="wave-sub">Get ready!</div>
+    </div>
+
+    <!-- DEFENSE LINE (words reaching here = lose life) -->
+    <div class="defense-line" id="defense-line"></div>
+
+    <!-- IN-GAME AD -->
+    <!--
+        MONETIZATION: Small in-game banner ad.
+        Shows during gameplay — non-intrusive placement above keyboard.
+    -->
+    <div class="ingame-ad" id="ingame-ad">
+        <div class="ad-slot">📢 In-Game Banner — 468x50</div>
+    </div>
+
+    <!-- VIRTUAL KEYBOARD -->
+    <div class="keyboard-container" id="keyboard">
+        <div class="finger-guide" id="finger-guide">
+            <div class="finger-guide-item" data-finger="lpinky"><div class="fg-dot" style="background:#e74c3c"></div>L Pinky</div>
+            <div class="finger-guide-item" data-finger="lring"><div class="fg-dot" style="background:#e67e22"></div>L Ring</div>
+            <div class="finger-guide-item" data-finger="lmiddle"><div class="fg-dot" style="background:#f1c40f"></div>L Middle</div>
+            <div class="finger-guide-item" data-finger="lindex"><div class="fg-dot" style="background:#2ecc71"></div>L Index</div>
+            <div class="finger-guide-item" data-finger="rindex"><div class="fg-dot" style="background:#1abc9c"></div>R Index</div>
+            <div class="finger-guide-item" data-finger="rmiddle"><div class="fg-dot" style="background:#3498db"></div>R Middle</div>
+            <div class="finger-guide-item" data-finger="rring"><div class="fg-dot" style="background:#9b59b6"></div>R Ring</div>
+            <div class="finger-guide-item" data-finger="rpinky"><div class="fg-dot" style="background:#fd79a8"></div>R Pinky</div>
+        </div>
+        <div id="keyboard-rows"></div>
+    </div>
+
+    <!-- ====== START SCREEN ====== -->
+    <div class="screen-overlay" id="start-screen">
+        <div class="screen-emoji">⌨️</div>
+        <div class="screen-title">WORD WARRIOR</div>
+        <div class="screen-sub">Destroy falling words. Master 10-finger typing.</div>
+        <div class="difficulty-selector">
+            <button class="diff-btn active" data-diff="1" onclick="setDifficulty(1)">Easy</button>
+            <button class="diff-btn" data-diff="2" onclick="setDifficulty(2)">Medium</button>
+            <button class="diff-btn" data-diff="3" onclick="setDifficulty(3)">Hard</button>
+        </div>
+        <button class="big-btn" onclick="startGame()">START BATTLE ⚔️</button>
+    </div>
+
+    <!-- ====== GAME OVER SCREEN ====== -->
+    <div class="screen-overlay hidden" id="gameover-screen">
+        <div class="screen-emoji" id="go-emoji">💀</div>
+        <div class="screen-title" id="go-title">GAME OVER</div>
+        <div class="screen-sub" id="go-sub">The bugs broke through!</div>
+        <div class="go-stats" id="go-stats"></div>
+        <!--
+            MONETIZATION: Post-game interstitial / rewarded ad.
+            Perfect time for a "Watch ad to continue" or interstitial.
+        -->
+        <button class="big-btn" style="background:linear-gradient(135deg,#fdcb6e,#e17055);font-size:14px;padding:12px 28px;margin-bottom:8px;" onclick="showContinueAd()">
+            ▶ Watch Ad to Continue
+        </button>
+        <button class="big-btn" onclick="startGame()">PLAY AGAIN ⚔️</button>
+        <button class="big-btn" style="background:rgba(255,255,255,0.05);font-size:14px;padding:10px 24px;" onclick="window.location.href='../index.html'">← Back to Games</button>
+    </div>
+</div>
+
+<script>
+// ============ AUDIO ============
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function ensureAudio() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playSound(type) {
+    ensureAudio();
+    const c = audioCtx, now = c.currentTime;
+    if (type === 'type') {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine'; osc.frequency.value = 800 + Math.random() * 400;
+        g.gain.setValueAtTime(0.08, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+        osc.connect(g).connect(c.destination); osc.start(now); osc.stop(now + 0.05);
+    } else if (type === 'word') {
+        [0, 0.06, 0.12].forEach((d, i) => {
+            const osc = c.createOscillator(), g = c.createGain();
+            osc.type = 'square'; osc.frequency.value = [523, 659, 784][i];
+            g.gain.setValueAtTime(0.08, now + d); g.gain.exponentialRampToValueAtTime(0.001, now + d + 0.1);
+            osc.connect(g).connect(c.destination); osc.start(now + d); osc.stop(now + d + 0.1);
+        });
+    } else if (type === 'miss') {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(80, now + 0.3);
+        g.gain.setValueAtTime(0.12, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+        osc.connect(g).connect(c.destination); osc.start(now); osc.stop(now + 0.3);
+    } else if (type === 'error') {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'square'; osc.frequency.value = 120;
+        g.gain.setValueAtTime(0.1, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(g).connect(c.destination); osc.start(now); osc.stop(now + 0.08);
+    } else if (type === 'combo') {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sine'; osc.frequency.setValueAtTime(600, now);
+        osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+        g.gain.setValueAtTime(0.1, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+        osc.connect(g).connect(c.destination); osc.start(now); osc.stop(now + 0.2);
+    } else if (type === 'life') {
+        const osc = c.createOscillator(), g = c.createGain();
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(500, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.5);
+        g.gain.setValueAtTime(0.2, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.connect(g).connect(c.destination); osc.start(now); osc.stop(now + 0.5);
+    } else if (type === 'wave') {
+        [0, 0.15, 0.3, 0.45].forEach((d, i) => {
+            const osc = c.createOscillator(), g = c.createGain();
+            osc.type = 'sine'; osc.frequency.value = [440, 554, 659, 880][i];
+            g.gain.setValueAtTime(0.08, now + d); g.gain.exponentialRampToValueAtTime(0.001, now + d + 0.2);
+            osc.connect(g).connect(c.destination); osc.start(now + d); osc.stop(now + d + 0.2);
+        });
+    }
+}
+
+// ============ FINGER MAP ============
+const FINGER_MAP = {};
+const fingerData = {
+    lpinky:  ['q','a','z','1','!'],
+    lring:   ['w','s','x','2','@'],
+    lmiddle: ['e','d','c','3','#'],
+    lindex:  ['r','f','v','t','g','b','4','5','$','%'],
+    rindex:  ['y','h','n','u','j','m','6','7','^','&'],
+    rmiddle: ['i','k',',','8','*'],
+    rring:   ['o','l','.','9','('],
+    rpinky:  ['p',';','/','-','=','[',']','\\','0',')','\''],
+    thumb:   [' ']
+};
+
+const FINGER_COLORS = {
+    lpinky: '#e74c3c', lring: '#e67e22', lmiddle: '#f1c40f', lindex: '#2ecc71',
+    rindex: '#1abc9c', rmiddle: '#3498db', rring: '#9b59b6', rpinky: '#fd79a8',
+    thumb: '#6c5ce7'
+};
+
+for (const [finger, keys] of Object.entries(fingerData)) {
+    keys.forEach(k => FINGER_MAP[k] = finger);
+}
+
+// ============ WORD LISTS ============
+const WORDS = {
+    easy: ['cat','dog','run','sun','hat','big','red','fun','top','cup','win','box','fly','go','hi','key','map','pen','sit','yes','bug','fix','log','net','zip','ace','owl','fox','jam','gem'],
+    medium: ['power','speed','ninja','robot','magic','cyber','laser','blast','storm','flame','swift','brave','quest','force','pixel','arrow','drift','spark','pulse','prime','coder','debug','stack','cloud','bytes','input','array','level','bonus','turbo'],
+    hard: ['warrior','champion','keyboard','computer','asteroid','defender','thunder','victory','ultimate','hacker','phantom','command','execute','firewall','protocol','function','variable','sequence','strategy','algorithm'],
+    boss: ['programming','cybersecurity','extraordinary','acceleration','constellation','masterpiece','thunderstorm','battleground','championship','unstoppable']
+};
+
+// ============ KEYBOARD LAYOUT ============
+const KBD_ROWS = [
+    [{k:'1',f:'lpinky'},{k:'2',f:'lring'},{k:'3',f:'lmiddle'},{k:'4',f:'lindex'},{k:'5',f:'lindex'},{k:'6',f:'rindex'},{k:'7',f:'rindex'},{k:'8',f:'rmiddle'},{k:'9',f:'rring'},{k:'0',f:'rpinky'}],
+    [{k:'Q',f:'lpinky'},{k:'W',f:'lring'},{k:'E',f:'lmiddle'},{k:'R',f:'lindex'},{k:'T',f:'lindex'},{k:'Y',f:'rindex'},{k:'U',f:'rindex'},{k:'I',f:'rmiddle'},{k:'O',f:'rring'},{k:'P',f:'rpinky'}],
+    [{k:'A',f:'lpinky'},{k:'S',f:'lring'},{k:'D',f:'lmiddle'},{k:'F',f:'lindex'},{k:'G',f:'lindex'},{k:'H',f:'rindex'},{k:'J',f:'rindex'},{k:'K',f:'rmiddle'},{k:'L',f:'rring'},{k:';',f:'rpinky'}],
+    [{k:'Z',f:'lpinky'},{k:'X',f:'lring'},{k:'C',f:'lmiddle'},{k:'V',f:'lindex'},{k:'B',f:'lindex'},{k:'N',f:'rindex'},{k:'M',f:'rindex'},{k:',',f:'rmiddle'},{k:'.',f:'rring'},{k:'/',f:'rpinky'}],
+    [{k:'SPACE',f:'thumb',cls:'space'}]
+];
+
+function buildKeyboard() {
+    const container = document.getElementById('keyboard-rows');
+    container.innerHTML = '';
+    KBD_ROWS.forEach(row => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'keyboard-row';
+        row.forEach(({k, f, cls}) => {
+            const keyEl = document.createElement('div');
+            keyEl.className = `key finger-${f} ${cls || ''}`;
+            keyEl.id = `key-${k.toLowerCase().replace(' ', 'space')}`;
+            keyEl.dataset.finger = f;
+            keyEl.innerHTML = `${k === 'SPACE' ? '␣' : k}<span class="finger-dot"></span>`;
+            rowEl.appendChild(keyEl);
+        });
+        container.appendChild(rowEl);
+    });
+}
+buildKeyboard();
+
+// ============ GAME STATE ============
+let state = 'menu'; // menu, playing, paused, gameover
+let score = 0;
+let lives = 5;
+let wave = 0;
+let combo = 0;
+let maxCombo = 0;
+let wordsTyped = 0;
+let totalChars = 0;
+let correctChars = 0;
+let errorChars = 0;
+let difficulty = 1; // 1=easy, 2=medium, 3=hard
+let startTime = 0;
+
+let words = []; // active falling words
+let activeWordIndex = -1; // currently typing this word
+
+// Wave config
+let waveWordCount = 0;
+let wordsSpawned = 0;
+let spawnTimer = 0;
+let waveActive = false;
+
+// ============ GAME CONFIG BY DIFFICULTY ============
+function getConfig() {
+    const base = {
+        fallSpeed: [0.3, 0.5, 0.7][difficulty - 1],
+        spawnInterval: [2500, 1800, 1200][difficulty - 1],
+        wordsPerWave: [6, 8, 10][difficulty - 1],
+        bossEveryNWaves: 3,
+    };
+    // Waves increase difficulty
+    base.fallSpeed += wave * 0.03;
+    base.spawnInterval = Math.max(600, base.spawnInterval - wave * 100);
+    base.wordsPerWave += Math.floor(wave / 2);
+    return base;
+}
+
+// ============ DEFENSE LINE ============
+function getDefenseY() {
+    const kbHeight = document.getElementById('keyboard').offsetHeight;
+    return window.innerHeight - kbHeight - 70; // above ad + keyboard
+}
+
+function updateDefenseLine() {
+    document.getElementById('defense-line').style.top = getDefenseY() + 'px';
+}
+
+// ============ WORD ENTITIES ============
+function pickWord() {
+    const config = getConfig();
+    const isBoss = wave > 0 && wave % config.bossEveryNWaves === 0 && wordsSpawned === waveWordCount - 1;
+
+    let pool;
+    if (isBoss) {
+        pool = WORDS.boss;
+    } else if (difficulty === 1) {
+        pool = wave < 3 ? WORDS.easy : [...WORDS.easy, ...WORDS.medium];
+    } else if (difficulty === 2) {
+        pool = wave < 2 ? WORDS.medium : [...WORDS.medium, ...WORDS.hard];
+    } else {
+        pool = [...WORDS.medium, ...WORDS.hard];
+    }
+
+    const word = pool[Math.floor(Math.random() * pool.length)];
+    return { text: word, isBoss };
+}
+
+function spawnWord() {
+    const { text, isBoss } = pickWord();
+    const margin = 60;
+    const maxX = window.innerWidth - text.length * 16 - margin;
+    const x = margin + Math.random() * Math.max(0, maxX);
+
+    const el = document.createElement('div');
+    el.className = `word-entity${isBoss ? ' boss' : ''}`;
+    el.style.left = x + 'px';
+    el.style.top = '50px';
+    document.getElementById('game-area').appendChild(el);
+
+    const word = {
+        text,
+        typed: 0,
+        el,
+        x,
+        y: 50,
+        speed: getConfig().fallSpeed * (isBoss ? 0.6 : (0.8 + Math.random() * 0.4)),
+        isBoss,
+        alive: true
+    };
+
+    renderWord(word);
+    words.push(word);
+    wordsSpawned++;
+}
+
+function renderWord(word) {
+    const typed = word.text.slice(0, word.typed);
+    const untyped = word.text.slice(word.typed);
+    word.el.innerHTML = `<span class="typed">${typed}</span><span class="untyped">${untyped}</span>`;
+}
+
+// ============ PARTICLES ============
+function spawnParticles(x, y, color, count) {
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = x + 'px';
+        p.style.top = y + 'px';
+        p.style.width = p.style.height = (3 + Math.random() * 5) + 'px';
+        p.style.background = color;
+        document.getElementById('game-area').appendChild(p);
+
+        const vx = (Math.random() - 0.5) * 200;
+        const vy = (Math.random() - 0.5) * 200 - 100;
+        const duration = 400 + Math.random() * 400;
+
+        p.animate([
+            { transform: 'translate(0,0) scale(1)', opacity: 1 },
+            { transform: `translate(${vx}px,${vy}px) scale(0)`, opacity: 0 }
+        ], { duration, easing: 'ease-out' }).onfinish = () => p.remove();
+    }
+}
+
+// ============ KEYBOARD HIGHLIGHTING ============
+function highlightKey(char) {
+    // Clear all highlights
+    document.querySelectorAll('.key.highlight').forEach(k => k.classList.remove('highlight'));
+    document.querySelectorAll('.finger-guide-item.active').forEach(g => g.classList.remove('active'));
+
+    if (!char) return;
+    const finger = FINGER_MAP[char.toLowerCase()] || FINGER_MAP[char];
+    if (!finger) return;
+
+    // Highlight the specific key
+    const keyId = char === ' ' ? 'key-space' : `key-${char.toLowerCase()}`;
+    const keyEl = document.getElementById(keyId);
+    if (keyEl) keyEl.classList.add('highlight');
+
+    // Highlight finger guide
+    const guide = document.querySelector(`.finger-guide-item[data-finger="${finger}"]`);
+    if (guide) guide.classList.add('active');
+}
+
+function flashKey(char, correct) {
+    const keyId = char === ' ' ? 'key-space' : `key-${char.toLowerCase()}`;
+    const keyEl = document.getElementById(keyId);
+    if (!keyEl) return;
+
+    keyEl.classList.add('pressed');
+    keyEl.style.boxShadow = correct ? '0 0 15px rgba(0,184,148,0.5)' : '0 0 15px rgba(231,76,60,0.5)';
+    setTimeout(() => {
+        keyEl.classList.remove('pressed');
+        keyEl.style.boxShadow = '';
+    }, 100);
+}
+
+// ============ UI UPDATES ============
+function updateScore() {
+    document.getElementById('score').textContent = score;
+}
+
+function updateWPM() {
+    if (wordsTyped === 0 || !startTime) {
+        document.getElementById('wpm').textContent = '0';
+        return;
+    }
+    const minutes = (Date.now() - startTime) / 60000;
+    const wpm = Math.round(wordsTyped / Math.max(minutes, 0.1));
+    document.getElementById('wpm').textContent = wpm;
+    document.getElementById('wpm-fill').style.width = Math.min(100, wpm / 1.5) + '%';
+
+    if (wpm > 60) {
+        document.getElementById('wpm').classList.add('fire');
+    } else {
+        document.getElementById('wpm').classList.remove('fire');
+    }
+}
+
+function updateAccuracy() {
+    if (totalChars === 0) {
+        document.getElementById('accuracy').textContent = '100%';
+        return;
+    }
+    const acc = Math.round((correctChars / totalChars) * 100);
+    document.getElementById('accuracy').textContent = acc + '%';
+}
+
+function updateLives() {
+    const lifeEls = document.querySelectorAll('#lives .life');
+    lifeEls.forEach((el, i) => {
+        el.classList.toggle('lost', i >= lives);
+    });
+}
+
+function updateCombo() {
+    const display = document.getElementById('combo-display');
+    if (combo >= 2) {
+        display.classList.add('active');
+        document.getElementById('combo-count').textContent = combo;
+        const mult = Math.floor(1 + combo / 3);
+        document.getElementById('combo-mult').textContent = `x${mult}`;
+    } else {
+        display.classList.remove('active');
+    }
+}
+
+function getMultiplier() {
+    return Math.floor(1 + combo / 3);
+}
+
+// ============ WAVE MANAGEMENT ============
+function startWave() {
+    wave++;
+    wordsSpawned = 0;
+    waveWordCount = getConfig().wordsPerWave;
+    waveActive = true;
+
+    const banner = document.getElementById('wave-banner');
+    const isBossWave = wave % getConfig().bossEveryNWaves === 0;
+    document.getElementById('wave-text').textContent = isBossWave ? `BOSS WAVE ${wave}` : `WAVE ${wave}`;
+    document.getElementById('wave-sub').textContent = isBossWave ? 'Defeat the mega-word!' : `${waveWordCount} words incoming!`;
+    banner.classList.add('show');
+    playSound('wave');
+
+    setTimeout(() => banner.classList.remove('show'), 2000);
+}
+
+// ============ GAME LOOP ============
+let lastFrame = 0;
+
+function gameLoop(timestamp) {
+    if (state !== 'playing') return;
+
+    const dt = Math.min(timestamp - lastFrame, 50);
+    lastFrame = timestamp;
+
+    const config = getConfig();
+    const defenseY = getDefenseY();
+
+    // Spawn words
+    spawnTimer += dt;
+    if (waveActive && wordsSpawned < waveWordCount && spawnTimer > config.spawnInterval) {
+        spawnTimer = 0;
+        spawnWord();
+    }
+
+    // Check if wave complete (all words spawned and destroyed)
+    if (waveActive && wordsSpawned >= waveWordCount && words.every(w => !w.alive)) {
+        waveActive = false;
+        setTimeout(() => {
+            if (state === 'playing') startWave();
+        }, 1500);
+    }
+
+    // Update word positions
+    words.forEach((word, i) => {
+        if (!word.alive) return;
+
+        word.y += word.speed * (dt / 16);
+        word.el.style.top = word.y + 'px';
+
+        // Hit defense line
+        if (word.y > defenseY) {
+            word.alive = false;
+            word.el.remove();
+            lives--;
+            combo = 0;
+            updateLives();
+            updateCombo();
+            playSound('life');
+
+            spawnParticles(word.x + 40, defenseY, '#e74c3c', 15);
+
+            if (activeWordIndex === i) {
+                activeWordIndex = -1;
+                highlightNextKey();
+            }
+
+            if (lives <= 0) {
+                gameOver();
+                return;
+            }
+        }
+    });
+
+    // Highlight next key to press
+    highlightNextKey();
+
+    requestAnimationFrame(gameLoop);
+}
+
+function highlightNextKey() {
+    if (activeWordIndex >= 0 && words[activeWordIndex] && words[activeWordIndex].alive) {
+        const word = words[activeWordIndex];
+        const nextChar = word.text[word.typed];
+        if (nextChar) highlightKey(nextChar);
+    } else {
+        // Find nearest alive word for hint
+        const alive = words.filter(w => w.alive);
+        if (alive.length > 0) {
+            const nearest = alive.reduce((a, b) => a.y > b.y ? a : b);
+            highlightKey(nearest.text[nearest.typed]);
+        } else {
+            highlightKey(null);
+        }
+    }
+}
+
+// ============ INPUT ============
+document.addEventListener('keydown', e => {
+    if (state !== 'playing') return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+    e.preventDefault();
+    ensureAudio();
+
+    const key = e.key.length === 1 ? e.key.toLowerCase() : null;
+    if (!key) return;
+
+    totalChars++;
+
+    // If no active word, find one that starts with this letter
+    if (activeWordIndex < 0 || !words[activeWordIndex] || !words[activeWordIndex].alive) {
+        activeWordIndex = -1;
+        // Find the lowest (most dangerous) word starting with this key
+        let best = -1, bestY = -1;
+        words.forEach((w, i) => {
+            if (w.alive && w.typed === 0 && w.text[0] === key && w.y > bestY) {
+                best = i;
+                bestY = w.y;
+            }
+        });
+
+        if (best >= 0) {
+            activeWordIndex = best;
+            words[best].el.classList.add('active');
+        }
+    }
+
+    if (activeWordIndex >= 0 && words[activeWordIndex] && words[activeWordIndex].alive) {
+        const word = words[activeWordIndex];
+        const expected = word.text[word.typed];
+
+        if (key === expected) {
+            // Correct!
+            word.typed++;
+            correctChars++;
+            renderWord(word);
+            flashKey(key, true);
+            playSound('type');
+
+            // Word completed?
+            if (word.typed >= word.text.length) {
+                // Destroy word!
+                const rect = word.el.getBoundingClientRect();
+                const color = word.isBoss ? '#e17055' : '#00b894';
+                spawnParticles(rect.left + rect.width / 2, rect.top, color, word.isBoss ? 30 : 15);
+
+                word.alive = false;
+                word.el.remove();
+                activeWordIndex = -1;
+
+                combo++;
+                if (combo > maxCombo) maxCombo = combo;
+                wordsTyped++;
+
+                const points = word.text.length * 10 * getMultiplier() * (word.isBoss ? 5 : 1);
+                score += points;
+
+                updateScore();
+                updateCombo();
+                updateWPM();
+                playSound('word');
+                if (combo > 0 && combo % 5 === 0) playSound('combo');
+            }
+        } else {
+            // Wrong key!
+            errorChars++;
+            combo = 0;
+            updateCombo();
+            flashKey(key, false);
+            playSound('error');
+        }
+    } else {
+        // No matching word found
+        errorChars++;
+        flashKey(key, false);
+        playSound('error');
+    }
+
+    updateAccuracy();
+});
+
+// ============ START / GAME OVER ============
+function setDifficulty(d) {
+    difficulty = d;
+    document.querySelectorAll('.diff-btn').forEach(b => {
+        b.classList.toggle('active', parseInt(b.dataset.diff) === d);
+    });
+}
+
+function startGame() {
+    state = 'playing';
+    score = 0; lives = 5; wave = 0; combo = 0; maxCombo = 0;
+    wordsTyped = 0; totalChars = 0; correctChars = 0; errorChars = 0;
+    activeWordIndex = -1; spawnTimer = 0;
+    startTime = Date.now();
+
+    // Clear old words
+    words.forEach(w => { if (w.el.parentNode) w.el.remove(); });
+    words = [];
+
+    updateScore(); updateLives(); updateCombo(); updateWPM(); updateAccuracy();
+    updateDefenseLine();
+
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('gameover-screen').classList.add('hidden');
+
+    lastFrame = performance.now();
+    startWave();
+    requestAnimationFrame(gameLoop);
+}
+
+function gameOver() {
+    state = 'gameover';
+
+    const minutes = (Date.now() - startTime) / 60000;
+    const wpm = Math.round(wordsTyped / Math.max(minutes, 0.1));
+    const acc = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 0;
+
+    // Save high score
+    const scores = JSON.parse(localStorage.getItem('altplay_typing_scores') || '[]');
+    const name = 'Player' + Math.floor(Math.random() * 100);
+    scores.push({ name, wpm });
+    scores.sort((a, b) => b.wpm - a.wpm);
+    localStorage.setItem('altplay_typing_scores', JSON.stringify(scores.slice(0, 20)));
+
+    // Show game over
+    const goScreen = document.getElementById('gameover-screen');
+    goScreen.classList.remove('hidden');
+
+    if (score > 2000) {
+        document.getElementById('go-emoji').textContent = '🏆';
+        document.getElementById('go-title').textContent = 'INCREDIBLE!';
+        document.getElementById('go-sub').textContent = `You reached Wave ${wave}!`;
+    } else if (score > 500) {
+        document.getElementById('go-emoji').textContent = '⚡';
+        document.getElementById('go-title').textContent = 'NICE RUN!';
+        document.getElementById('go-sub').textContent = `Wave ${wave} — keep going!`;
+    } else {
+        document.getElementById('go-emoji').textContent = '💀';
+        document.getElementById('go-title').textContent = 'GAME OVER';
+        document.getElementById('go-sub').textContent = 'The bugs broke through!';
+    }
+
+    document.getElementById('go-stats').innerHTML = `
+        <div class="go-stat"><div class="val">${score}</div><div class="lbl">Score</div></div>
+        <div class="go-stat"><div class="val">${wpm}</div><div class="lbl">WPM</div></div>
+        <div class="go-stat"><div class="val">${acc}%</div><div class="lbl">Accuracy</div></div>
+        <div class="go-stat"><div class="val">${maxCombo}</div><div class="lbl">Max Combo</div></div>
+        <div class="go-stat"><div class="val">${wave}</div><div class="lbl">Waves</div></div>
+        <div class="go-stat"><div class="val">${wordsTyped}</div><div class="lbl">Words</div></div>
+    `;
+}
+
+function showContinueAd() {
+    /*
+        MONETIZATION: Rewarded ad for extra life.
+        Replace with real rewarded ad SDK call:
+
+        admob.showRewardedAd({
+            onReward: () => {
+                lives = 2;
+                state = 'playing';
+                ...resume game
+            }
+        });
+    */
+    alert('🎬 [Rewarded ad would play here]\n\nYou earned 2 extra lives!');
+    lives = 2;
+    updateLives();
+    document.getElementById('gameover-screen').classList.add('hidden');
+    state = 'playing';
+    lastFrame = performance.now();
+    requestAnimationFrame(gameLoop);
+}
+
+// Handle resize
+window.addEventListener('resize', () => {
+    updateDefenseLine();
+    buildKeyboard();
+});
+
+updateDefenseLine();
+</script>
+</body>
+</html>
