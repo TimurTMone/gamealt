@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Coloring Book — BabyPath</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +13,7 @@
             --radius: 16px; --shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
         html, body { height: 100%; overflow: hidden; }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; touch-action: none; }
+        body { font-family: 'Nunito', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; touch-action: none; padding-top: env(safe-area-inset-top, 0px); }
 
         /* ─── TOP BAR ─── */
         .top-bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--surface); box-shadow: 0 2px 12px rgba(0,0,0,0.06); z-index: 100; flex-shrink: 0; min-height: 52px; }
@@ -26,7 +26,7 @@
         #colorCanvas { background: #ffffff; border-radius: 12px; box-shadow: var(--shadow); touch-action: none; max-width: calc(100% - 24px); max-height: 100%; }
 
         /* ─── COLOR PALETTE ─── */
-        .palette-bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--surface); box-shadow: 0 -2px 12px rgba(0,0,0,0.06); overflow-x: auto; overflow-y: hidden; flex-shrink: 0; z-index: 100; -webkit-overflow-scrolling: touch; }
+        .palette-bar { display: flex; align-items: center; gap: 6px; padding: 8px 10px; padding-bottom: env(safe-area-inset-bottom, 8px); background: var(--surface); box-shadow: 0 -2px 12px rgba(0,0,0,0.06); overflow-x: auto; overflow-y: hidden; flex-shrink: 0; z-index: 100; -webkit-overflow-scrolling: touch; }
         .palette-bar::-webkit-scrollbar { display: none; }
         .color-btn { width: 52px; height: 52px; border-radius: 50%; border: 3px solid transparent; cursor: pointer; flex-shrink: 0; transition: transform 0.15s, border-color 0.15s; position: relative; }
         .color-btn:active { transform: scale(0.88); }

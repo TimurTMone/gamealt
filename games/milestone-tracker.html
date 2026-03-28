@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <title>BabyPath - Milestone Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -40,6 +40,7 @@ body {
   color: var(--text);
   min-height: 100vh;
   line-height: 1.6;
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 /* ---- NAV ---- */
@@ -88,6 +89,7 @@ body {
 .tab-nav {
   display: flex; gap: 6px; overflow-x: auto; padding: 4px 0 16px;
   -ms-overflow-style: none; scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 .tab-nav::-webkit-scrollbar { display: none; }
 .tab-btn {
@@ -223,7 +225,7 @@ body {
 .milestone-item.completed { background: var(--green-light); border-color: transparent; }
 
 .milestone-check {
-  flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+  flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%;
   border: 3px solid var(--border); cursor: pointer; display: flex;
   align-items: center; justify-content: center; transition: var(--transition);
   margin-top: 2px; background: var(--bg-card);
@@ -513,7 +515,7 @@ body {
     <h3 data-i18n="edit_profile">Baby Profile</h3>
     <div class="form-group">
       <label data-i18n="baby_name">Baby's Name</label>
-      <input type="text" id="inputName" placeholder="Baby">
+      <input type="text" id="inputName" placeholder="Baby" maxlength="50">
     </div>
     <div class="form-group">
       <label data-i18n="date_of_birth">Date of Birth</label>
@@ -924,7 +926,7 @@ const catMeta = {
 /* ===================================================================
    STATE
    =================================================================== */
-let lang = localStorage.getItem('bp_lang') || 'en';
+let lang = localStorage.getItem('babypath_lang') || 'en';
 let profile = JSON.parse(localStorage.getItem('bp_profile') || 'null');
 let milestoneData = JSON.parse(localStorage.getItem('bp_milestones') || '{}');
 let journal = JSON.parse(localStorage.getItem('bp_journal') || '[]');
@@ -1011,7 +1013,7 @@ function saveProfile_() { localStorage.setItem('bp_profile', JSON.stringify(prof
    =================================================================== */
 function setLang(l) {
   lang = l;
-  localStorage.setItem('bp_lang', l);
+  localStorage.setItem('babypath_lang', l);
   document.querySelectorAll('.lang-btn').forEach(b => {
     b.classList.toggle('active', b.textContent.trim() === l.toUpperCase());
   });

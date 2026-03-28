@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Word Warrior — Typing Arena</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
@@ -15,6 +15,7 @@
             font-family: 'Inter', sans-serif;
             overflow: hidden;
             height: 100vh;
+            padding-top: env(safe-area-inset-top, 0px);
         }
 
         /* ─── GAME CANVAS AREA ─── */
@@ -191,6 +192,7 @@
             background: rgba(6,6,15,0.95);
             border-top: 1px solid rgba(108,92,231,0.2);
             padding: 10px 10px 15px;
+            padding-bottom: env(safe-area-inset-bottom, 10px);
             z-index: 50;
         }
 

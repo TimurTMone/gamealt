@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Magic Keyboard — Kid Zone</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
@@ -12,6 +12,7 @@
             height: 100vh;
             font-family: -apple-system, sans-serif;
             cursor: none;
+            padding-top: env(safe-area-inset-top, 0px);
         }
 
         /* ─── MAIN CANVAS ─── */

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>Speech Buddy — Evidence-Based Speech Therapy</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&display=swap');
@@ -31,6 +31,7 @@
             font-family: 'Nunito', -apple-system, sans-serif;
             overflow-x: hidden;
             min-height: 100vh;
+            padding-top: env(safe-area-inset-top, 0px);
             padding-bottom: 60px;
         }
 
@@ -54,7 +55,7 @@
         .back-btn {
             background: var(--accent);
             border: none;
-            width: 38px; height: 38px;
+            width: 44px; height: 44px;
             border-radius: 12px;
             font-size: 18px;
             cursor: pointer;
@@ -92,7 +93,7 @@
         .icon-btn {
             background: var(--accent);
             border: none;
-            width: 36px; height: 36px;
+            width: 44px; height: 44px;
             border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
@@ -151,7 +152,7 @@
             border-left: 5px solid;
         }
 
-        .stage-card:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        @media (hover: hover) { .stage-card:hover { transform: translateX(4px); box-shadow: 0 4px 20px rgba(0,0,0,0.08); } }
         .stage-card:active { transform: scale(0.98); }
 
         .stage-card .st-emoji { font-size: 40px; flex-shrink: 0; }
@@ -206,7 +207,7 @@
             gap: 6px;
         }
 
-        .routine-chip:hover { border-color: var(--primary); }
+        @media (hover: hover) { .routine-chip:hover { border-color: var(--primary); } }
         .routine-chip:active { transform: scale(0.95); }
 
         /* ─── SUB NAV (inside word view) ─── */
@@ -275,7 +276,7 @@
             justify-content: center;
         }
 
-        .word-card:hover { transform: scale(1.05); }
+        @media (hover: hover) { .word-card:hover { transform: scale(1.05); } }
         .word-card:active { transform: scale(0.95); }
         .word-card.spoken { border-color: var(--primary); box-shadow: 0 0 20px rgba(245,130,174,0.3); animation: pop 0.4s ease; }
 

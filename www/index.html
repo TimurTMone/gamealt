@@ -6,419 +6,982 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>BabyPath</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --bg: #fef9f0;
-            --surface: #ffffff;
-            --primary: #6366f1;
-            --primary-light: #818cf8;
-            --primary-bg: #eef2ff;
-            --green: #10b981;
-            --green-bg: #ecfdf5;
-            --pink: #ec4899;
-            --pink-bg: #fdf2f8;
-            --warm: #f59e0b;
-            --text: #1e293b;
-            --text2: #64748b;
-            --border: #e2e8f0;
-            --radius: 16px;
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#fef9f0;--surface:#fff;--primary:#6366f1;--primary-light:#818cf8;--primary-bg:#eef2ff;
+            --green:#10b981;--green-bg:#ecfdf5;--pink:#ec4899;--pink-bg:#fdf2f8;
+            --warm:#f59e0b;--warm-bg:#fffbeb;--text:#1e293b;--text2:#64748b;--border:#e2e8f0;
+            --radius:16px;--radius-sm:12px;
+            --safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);
+            --safe-left:env(safe-area-inset-left,0px);--safe-right:env(safe-area-inset-right,0px);
         }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            font-family: 'Nunito', -apple-system, sans-serif;
-            min-height: 100vh;
-            padding-top: var(--safe-top);
-            padding-bottom: calc(var(--safe-bottom) + 70px);
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
+        body{
+            background:var(--bg);color:var(--text);font-family:'Nunito',-apple-system,sans-serif;
+            min-height:100vh;min-height:100dvh;
+            padding-top:var(--safe-top);padding-bottom:calc(var(--safe-bottom) + 68px);
+            padding-left:var(--safe-left);padding-right:var(--safe-right);
+            -webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;
+            overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;
         }
-
-        /* ─── HEADER ─── */
-        .header {
-            background: white;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 22px;
-            font-weight: 900;
-        }
-
-        .header h1 span {
-            background: linear-gradient(135deg, var(--primary), var(--pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header p {
-            font-size: 13px;
-            color: var(--text2);
-            margin-top: 2px;
-        }
-
-        /* ─── TOOL GRID ─── */
-        .section-label {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text2);
-            padding: 20px 20px 8px;
-        }
-
-        .tools {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            padding: 0 16px 12px;
-        }
-
-        .tool {
-            background: white;
-            border-radius: var(--radius);
-            padding: 20px 14px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            border: 1px solid var(--border);
-            transition: transform 0.15s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .tool:active { transform: scale(0.96); }
-
-        .tool .t-icon {
-            font-size: 40px;
-            margin-bottom: 2px;
-        }
-
-        .tool .t-name {
-            font-size: 14px;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-
-        .tool .t-desc {
-            font-size: 11px;
-            color: var(--text2);
-            line-height: 1.3;
-        }
-
-        .tool .t-badge {
-            font-size: 9px;
-            font-weight: 800;
-            padding: 2px 8px;
-            border-radius: 8px;
-            color: white;
-        }
-
-        .badge-free { background: var(--green); }
-        .badge-new { background: var(--pink); }
-
-        /* ─── GUIDES LIST ─── */
-        .guides {
-            padding: 0 16px 16px;
-        }
-
-        .guide-item {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            background: white;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
-            text-decoration: none;
-            color: inherit;
-            transition: transform 0.15s;
-        }
-
-        .guide-item:active { transform: scale(0.98); }
-
-        .guide-item .g-icon { font-size: 32px; flex-shrink: 0; }
-
-        .guide-item .g-info { flex: 1; }
-        .guide-item .g-name { font-size: 14px; font-weight: 800; }
-        .guide-item .g-desc { font-size: 11px; color: var(--text2); line-height: 1.3; }
-
-        .guide-item .g-arrow { color: #ccc; font-size: 18px; }
-
-        /* ─── BOTTOM TAB BAR ─── */
-        .tab-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            border-top: 1px solid var(--border);
-            display: flex;
-            padding-bottom: var(--safe-bottom);
-            z-index: 100;
-        }
-
-        .tab {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 0 6px;
-            font-size: 10px;
-            font-weight: 700;
-            color: var(--text2);
-            text-decoration: none;
-            transition: color 0.2s;
-            cursor: pointer;
-            border: none;
-            background: none;
-        }
-
-        .tab.active { color: var(--primary); }
-
-        .tab .tab-icon { font-size: 22px; margin-bottom: 2px; }
-
-        /* ─── VIEWS ─── */
-        .view { display: none; }
-        .view.active { display: block; }
-
-        /* ─── SETTINGS ─── */
-        .settings {
-            padding: 20px 16px;
-        }
-
-        .setting-group {
-            background: white;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            overflow: hidden;
-            margin-bottom: 16px;
-        }
-
-        .setting-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 16px;
-            border-bottom: 1px solid #f5f5f5;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .setting-row:last-child { border: none; }
-
-        .setting-row .sr-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .setting-row .sr-icon { font-size: 20px; }
-        .setting-row .sr-arrow { color: #ccc; }
-
-        .lang-pills {
-            display: flex;
-            gap: 8px;
-        }
-
-        .lang-pill {
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 2px solid var(--border);
-            background: white;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .lang-pill.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .app-version {
-            text-align: center;
-            font-size: 12px;
-            color: var(--text2);
-            padding: 20px;
-        }
+        /* --- ONBOARDING OVERLAY --- */
+        .onboarding{position:fixed;inset:0;z-index:1000;background:var(--bg);display:flex;flex-direction:column;
+            padding:var(--safe-top) var(--safe-left) var(--safe-bottom) var(--safe-right);transition:opacity .3s}
+        .onboarding.hidden{opacity:0;pointer-events:none}
+        .ob-content{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center}
+        .ob-emoji{font-size:80px;margin-bottom:16px;animation:ob-float 3s ease-in-out infinite}
+        @keyframes ob-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+        .ob-title{font-size:28px;font-weight:900;margin-bottom:8px}
+        .ob-title span{background:linear-gradient(135deg,var(--primary),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .ob-sub{font-size:15px;color:var(--text2);line-height:1.5;max-width:300px;margin:0 auto}
+        .ob-form{width:100%;max-width:340px;margin:20px auto 0;text-align:left}
+        .ob-label{font-size:13px;font-weight:800;margin-bottom:6px;color:var(--text2)}
+        .ob-input{width:100%;padding:14px 16px;border:2px solid var(--border);border-radius:var(--radius-sm);
+            font-size:16px;font-family:inherit;font-weight:600;background:var(--surface);color:var(--text);
+            appearance:none;-webkit-appearance:none;outline:none;margin-bottom:16px}
+        .ob-input:focus{border-color:var(--primary)}
+        .ob-lang-grid{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+        .ob-lang-btn{flex:1;min-width:90px;padding:14px 8px;border:2px solid var(--border);border-radius:var(--radius-sm);
+            background:var(--surface);font-size:14px;font-weight:800;text-align:center;cursor:pointer;
+            transition:all .15s;min-height:44px}
+        .ob-lang-btn.sel{border-color:var(--primary);background:var(--primary-bg);color:var(--primary)}
+        .ob-lang-btn:active{transform:scale(.96)}
+        .ob-dots{display:flex;gap:8px;justify-content:center;margin-top:20px}
+        .ob-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .2s}
+        .ob-dot.active{background:var(--primary);width:24px;border-radius:4px}
+        .ob-actions{padding:16px 24px;display:flex;gap:12px}
+        .ob-btn{flex:1;padding:16px;border-radius:var(--radius-sm);font-size:16px;font-weight:800;
+            border:none;cursor:pointer;min-height:52px;transition:transform .1s;font-family:inherit}
+        .ob-btn:active{transform:scale(.97)}
+        .ob-btn-primary{background:var(--primary);color:#fff}
+        .ob-btn-skip{background:transparent;color:var(--text2)}
+        .ob-features{display:flex;flex-direction:column;gap:12px;margin-top:16px;width:100%;max-width:300px}
+        .ob-feat{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 16px;
+            background:var(--surface);border-radius:var(--radius-sm);border:1px solid var(--border)}
+        .ob-feat-icon{font-size:28px;flex-shrink:0}
+        .ob-feat-text{font-size:14px;font-weight:700;line-height:1.3}
+        /* --- TAB VIEWS --- */
+        .view{display:none;animation:fadeIn .2s}
+        .view.active{display:block}
+        @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+        /* --- HEADER --- */
+        .header{padding:20px 20px 0}
+        .header-greeting{font-size:14px;color:var(--text2);font-weight:700}
+        .header-title{font-size:22px;font-weight:900;margin-top:2px}
+        .header-title span{background:linear-gradient(135deg,var(--primary),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        /* --- STREAK --- */
+        .streak-bar{display:flex;align-items:center;gap:10px;margin:16px 20px 0;padding:14px 16px;
+            background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:var(--radius);
+            border:1px solid #fbbf24}
+        .streak-fire{font-size:28px;transition:transform .3s}
+        .streak-info{flex:1}
+        .streak-count{font-size:16px;font-weight:900;color:#92400e}
+        .streak-sub{font-size:11px;color:#a16207;font-weight:600}
+        /* --- DAILY WORD CARD --- */
+        .daily-word{margin:16px 20px 0;background:var(--surface);border-radius:var(--radius);
+            border:1px solid var(--border);overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+        .dw-header{padding:14px 16px 0;display:flex;justify-content:space-between;align-items:center}
+        .dw-badge{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--primary)}
+        .dw-stage{font-size:10px;font-weight:700;color:var(--text2);background:var(--primary-bg);
+            padding:3px 10px;border-radius:8px}
+        .dw-body{padding:16px;text-align:center}
+        .dw-emoji{font-size:56px;margin-bottom:8px}
+        .dw-words{display:flex;flex-direction:column;gap:4px;margin-bottom:8px}
+        .dw-word{font-size:20px;font-weight:900}
+        .dw-word-alt{font-size:14px;color:var(--text2);font-weight:700}
+        .dw-target{display:inline-block;font-size:11px;font-weight:800;padding:3px 10px;
+            border-radius:8px;background:var(--warm-bg);color:var(--warm);margin:8px 0}
+        .dw-tip{font-size:12px;color:var(--text2);line-height:1.5;margin-top:8px;padding:10px 12px;
+            background:var(--bg);border-radius:var(--radius-sm)}
+        .dw-actions{display:flex;gap:10px;padding:0 16px 16px;justify-content:center}
+        .dw-btn{flex:1;padding:12px;border-radius:var(--radius-sm);font-size:14px;font-weight:800;
+            border:none;cursor:pointer;min-height:44px;transition:transform .1s;font-family:inherit;max-width:180px}
+        .dw-btn:active{transform:scale(.96)}
+        .dw-btn-hear{background:var(--primary);color:#fff}
+        .dw-btn-practice{background:var(--green);color:#fff}
+        /* --- QUICK ACTIONS --- */
+        .section-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;
+            color:var(--text2);padding:20px 20px 10px}
+        .quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px}
+        .q-card{background:var(--surface);border-radius:var(--radius);padding:18px 14px;
+            text-decoration:none;color:inherit;border:1px solid var(--border);display:flex;flex-direction:column;
+            align-items:center;gap:6px;text-align:center;transition:transform .1s;position:relative}
+        .q-card:active{transform:scale(.96)}
+        .q-icon{font-size:36px}
+        .q-name{font-size:14px;font-weight:800}
+        .q-sub{font-size:11px;color:var(--text2)}
+        .q-badge{position:absolute;top:10px;right:10px;font-size:9px;font-weight:800;padding:2px 8px;
+            border-radius:8px;color:#fff}
+        .q-badge-new{background:var(--pink)}
+        .q-badge-free{background:var(--green)}
+        .q-progress{width:60%;height:4px;background:var(--border);border-radius:2px;margin-top:4px}
+        .q-progress-fill{height:100%;border-radius:2px;background:var(--primary);transition:width .3s}
+        /* --- GUIDES HORIZONTAL SCROLL --- */
+        .guides-scroll{display:flex;gap:12px;padding:0 20px;overflow-x:auto;-webkit-overflow-scrolling:touch;
+            scroll-snap-type:x mandatory;scrollbar-width:none}
+        .guides-scroll::-webkit-scrollbar{display:none}
+        .guide-card{flex-shrink:0;width:150px;background:var(--surface);border-radius:var(--radius);
+            border:1px solid var(--border);padding:16px;text-align:center;scroll-snap-align:start;
+            text-decoration:none;color:inherit;transition:transform .1s}
+        .guide-card:active{transform:scale(.96)}
+        .guide-card .gc-icon{font-size:32px;margin-bottom:8px}
+        .guide-card .gc-title{font-size:12px;font-weight:800;line-height:1.3;margin-bottom:10px;
+            display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .guide-card .gc-btn{font-size:11px;font-weight:800;color:var(--primary);padding:6px 14px;
+            border-radius:8px;background:var(--primary-bg);display:inline-block}
+        /* --- DAILY TIP --- */
+        .daily-tip{margin:0 20px 20px;padding:16px;background:var(--surface);border-radius:var(--radius);
+            border:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
+        .dt-icon{font-size:28px;flex-shrink:0}
+        .dt-body{flex:1}
+        .dt-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--warm);margin-bottom:4px}
+        .dt-text{font-size:13px;line-height:1.6;color:var(--text)}
+        /* --- PROGRESS TAB --- */
+        .prog-section{padding:0 20px}
+        .prog-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+        .prog-stat{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+            padding:16px 10px;text-align:center}
+        .ps-num{font-size:24px;font-weight:900}
+        .ps-label{font-size:10px;font-weight:700;color:var(--text2);margin-top:2px}
+        .prog-chart{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+            padding:16px;margin-bottom:16px}
+        .pc-title{font-size:14px;font-weight:800;margin-bottom:14px}
+        .pc-bars{display:flex;align-items:flex-end;gap:8px;height:100px}
+        .pc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+        .pc-bar{width:100%;border-radius:6px 6px 0 0;background:var(--primary-bg);min-height:4px;
+            transition:height .5s cubic-bezier(.34,1.56,.64,1)}
+        .pc-bar.filled{background:var(--primary)}
+        .pc-day{font-size:10px;font-weight:700;color:var(--text2)}
+        .prog-streak{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+            padding:16px;text-align:center;margin-bottom:16px}
+        .prog-streak .ps-big{font-size:48px;font-weight:900;color:var(--primary)}
+        .prog-streak .ps-sub{font-size:14px;color:var(--text2);font-weight:700}
+        /* --- SHARE TAB --- */
+        .share-section{padding:20px}
+        .share-card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+            padding:24px;text-align:center;margin-bottom:16px}
+        .share-emoji{font-size:48px;margin-bottom:12px}
+        .share-title{font-size:18px;font-weight:900;margin-bottom:6px}
+        .share-sub{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:16px}
+        .share-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 28px;
+            border-radius:var(--radius-sm);font-size:15px;font-weight:800;border:none;cursor:pointer;
+            min-height:48px;transition:transform .1s;font-family:inherit;width:100%}
+        .share-btn:active{transform:scale(.97)}
+        .share-btn-primary{background:var(--primary);color:#fff}
+        .share-btn-green{background:var(--green);color:#fff}
+        .share-btn-pink{background:var(--pink);color:#fff}
+        .share-btn-outline{background:transparent;border:2px solid var(--border);color:var(--text)}
+        /* --- SETTINGS TAB --- */
+        .settings{padding:20px}
+        .setting-group{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);
+            overflow:hidden;margin-bottom:16px}
+        .setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;
+            border-bottom:1px solid #f5f5f5;font-size:14px;font-weight:600;min-height:48px;cursor:pointer;
+            transition:background .1s}
+        .setting-row:last-child{border:none}
+        .setting-row:active{background:var(--bg)}
+        .sr-left{display:flex;align-items:center;gap:10px}
+        .sr-icon{font-size:20px}
+        .sr-arrow{color:#ccc;font-size:16px}
+        .sr-value{font-size:13px;color:var(--text2);font-weight:700}
+        .lang-pills{display:flex;gap:8px}
+        .lang-pill{padding:8px 16px;border-radius:20px;border:2px solid var(--border);background:var(--surface);
+            font-size:13px;font-weight:700;cursor:pointer;min-height:36px;transition:all .15s}
+        .lang-pill.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+        .lang-pill:active{transform:scale(.95)}
+        .multi-lang-pills .lang-pill.active{background:var(--green);border-color:var(--green)}
+        .pro-card{background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:var(--radius);
+            padding:20px;color:#fff;text-align:center;margin-bottom:16px}
+        .pro-card h3{font-size:18px;font-weight:900;margin-bottom:6px}
+        .pro-card p{font-size:12px;opacity:.9;line-height:1.5;margin-bottom:12px}
+        .pro-features{text-align:left;margin-bottom:14px}
+        .pro-feat{font-size:12px;font-weight:700;padding:3px 0}
+        .pro-btn{background:#fff;color:var(--primary);border:none;padding:12px 24px;border-radius:var(--radius-sm);
+            font-size:14px;font-weight:800;cursor:pointer;font-family:inherit;min-height:44px}
+        .pro-btn:active{transform:scale(.97)}
+        .app-version{text-align:center;font-size:12px;color:var(--text2);padding:20px}
+        /* --- EDIT MODAL --- */
+        .modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.4);display:none;
+            align-items:flex-end;justify-content:center;animation:fadeIn .2s}
+        .modal-overlay.show{display:flex}
+        .modal{background:var(--bg);border-radius:20px 20px 0 0;width:100%;max-width:480px;
+            padding:24px 20px calc(var(--safe-bottom) + 20px);max-height:80vh;overflow-y:auto}
+        .modal h3{font-size:18px;font-weight:900;margin-bottom:16px;text-align:center}
+        .modal-close{display:block;width:100%;padding:14px;border-radius:var(--radius-sm);font-size:15px;
+            font-weight:800;border:none;cursor:pointer;margin-top:12px;font-family:inherit;
+            background:var(--primary);color:#fff;min-height:48px}
+        .modal-close:active{transform:scale(.97)}
+        /* --- TAB BAR --- */
+        .tab-bar{position:fixed;bottom:0;left:0;width:100%;background:var(--surface);
+            border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);z-index:100}
+        .tab{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 0 6px;
+            font-size:10px;font-weight:700;color:var(--text2);cursor:pointer;border:none;background:none;
+            min-height:50px;transition:color .15s;font-family:inherit;-webkit-tap-highlight-color:transparent}
+        .tab.active{color:var(--primary)}
+        .tab .tab-icon{font-size:22px;margin-bottom:2px;transition:transform .15s}
+        .tab.active .tab-icon{transform:scale(1.1)}
+        /* --- TOGGLE --- */
+        .toggle{width:48px;height:28px;border-radius:14px;background:var(--border);position:relative;
+            cursor:pointer;transition:background .2s;flex-shrink:0}
+        .toggle.on{background:var(--green)}
+        .toggle::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;
+            border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+        .toggle.on::after{transform:translateX(20px)}
     </style>
 </head>
 <body>
 
-<!-- ====== VIEW: HOME ====== -->
-<div class="view active" id="view-home">
-    <div class="header">
-        <h1>🍼 <span>BabyPath</span></h1>
-        <p>Evidence-based tools for new parents</p>
-    </div>
-
-    <div class="section-label">Interactive Tools</div>
-    <div class="tools">
-        <a class="tool" href="games/speech-buddy.html">
-            <span class="t-badge badge-free">FREE</span>
-            <div class="t-icon">🗣️</div>
-            <div class="t-name">Speech Buddy</div>
-            <div class="t-desc">Learn to talk in 3 languages</div>
-        </a>
-        <a class="tool" href="games/coloring-book.html">
-            <span class="t-badge badge-free">FREE</span>
-            <div class="t-icon">🖍️</div>
-            <div class="t-name">Coloring Book</div>
-            <div class="t-desc">15 pages, tap to color</div>
-        </a>
-        <a class="tool" href="games/kid-zone.html">
-            <span class="t-badge badge-free">FREE</span>
-            <div class="t-icon">🎨</div>
-            <div class="t-name">Kid Zone</div>
-            <div class="t-desc">Safe play mode</div>
-        </a>
-        <a class="tool" href="games/milestone-tracker.html">
-            <span class="t-badge badge-new">NEW</span>
-            <div class="t-icon">📊</div>
-            <div class="t-name">Milestones</div>
-            <div class="t-desc">Track development</div>
-        </a>
-    </div>
-
-    <div class="section-label">Printable Guides</div>
-    <div class="guides">
-        <a class="guide-item" href="guides/first-50-words.html">
-            <div class="g-icon">📋</div>
-            <div class="g-info">
-                <div class="g-name">First 50 Words Checklist</div>
-                <div class="g-desc">Trilingual word tracker with parent tips</div>
-            </div>
-            <div class="g-arrow">›</div>
-        </a>
-        <a class="guide-item" href="guides/speech-delay-guide.html">
-            <div class="g-icon">📖</div>
-            <div class="g-info">
-                <div class="g-name">Speech Delay Guide</div>
-                <div class="g-desc">10 strategies for when your child isn't talking yet</div>
-            </div>
-            <div class="g-arrow">›</div>
-        </a>
-        <a class="guide-item" href="guides/bilingual-handbook.html">
-            <div class="g-icon">🌍</div>
-            <div class="g-info">
-                <div class="g-name">Bilingual Parenting Handbook</div>
-                <div class="g-desc">100 words in EN/RU/KY + daily plan</div>
-            </div>
-            <div class="g-arrow">›</div>
-        </a>
-        <a class="guide-item" href="guides/daily-routine-cards.html">
-            <div class="g-icon">🧸</div>
-            <div class="g-info">
-                <div class="g-name">Daily Routine Cards</div>
-                <div class="g-desc">5 printable cards for meals, bath, bedtime</div>
-            </div>
-            <div class="g-arrow">›</div>
-        </a>
-    </div>
+<!-- ===== ONBOARDING ===== -->
+<div class="onboarding" id="onboarding">
+    <div class="ob-content" id="ob-content"></div>
+    <div class="ob-dots"><div class="ob-dot active"></div><div class="ob-dot"></div><div class="ob-dot"></div></div>
+    <div class="ob-actions" id="ob-actions"></div>
 </div>
 
-<!-- ====== VIEW: SETTINGS ====== -->
-<div class="view" id="view-settings">
+<!-- ===== HOME TAB ===== -->
+<div class="view" id="view-home">
     <div class="header">
-        <h1>Settings</h1>
+        <div class="header-greeting" id="home-greeting"></div>
+        <div class="header-title" id="home-title"></div>
     </div>
-    <div class="settings">
-        <div class="section-label">Language</div>
+    <div id="streak-container"></div>
+    <div id="daily-word-container"></div>
+    <div class="section-label">Quick Actions</div>
+    <div class="quick-grid" id="quick-actions"></div>
+    <div class="section-label">Guides</div>
+    <div class="guides-scroll" id="guides-scroll"></div>
+    <div class="section-label">Daily Tip</div>
+    <div id="daily-tip-container"></div>
+</div>
+
+<!-- ===== PROGRESS TAB ===== -->
+<div class="view" id="view-progress">
+    <div class="header"><div class="header-title">Your Progress</div></div>
+    <div class="section-label">Overview</div>
+    <div class="prog-section" id="progress-content"></div>
+</div>
+
+<!-- ===== SHARE TAB ===== -->
+<div class="view" id="view-share">
+    <div class="header"><div class="header-title">Share & Grow</div></div>
+    <div class="share-section" id="share-content"></div>
+</div>
+
+<!-- ===== SETTINGS TAB ===== -->
+<div class="view" id="view-settings">
+    <div class="header"><div class="header-title">Settings</div></div>
+    <div class="settings" id="settings-content"></div>
+</div>
+
+<!-- ===== EDIT PROFILE MODAL ===== -->
+<div class="modal-overlay" id="edit-modal">
+    <div class="modal" id="edit-modal-body"></div>
+</div>
+
+<!-- ===== TAB BAR ===== -->
+<div class="tab-bar" id="tab-bar">
+    <button class="tab active" data-tab="home"><div class="tab-icon">&#x1F3E0;</div>Home</button>
+    <button class="tab" data-tab="progress"><div class="tab-icon">&#x1F4C8;</div>Progress</button>
+    <button class="tab" data-tab="share"><div class="tab-icon">&#x1F517;</div>Share</button>
+    <button class="tab" data-tab="settings"><div class="tab-icon">&#x2699;&#xFE0F;</div>Settings</button>
+</div>
+
+<script>
+// ================================================================
+//  DATA
+// ================================================================
+const WORD_DB = [
+{s:1,emoji:'\u{1F50A}',en:'ba-ba',ru:'ба-ба',ky:'ба-ба',target:'/b/',tip:'Bounce a ball: "ba-ba-ba!" with each bounce. Exaggerate the /b/ sound.'},
+{s:1,emoji:'\u{1F469}',en:'ma-ma',ru:'ма-ма',ky:'ма-ма',target:'/m/',tip:'Point to mama and say "ma-ma" slowly, face to face.'},
+{s:1,emoji:'\u{1F468}',en:'da-da',ru:'да-да',ky:'да-да',target:'/d/',tip:'Point to papa: "da-da!" Tap the table rhythmically.'},
+{s:1,emoji:'\u{1F42E}',en:'moo',ru:'му',ky:'муу',target:'/m/',tip:'Show a cow picture. Say "mooooo" with a long vowel.'},
+{s:1,emoji:'\u{1F436}',en:'woof',ru:'гав',ky:'ав',target:'/w/',tip:'Point at dogs everywhere! "Woof woof!"'},
+{s:1,emoji:'\u{1F431}',en:'meow',ru:'мяу',ky:'мяу',target:'/m/',tip:'"Meow!" — exaggerate the /m/ and the vowel.'},
+{s:1,emoji:'\u{1F411}',en:'baa',ru:'бее',ky:'маа',target:'/b/',tip:'"Baaaa!" — hold the vowel long.'},
+{s:1,emoji:'\u{1F697}',en:'vroom',ru:'вжжж',ky:'вжжж',target:'/v/',tip:'Push a toy car: "Vroooom!"'},
+{s:2,emoji:'\u{1F504}',en:'More',ru:'Ещё',ky:'Дагы',target:'/m/',tip:'THE most important first word. Give a tiny portion, wait, model "more?"'},
+{s:2,emoji:'\u{270B}',en:'All done',ru:'Всё',ky:'Бүттү',target:'/d/',tip:'Wave hands at the end of every activity: "All done!"'},
+{s:2,emoji:'\u{261D}',en:'Up',ru:'Вверх',ky:'Жогору',target:'/ʌ/',tip:'When child reaches up: pause, model "Up!" with arms raised.'},
+{s:2,emoji:'\u{1F6AA}',en:'Open',ru:'Открой',ky:'Ач',target:'/p/',tip:'Use with doors, containers, books. "Open!" and wait.'},
+{s:2,emoji:'\u{1F3C3}',en:'Go',ru:'Иди',ky:'Бар',target:'/ɡ/',tip:'"Ready, set... GO!" — pause before "go" every time.'},
+{s:2,emoji:'\u{1F6D1}',en:'Stop',ru:'Стоп',ky:'Токто',target:'/t/',tip:'Play chase games: run then "STOP!" Use hand-out gesture.'},
+{s:2,emoji:'\u{1F64F}',en:'Help',ru:'Помоги',ky:'Жардам',target:'/h/',tip:'When child struggles, model "help!" and wait.'},
+{s:2,emoji:'\u{1F44B}',en:'Hi',ru:'Привет',ky:'Салам',target:'/h/',tip:'Wave and say "Hi!" to everyone — people, toys, animals.'},
+{s:3,emoji:'\u{1F469}',en:'Mama',ru:'Мама',ky:'Апа',target:'/m/',tip:'Point to mama in photos, mirror, in person.'},
+{s:3,emoji:'\u{1F468}',en:'Papa',ru:'Папа',ky:'Ата',target:'/p/',tip:'"Papa!" — practice during face-to-face play.'},
+{s:3,emoji:'\u{1F95B}',en:'Milk',ru:'Молоко',ky:'Сүт',target:'/m/',tip:'Before pouring milk, hold the cup and model "Milk!"'},
+{s:3,emoji:'\u{1F4A7}',en:'Water',ru:'Вода',ky:'Суу',target:'/w/',tip:'Model at every drink opportunity.'},
+{s:3,emoji:'\u{1F34C}',en:'Banana',ru:'Банан',ky:'Банан',target:'/b/',tip:'"Banana!" — a fun word with repeating syllables.'},
+{s:3,emoji:'\u{26BD}',en:'Ball',ru:'Мяч',ky:'Топ',target:'/b/',tip:'Roll a ball back and forth: "Ball! Roll the ball!"'},
+{s:3,emoji:'\u{1F436}',en:'Dog',ru:'Собака',ky:'Ит',target:'/d/',tip:'Point at dogs everywhere. "Dog! Woof woof!"'},
+{s:3,emoji:'\u{1F431}',en:'Cat',ru:'Кошка',ky:'Мышык',target:'/k/',tip:'"Cat! Meow!" — if they say "tat", that is perfect.'},
+{s:4,emoji:'\u{1F95B}',en:'More milk',ru:'Ещё молоко',ky:'Дагы сүт',target:'combo',tip:'At meals, model the full phrase: "More milk!"'},
+{s:4,emoji:'\u{26BD}',en:'Want ball',ru:'Хочу мяч',ky:'Топ керек',target:'combo',tip:'Hold the ball, model "Want ball?" — pause, wait.'},
+{s:4,emoji:'\u{1F469}',en:'Mama go',ru:'Мама иди',ky:'Апа бар',target:'combo',tip:'When leaving: "Mama go! Bye!"'},
+{s:4,emoji:'\u{1F436}',en:'Big dog',ru:'Большая собака',ky:'Чоң ит',target:'combo',tip:'Compare sizes! "Big dog! Little dog!"'},
+{s:4,emoji:'\u{1F634}',en:'Night night',ru:'Баю-бай',ky:'Жукта-жукта',target:'combo',tip:'Tuck in each toy: "Night night, bear!"'},
+{s:4,emoji:'\u{1F34E}',en:'Yummy apple',ru:'Вкусное яблоко',ky:'Даамдуу алма',target:'combo',tip:'During snack: "Mmm, yummy apple!"'},
+];
+
+const TIPS = ["Talk to your baby during everyday routines. Narrate diaper changes, meals, and walks.","Respond to ALL sounds your baby makes. This teaches them that communication matters.","Read to your baby every day \u2014 even 5 minutes makes a difference for language development.","Get face-to-face with your baby when speaking. They learn by watching your mouth move.","Use 'parentese' \u2014 that sing-song voice. Research shows babies learn faster from it.","Wait 5 seconds after asking a question. Give your baby time to process and respond.","Label everything! 'Look, a dog! The dog is big! Hi dog!' \u2014 repetition is key.","Follow your child's lead. Talk about what THEY are interested in.","Sing songs with hand motions. Music activates language areas in the brain.","Reduce screen time before age 2. Live interaction beats any app for language learning.","Bilingual exposure doesn't cause speech delays. It's a gift for their brain!","Point to things as you name them. Joint attention is crucial for word learning.","Use the '+1 rule': add one word to whatever your child says. 'Ball' \u2192 'Big ball!'","Give choices: 'Want milk or water?' This motivates communication.","Pretend play boosts language. Have a tea party, play doctor, cook together.","Don't correct pronunciation directly. Instead, model the correct form: 'Tat!' \u2192 'Yes, cat!'","Eye contact during communication builds social-emotional AND language skills.","Bath time is language time! Name body parts, actions, and toys.","Mealtime vocab: hot, cold, more, all done, yummy, spoon, cup. Repeat every meal.","If your child points, they're communicating! Label what they point at every time.","Pausing in familiar songs teaches anticipation. 'Twinkle twinkle little...' wait for them!","Toddlers understand 3x more words than they can say. Comprehension comes first.","Walking and talking develop together. Movement activities boost language.","Name emotions: 'You're sad. You wanted the toy.' This builds emotional vocabulary.","Animal sounds count as words! 'Moo', 'woof', 'baa' are real communication.","Turn off background TV. It reduces parent-child conversation by up to 20%.","Go outside! New environments provide new vocabulary opportunities.","Stacking blocks? 'Up! Up! Up! Fall DOWN!' \u2014 simple words in fun contexts.","Gesture + word = faster learning. Point while naming to boost understanding.","Bedtime routines teach sequence words: first, then, after, last. Predictability helps.","Play peekaboo! It teaches object permanence AND social communication.","Let your toddler 'help' with chores. Folding, stirring, pouring = vocab gold.","Worry less about the number of words. Focus on whether they COMMUNICATE (gestures count!).","Board books with flaps and textures engage multiple senses during reading.","Repetitive books (like 'Brown Bear') help children predict and fill in words."];
+
+const GUIDES = [
+    {emoji:'&#x1F4CB;',title:'First 50 Words',href:'guides/first-50-words.html'},
+    {emoji:'&#x1F4D6;',title:'Speech Delay Guide',href:'guides/speech-delay-guide.html'},
+    {emoji:'&#x1F30D;',title:'Bilingual Handbook',href:'guides/bilingual-handbook.html'},
+    {emoji:'&#x1F9F8;',title:'Daily Routine Cards',href:'guides/daily-routine-cards.html'},
+];
+
+// ================================================================
+//  STATE
+// ================================================================
+let profile = null;
+let currentTab = 'home';
+
+function getProfile() {
+    if (!profile) profile = JSON.parse(localStorage.getItem('babypath_profile') || 'null');
+    return profile;
+}
+
+function saveProfile(p) {
+    profile = p;
+    localStorage.setItem('babypath_profile', JSON.stringify(p));
+}
+
+function getBabyAgeMonths() {
+    const p = getProfile();
+    if (!p || !p.dob) return -1;
+    const dob = new Date(p.dob);
+    const now = new Date();
+    return (now.getFullYear() - dob.getFullYear()) * 12 + (now.getMonth() - dob.getMonth());
+}
+
+function getStageForAge(months) {
+    if (months < 0) return 2;
+    if (months < 12) return 1;
+    if (months < 18) return 2;
+    if (months < 24) return 3;
+    return 4;
+}
+
+function getSelectedLangs() {
+    const p = getProfile();
+    return (p && p.langs && p.langs.length) ? p.langs : ['en'];
+}
+
+function getTimeGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    return 'Good evening';
+}
+
+function getDaysSinceEpoch() {
+    return Math.floor(Date.now() / 86400000);
+}
+
+// ================================================================
+//  STREAK
+// ================================================================
+function updateStreak() {
+    const today = new Date().toDateString();
+    const last = localStorage.getItem('babypath_last_open');
+    let streak = parseInt(localStorage.getItem('babypath_streak') || '0', 10);
+
+    if (last === today) {
+        // already counted today
+    } else {
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        if (last === yesterday) {
+            streak++;
+        } else {
+            streak = 1;
+        }
+        localStorage.setItem('babypath_streak', streak);
+        localStorage.setItem('babypath_last_open', today);
+    }
+    return streak;
+}
+
+// ================================================================
+//  ONBOARDING
+// ================================================================
+let obStep = 0;
+const obData = { name: '', dob: '', langs: ['en'] };
+
+function showOnboarding() {
+    const el = document.getElementById('onboarding');
+    el.style.display = 'flex';
+    renderObStep();
+}
+
+function hideOnboarding() {
+    const el = document.getElementById('onboarding');
+    el.classList.add('hidden');
+    setTimeout(() => { el.style.display = 'none'; }, 300);
+    renderApp();
+}
+
+function renderObStep() {
+    const content = document.getElementById('ob-content');
+    const actions = document.getElementById('ob-actions');
+    const dots = document.querySelectorAll('.ob-dot');
+    dots.forEach((d, i) => { d.classList.toggle('active', i === obStep); });
+
+    if (obStep === 0) {
+        content.innerHTML = `
+            <div class="ob-emoji">&#x1F476;&#x1F31F;</div>
+            <div class="ob-title"><span>Welcome to BabyPath</span></div>
+            <div class="ob-sub">Evidence-based speech therapy tools, personalized for your baby's age and language.</div>
+            <div class="ob-features">
+                <div class="ob-feat"><div class="ob-feat-icon">&#x1F5E3;&#xFE0F;</div><div class="ob-feat-text">Speech therapy games in 3 languages</div></div>
+                <div class="ob-feat"><div class="ob-feat-icon">&#x1F4CA;</div><div class="ob-feat-text">Track milestones & progress</div></div>
+                <div class="ob-feat"><div class="ob-feat-icon">&#x1F496;</div><div class="ob-feat-text">Daily tips from speech pathologists</div></div>
+            </div>`;
+        actions.innerHTML = `
+            <button class="ob-btn ob-btn-skip" onclick="skipOnboarding()">Skip</button>
+            <button class="ob-btn ob-btn-primary" onclick="obNext()">Get Started</button>`;
+    } else if (obStep === 1) {
+        content.innerHTML = `
+            <div class="ob-emoji">&#x1F476;</div>
+            <div class="ob-title">Tell us about <span>your baby</span></div>
+            <div class="ob-sub">We'll personalize words and activities for their stage.</div>
+            <div class="ob-form">
+                <div class="ob-label">Baby's Name</div>
+                <input class="ob-input" id="ob-name" type="text" placeholder="e.g. Aisha" value="${obData.name}" autocomplete="off">
+                <div class="ob-label">Date of Birth</div>
+                <input class="ob-input" id="ob-dob" type="date" value="${obData.dob}">
+                <div class="ob-label">Languages (select all that apply)</div>
+                <div class="ob-lang-grid">
+                    <div class="ob-lang-btn${obData.langs.includes('en')?' sel':''}" data-l="en" onclick="toggleObLang(this)">&#x1F1EC;&#x1F1E7; English</div>
+                    <div class="ob-lang-btn${obData.langs.includes('ru')?' sel':''}" data-l="ru" onclick="toggleObLang(this)">&#x1F1F7;&#x1F1FA; Русский</div>
+                    <div class="ob-lang-btn${obData.langs.includes('ky')?' sel':''}" data-l="ky" onclick="toggleObLang(this)">&#x1F1F0;&#x1F1EC; Кыргызча</div>
+                </div>
+            </div>`;
+        actions.innerHTML = `
+            <button class="ob-btn ob-btn-skip" onclick="obStep=0;renderObStep()">Back</button>
+            <button class="ob-btn ob-btn-primary" onclick="obNext()">Continue</button>`;
+    } else if (obStep === 2) {
+        const name = obData.name || 'your baby';
+        const age = obData.dob ? getBabyAgeFromDob(obData.dob) : '';
+        const stage = obData.dob ? getStageForAge(getMonthsFromDob(obData.dob)) : 2;
+        const stageNames = {1:'Sounds & Babbling',2:'First Core Words',3:'First Nouns & Verbs',4:'Word Combinations'};
+        content.innerHTML = `
+            <div class="ob-emoji">&#x1F389;</div>
+            <div class="ob-title">You're <span>all set!</span></div>
+            <div class="ob-sub">Here's what we've personalized for ${name}:</div>
+            <div class="ob-features">
+                <div class="ob-feat"><div class="ob-feat-icon">&#x1F3AF;</div><div class="ob-feat-text">Stage ${stage}: ${stageNames[stage]}</div></div>
+                <div class="ob-feat"><div class="ob-feat-icon">&#x1F30D;</div><div class="ob-feat-text">${obData.langs.map(l=>({en:'English',ru:'Русский',ky:'Кыргызча'}[l])).join(', ')}</div></div>
+                <div class="ob-feat"><div class="ob-feat-icon">&#x1F4C5;</div><div class="ob-feat-text">New word every day, matched to ${name}'s age</div></div>
+            </div>`;
+        actions.innerHTML = `
+            <button class="ob-btn ob-btn-primary" style="flex:1" onclick="finishOnboarding()">Start Using BabyPath</button>`;
+    }
+}
+
+function toggleObLang(el) {
+    const l = el.dataset.l;
+    const idx = obData.langs.indexOf(l);
+    if (idx >= 0 && obData.langs.length > 1) { obData.langs.splice(idx, 1); el.classList.remove('sel'); }
+    else if (idx < 0) { obData.langs.push(l); el.classList.add('sel'); }
+}
+
+function obNext() {
+    if (obStep === 1) {
+        const nameEl = document.getElementById('ob-name');
+        const dobEl = document.getElementById('ob-dob');
+        obData.name = (nameEl.value || '').trim();
+        obData.dob = dobEl.value || '';
+    }
+    obStep++;
+    renderObStep();
+}
+
+function skipOnboarding() {
+    localStorage.setItem('babypath_onboarded', 'true');
+    hideOnboarding();
+}
+
+function finishOnboarding() {
+    saveProfile({ name: obData.name, dob: obData.dob, langs: obData.langs });
+    localStorage.setItem('babypath_onboarded', 'true');
+    if (obData.langs.length) localStorage.setItem('babypath_lang', obData.langs[0]);
+    hideOnboarding();
+}
+
+function getBabyAgeFromDob(dob) {
+    const m = getMonthsFromDob(dob);
+    if (m < 0) return '';
+    if (m < 12) return m + ' months old';
+    const y = Math.floor(m / 12);
+    const rm = m % 12;
+    return y + (y === 1 ? ' year' : ' years') + (rm ? ', ' + rm + 'mo' : '') + ' old';
+}
+
+function getMonthsFromDob(dob) {
+    const d = new Date(dob);
+    const now = new Date();
+    return (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
+}
+
+// ================================================================
+//  TAB NAVIGATION
+// ================================================================
+document.getElementById('tab-bar').addEventListener('click', function(e) {
+    const tab = e.target.closest('.tab');
+    if (!tab) return;
+    const name = tab.dataset.tab;
+    if (name === currentTab) return;
+    switchTab(name);
+});
+
+function switchTab(name) {
+    currentTab = name;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + name).classList.add('active');
+    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+    // lazy render
+    if (name === 'progress') renderProgress();
+    if (name === 'share') renderShare();
+    if (name === 'settings') renderSettings();
+}
+
+// ================================================================
+//  HOME TAB
+// ================================================================
+function renderHome() {
+    const p = getProfile();
+    const greetEl = document.getElementById('home-greeting');
+    const titleEl = document.getElementById('home-title');
+
+    if (p && p.name) {
+        greetEl.textContent = getTimeGreeting() + '!';
+        const ageStr = p.dob ? getBabyAgeFromDob(p.dob) : '';
+        titleEl.innerHTML = '<span>' + p.name + '</span>' + (ageStr ? ' is ' + ageStr : '');
+    } else {
+        greetEl.textContent = getTimeGreeting() + '!';
+        titleEl.innerHTML = 'Welcome to <span>BabyPath</span>';
+    }
+
+    renderStreak();
+    renderDailyWord();
+    renderQuickActions();
+    renderGuides();
+    renderDailyTip();
+}
+
+function renderStreak() {
+    const streak = updateStreak();
+    const c = document.getElementById('streak-container');
+    if (streak > 0) {
+        const fireSize = Math.min(28 + streak * 2, 48);
+        c.innerHTML = `<div class="streak-bar">
+            <div class="streak-fire" style="font-size:${fireSize}px">&#x1F525;</div>
+            <div class="streak-info">
+                <div class="streak-count">${streak} day streak!</div>
+                <div class="streak-sub">${streak >= 7 ? 'Incredible consistency!' : streak >= 3 ? 'Keep it going!' : 'Great start!'}</div>
+            </div></div>`;
+    } else {
+        c.innerHTML = `<div class="streak-bar" style="background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-color:#cbd5e1">
+            <div class="streak-fire" style="font-size:28px">&#x1F31F;</div>
+            <div class="streak-info">
+                <div class="streak-count" style="color:var(--text)">Start a new streak today!</div>
+                <div class="streak-sub" style="color:var(--text2)">Open the app daily to build your streak</div>
+            </div></div>`;
+    }
+}
+
+function renderDailyWord() {
+    const c = document.getElementById('daily-word-container');
+    const months = getBabyAgeMonths();
+    const stage = getStageForAge(months);
+    const stageWords = WORD_DB.filter(w => w.s === stage);
+    if (!stageWords.length) { c.innerHTML = ''; return; }
+
+    const dayIdx = getDaysSinceEpoch() % stageWords.length;
+    const word = stageWords[dayIdx];
+    const langs = getSelectedLangs();
+    const stageLabels = {1:'Stage 1 (8-14mo)',2:'Stage 2 (12-18mo)',3:'Stage 3 (16-24mo)',4:'Stage 4 (20-30mo)'};
+
+    let wordsHtml = '';
+    if (langs.includes('en')) wordsHtml += `<div class="dw-word">${word.en}</div>`;
+    if (langs.includes('ru')) wordsHtml += `<div class="${langs[0]==='ru'?'dw-word':'dw-word-alt'}">${word.ru}</div>`;
+    if (langs.includes('ky')) wordsHtml += `<div class="${langs[0]==='ky'?'dw-word':'dw-word-alt'}">${word.ky}</div>`;
+    if (!wordsHtml) wordsHtml = `<div class="dw-word">${word.en}</div>`;
+
+    c.innerHTML = `<div class="daily-word">
+        <div class="dw-header">
+            <div class="dw-badge">&#x2B50; Word of the Day</div>
+            <div class="dw-stage">${stageLabels[stage]}</div>
+        </div>
+        <div class="dw-body">
+            <div class="dw-emoji">${word.emoji}</div>
+            <div class="dw-words">${wordsHtml}</div>
+            <div class="dw-target">Target sound: ${word.target}</div>
+            <div class="dw-tip">&#x1F4A1; ${word.tip}</div>
+        </div>
+        <div class="dw-actions">
+            <button class="dw-btn dw-btn-hear" onclick="hearWord()">&#x1F50A; Hear it</button>
+            <a class="dw-btn dw-btn-practice" href="games/speech-buddy.html" style="text-decoration:none;text-align:center">Practice &#x2192;</a>
+        </div>
+    </div>`;
+}
+
+function hearWord() {
+    const months = getBabyAgeMonths();
+    const stage = getStageForAge(months);
+    const stageWords = WORD_DB.filter(w => w.s === stage);
+    if (!stageWords.length) return;
+    const dayIdx = getDaysSinceEpoch() % stageWords.length;
+    const word = stageWords[dayIdx];
+    const langs = getSelectedLangs();
+    const lang = langs[0] || 'en';
+    const text = word[lang] || word.en;
+    try {
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.rate = 0.8;
+        utter.pitch = 1.1;
+        if (lang === 'ru') utter.lang = 'ru-RU';
+        else if (lang === 'ky') utter.lang = 'ky-KG';
+        else utter.lang = 'en-US';
+        speechSynthesis.cancel();
+        speechSynthesis.speak(utter);
+    } catch (e) { /* SpeechSynthesis not supported */ }
+}
+
+function renderQuickActions() {
+    const c = document.getElementById('quick-actions');
+    const progress = JSON.parse(localStorage.getItem('sb_progress') || '{}');
+    const wordsLearned = Object.keys(progress).length;
+    const totalWords = WORD_DB.length;
+    const sbPct = totalWords ? Math.round((wordsLearned / totalWords) * 100) : 0;
+
+    // Count coloring pages completed
+    let cbCount = 0;
+    for (let i = 0; i < 15; i++) {
+        if (localStorage.getItem('cb_page_' + i)) cbCount++;
+    }
+
+    const milestones = JSON.parse(localStorage.getItem('bp_milestones') || '{}');
+    const msCount = Object.keys(milestones).length;
+
+    c.innerHTML = `
+        <a class="q-card" href="games/speech-buddy.html">
+            <span class="q-badge q-badge-free">FREE</span>
+            <div class="q-icon">&#x1F5E3;&#xFE0F;</div>
+            <div class="q-name">Speech Buddy</div>
+            <div class="q-sub">${wordsLearned} words practiced</div>
+            <div class="q-progress"><div class="q-progress-fill" style="width:${sbPct}%"></div></div>
+        </a>
+        <a class="q-card" href="games/coloring-book.html">
+            <span class="q-badge q-badge-free">FREE</span>
+            <div class="q-icon">&#x1F58D;&#xFE0F;</div>
+            <div class="q-name">Coloring Book</div>
+            <div class="q-sub">${cbCount}/15 pages colored</div>
+            <div class="q-progress"><div class="q-progress-fill" style="width:${Math.round(cbCount/15*100)}%"></div></div>
+        </a>
+        <a class="q-card" href="games/milestone-tracker.html">
+            <div class="q-icon">&#x1F4CA;</div>
+            <div class="q-name">Milestones</div>
+            <div class="q-sub">${msCount} tracked</div>
+        </a>
+        <a class="q-card" href="games/kid-zone.html">
+            <span class="q-badge q-badge-new">NEW</span>
+            <div class="q-icon">&#x1F3A8;</div>
+            <div class="q-name">Kid Zone</div>
+            <div class="q-sub">Safe play mode</div>
+        </a>`;
+}
+
+function renderGuides() {
+    const c = document.getElementById('guides-scroll');
+    c.innerHTML = GUIDES.map(g => `
+        <a class="guide-card" href="${g.href}">
+            <div class="gc-icon">${g.emoji}</div>
+            <div class="gc-title">${g.title}</div>
+            <div class="gc-btn">Read</div>
+        </a>`).join('');
+}
+
+function renderDailyTip() {
+    const c = document.getElementById('daily-tip-container');
+    const tipIdx = getDaysSinceEpoch() % TIPS.length;
+    c.innerHTML = `<div class="daily-tip">
+        <div class="dt-icon">&#x1F4A1;</div>
+        <div class="dt-body">
+            <div class="dt-label">Daily Tip</div>
+            <div class="dt-text">${TIPS[tipIdx]}</div>
+        </div>
+    </div>`;
+}
+
+// ================================================================
+//  PROGRESS TAB
+// ================================================================
+function renderProgress() {
+    const c = document.getElementById('progress-content');
+    const progress = JSON.parse(localStorage.getItem('sb_progress') || '{}');
+    const wordsLearned = Object.keys(progress).length;
+
+    const milestones = JSON.parse(localStorage.getItem('bp_milestones') || '{}');
+    const msCount = Object.keys(milestones).length;
+
+    let cbCount = 0;
+    for (let i = 0; i < 15; i++) {
+        if (localStorage.getItem('cb_page_' + i)) cbCount++;
+    }
+
+    const streak = parseInt(localStorage.getItem('babypath_streak') || '0', 10);
+
+    // Sessions this week
+    const sessions = JSON.parse(localStorage.getItem('sb_sessions') || '[]');
+    const now = new Date();
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const weekData = [];
+    for (let i = 6; i >= 0; i--) {
+        const d = new Date(now.getTime() - i * 86400000);
+        const ds = d.toDateString();
+        const count = sessions.filter(s => new Date(s.date || s.d || 0).toDateString() === ds).length;
+        weekData.push({ day: dayNames[d.getDay()], count, isToday: i === 0 });
+    }
+    const maxSessions = Math.max(...weekData.map(d => d.count), 1);
+
+    c.innerHTML = `
+        <div class="prog-stats">
+            <div class="prog-stat"><div class="ps-num" style="color:var(--primary)">${wordsLearned}</div><div class="ps-label">Words Practiced</div></div>
+            <div class="prog-stat"><div class="ps-num" style="color:var(--green)">${msCount}</div><div class="ps-label">Milestones</div></div>
+            <div class="prog-stat"><div class="ps-num" style="color:var(--pink)">${cbCount}</div><div class="ps-label">Pages Colored</div></div>
+        </div>
+        <div class="prog-chart">
+            <div class="pc-title">Sessions This Week</div>
+            <div class="pc-bars">
+                ${weekData.map(d => `<div class="pc-bar-wrap">
+                    <div class="pc-bar${d.count ? ' filled' : ''}" style="height:${d.count ? Math.max((d.count / maxSessions) * 100, 10) : 4}%"></div>
+                    <div class="pc-day" style="${d.isToday ? 'color:var(--primary);font-weight:900' : ''}">${d.day}</div>
+                </div>`).join('')}
+            </div>
+        </div>
+        <div class="prog-streak">
+            <div style="font-size:40px;margin-bottom:4px">&#x1F525;</div>
+            <div class="ps-big">${streak}</div>
+            <div class="ps-sub">Day Streak</div>
+        </div>`;
+}
+
+// ================================================================
+//  SHARE TAB
+// ================================================================
+function renderShare() {
+    const c = document.getElementById('share-content');
+    const p = getProfile();
+    const name = (p && p.name) || 'my baby';
+
+    c.innerHTML = `
+        <div class="share-card">
+            <div class="share-emoji">&#x1F49C;</div>
+            <div class="share-title">Share BabyPath</div>
+            <div class="share-sub">Know a parent who'd love free speech therapy tools? Share BabyPath with them!</div>
+            <button class="share-btn share-btn-primary" onclick="shareApp()">&#x1F4E4; Share with a Friend</button>
+        </div>
+        <div class="share-card">
+            <div class="share-emoji">&#x2B50;</div>
+            <div class="share-title">Rate Us</div>
+            <div class="share-sub">Your review helps other parents find BabyPath!</div>
+            <button class="share-btn share-btn-green" onclick="rateApp()">Rate on App Store</button>
+        </div>
+        <div class="share-card">
+            <div class="share-emoji">&#x1F465;</div>
+            <div class="share-title">Join Our Community</div>
+            <div class="share-sub">Connect with other parents on the same journey.</div>
+            <button class="share-btn share-btn-outline" onclick="alert('Community feature coming soon!')">Coming Soon</button>
+        </div>`;
+}
+
+function shareApp() {
+    const p = getProfile();
+    const name = (p && p.name) || 'my baby';
+    const text = `I'm using BabyPath to help ${name} learn to talk! Free speech therapy app with 3 languages (English, Russian, Kyrgyz). Try it: https://babypath.app`;
+    try {
+        if (navigator.share) {
+            navigator.share({ title: 'BabyPath', text: text, url: 'https://babypath.app' }).catch(() => {});
+        } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(text).then(() => alert('Copied to clipboard!')).catch(() => alert(text));
+        }
+    } catch (e) {
+        alert(text);
+    }
+}
+
+function rateApp() {
+    // Placeholder — replace with actual App Store link
+    alert('App Store rating link will be configured after launch.');
+}
+
+// ================================================================
+//  SETTINGS TAB
+// ================================================================
+function renderSettings() {
+    const c = document.getElementById('settings-content');
+    const p = getProfile();
+    const currentLang = localStorage.getItem('babypath_lang') || 'en';
+    const langs = getSelectedLangs();
+    const notificationsOn = localStorage.getItem('babypath_notif') === 'true';
+
+    c.innerHTML = `
+        ${p && p.name ? `
+        <div class="section-label" style="padding-left:0">Baby Profile</div>
+        <div class="setting-group">
+            <div class="setting-row" onclick="editProfile()">
+                <div class="sr-left"><span class="sr-icon">&#x1F476;</span> ${p.name}${p.dob ? ' — ' + getBabyAgeFromDob(p.dob) : ''}</div>
+                <div class="sr-arrow">&#x203A;</div>
+            </div>
+        </div>` : `
+        <div class="section-label" style="padding-left:0">Profile</div>
+        <div class="setting-group">
+            <div class="setting-row" onclick="editProfile()">
+                <div class="sr-left"><span class="sr-icon">&#x1F476;</span> Set up baby profile</div>
+                <div class="sr-arrow">&#x203A;</div>
+            </div>
+        </div>`}
+
+        <div class="section-label" style="padding-left:0">Learning Languages</div>
         <div class="setting-group">
             <div class="setting-row">
-                <div class="sr-left"><span class="sr-icon">🌍</span> App Language</div>
-                <div class="lang-pills">
-                    <div class="lang-pill active" onclick="setLang('en')">EN</div>
-                    <div class="lang-pill" onclick="setLang('ru')">РУ</div>
-                    <div class="lang-pill" onclick="setLang('ky')">КЫР</div>
+                <div class="sr-left"><span class="sr-icon">&#x1F30D;</span> Languages</div>
+                <div class="lang-pills multi-lang-pills">
+                    <div class="lang-pill${langs.includes('en')?' active':''}" onclick="toggleLang('en',this)">EN</div>
+                    <div class="lang-pill${langs.includes('ru')?' active':''}" onclick="toggleLang('ru',this)">РУ</div>
+                    <div class="lang-pill${langs.includes('ky')?' active':''}" onclick="toggleLang('ky',this)">КЫР</div>
                 </div>
             </div>
         </div>
 
-        <div class="section-label">Account</div>
+        <div class="section-label" style="padding-left:0">App Language</div>
         <div class="setting-group">
-            <div class="setting-row" onclick="alert('Coming soon — RevenueCat integration')">
-                <div class="sr-left"><span class="sr-icon">⭐</span> Upgrade to Pro</div>
-                <div class="sr-arrow">›</div>
-            </div>
-            <div class="setting-row" onclick="alert('Coming soon')">
-                <div class="sr-left"><span class="sr-icon">👶</span> Child Profile</div>
-                <div class="sr-arrow">›</div>
-            </div>
-            <div class="setting-row" onclick="alert('Coming soon')">
-                <div class="sr-left"><span class="sr-icon">🔔</span> Reminders</div>
-                <div class="sr-arrow">›</div>
+            <div class="setting-row">
+                <div class="sr-left"><span class="sr-icon">&#x1F4AC;</span> Interface</div>
+                <div class="lang-pills">
+                    <div class="lang-pill${currentLang==='en'?' active':''}" onclick="setAppLang('en')">EN</div>
+                    <div class="lang-pill${currentLang==='ru'?' active':''}" onclick="setAppLang('ru')">РУ</div>
+                    <div class="lang-pill${currentLang==='ky'?' active':''}" onclick="setAppLang('ky')">КЫР</div>
+                </div>
             </div>
         </div>
 
-        <div class="section-label">About</div>
+        <div class="section-label" style="padding-left:0">Preferences</div>
         <div class="setting-group">
-            <div class="setting-row">
-                <div class="sr-left"><span class="sr-icon">📚</span> Our Methodology</div>
-                <div class="sr-arrow">›</div>
-            </div>
-            <div class="setting-row">
-                <div class="sr-left"><span class="sr-icon">🔒</span> Privacy Policy</div>
-                <div class="sr-arrow">›</div>
-            </div>
-            <div class="setting-row">
-                <div class="sr-left"><span class="sr-icon">📧</span> Contact Us</div>
-                <div class="sr-arrow">›</div>
+            <div class="setting-row" onclick="toggleNotif(this)">
+                <div class="sr-left"><span class="sr-icon">&#x1F514;</span> Daily Reminders</div>
+                <div class="toggle${notificationsOn?' on':''}"></div>
             </div>
         </div>
 
-        <div class="app-version">BabyPath v1.0.0 — Built with ❤️ by parents</div>
-    </div>
-</div>
+        <div class="pro-card">
+            <h3>&#x2B50; Upgrade to Pro</h3>
+            <p>Unlock the full BabyPath experience</p>
+            <div class="pro-features">
+                <div class="pro-feat">&#x2705; Unlimited speech therapy sessions</div>
+                <div class="pro-feat">&#x2705; Detailed progress reports</div>
+                <div class="pro-feat">&#x2705; Offline mode</div>
+                <div class="pro-feat">&#x2705; Priority support</div>
+            </div>
+            <button class="pro-btn" onclick="alert('Coming soon — RevenueCat integration')">Upgrade Now</button>
+        </div>
 
-<!-- ====== TAB BAR ====== -->
-<div class="tab-bar">
-    <button class="tab active" onclick="showTab('home')">
-        <div class="tab-icon">🏠</div>
-        Home
-    </button>
-    <button class="tab" onclick="window.location.href='games/speech-buddy.html'">
-        <div class="tab-icon">🗣️</div>
-        Speech
-    </button>
-    <button class="tab" onclick="window.location.href='games/milestone-tracker.html'">
-        <div class="tab-icon">📊</div>
-        Milestones
-    </button>
-    <button class="tab" onclick="showTab('settings')">
-        <div class="tab-icon">⚙️</div>
-        Settings
-    </button>
-</div>
+        <div class="section-label" style="padding-left:0">About</div>
+        <div class="setting-group">
+            <div class="setting-row"><div class="sr-left"><span class="sr-icon">&#x1F4DA;</span> Our Methodology</div><div class="sr-arrow">&#x203A;</div></div>
+            <div class="setting-row"><div class="sr-left"><span class="sr-icon">&#x1F512;</span> Privacy Policy</div><div class="sr-arrow">&#x203A;</div></div>
+            <div class="setting-row"><div class="sr-left"><span class="sr-icon">&#x1F4C4;</span> Terms of Service</div><div class="sr-arrow">&#x203A;</div></div>
+            <div class="setting-row"><div class="sr-left"><span class="sr-icon">&#x1F4E7;</span> Contact Us</div><div class="sr-arrow">&#x203A;</div></div>
+        </div>
 
-<script>
-function showTab(name) {
-    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-    document.getElementById('view-' + name).classList.add('active');
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+        <div class="app-version">BabyPath v1.2.0</div>`;
 }
 
-function setLang(l) {
+function toggleLang(l, el) {
+    const p = getProfile() || { name: '', dob: '', langs: ['en'] };
+    const idx = p.langs.indexOf(l);
+    if (idx >= 0 && p.langs.length > 1) {
+        p.langs.splice(idx, 1);
+        el.classList.remove('active');
+    } else if (idx < 0) {
+        p.langs.push(l);
+        el.classList.add('active');
+    }
+    saveProfile(p);
+}
+
+function setAppLang(l) {
     localStorage.setItem('babypath_lang', l);
-    document.querySelectorAll('.lang-pill').forEach(p => p.classList.remove('active'));
-    event.currentTarget.classList.add('active');
+    renderSettings();
 }
+
+function toggleNotif(row) {
+    const tog = row.querySelector('.toggle');
+    const isOn = tog.classList.toggle('on');
+    localStorage.setItem('babypath_notif', isOn ? 'true' : 'false');
+}
+
+// ================================================================
+//  EDIT PROFILE MODAL
+// ================================================================
+function editProfile() {
+    const modal = document.getElementById('edit-modal');
+    const body = document.getElementById('edit-modal-body');
+    const p = getProfile() || { name: '', dob: '', langs: ['en'] };
+
+    body.innerHTML = `
+        <h3>Edit Baby Profile</h3>
+        <div class="ob-label">Baby's Name</div>
+        <input class="ob-input" id="edit-name" type="text" value="${p.name || ''}" autocomplete="off">
+        <div class="ob-label">Date of Birth</div>
+        <input class="ob-input" id="edit-dob" type="date" value="${p.dob || ''}">
+        <button class="modal-close" onclick="saveEditProfile()">Save</button>
+        <button class="modal-close" style="background:transparent;color:var(--text2);margin-top:8px" onclick="closeModal()">Cancel</button>`;
+    modal.classList.add('show');
+}
+
+function saveEditProfile() {
+    const p = getProfile() || { name: '', dob: '', langs: ['en'] };
+    p.name = (document.getElementById('edit-name').value || '').trim();
+    p.dob = document.getElementById('edit-dob').value || '';
+    saveProfile(p);
+    closeModal();
+    renderSettings();
+    renderHome();
+}
+
+function closeModal() {
+    document.getElementById('edit-modal').classList.remove('show');
+}
+
+document.getElementById('edit-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+});
+
+// ================================================================
+//  INIT
+// ================================================================
+function renderApp() {
+    document.getElementById('view-home').classList.add('active');
+    renderHome();
+}
+
+(function init() {
+    const onboarded = localStorage.getItem('babypath_onboarded');
+    if (!onboarded) {
+        document.getElementById('onboarding').style.display = 'flex';
+        renderObStep();
+    } else {
+        document.getElementById('onboarding').style.display = 'none';
+        renderApp();
+    }
+})();
 </script>
 </body>
 </html>
