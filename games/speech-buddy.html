@@ -78,14 +78,15 @@
         .nav-right { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 
         .lang-btn {
-            padding: 5px 12px;
+            padding: 10px 16px;
             border-radius: 20px;
             border: 2px solid #eee;
             background: white;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 44px;
         }
 
         .lang-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
@@ -196,8 +197,8 @@
             background: white;
             border: 2px solid #eee;
             border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 12px 20px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
@@ -205,6 +206,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            min-height: 48px;
         }
 
         @media (hover: hover) { .routine-chip:hover { border-color: var(--primary); } }
@@ -220,15 +222,16 @@
         }
 
         .sub-btn {
-            padding: 7px 16px;
+            padding: 14px 20px;
             border-radius: 20px;
             border: 2px solid #eee;
             background: white;
-            font-size: 12px;
+            font-size: 16px;
             font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s;
+            min-height: 52px;
         }
 
         .sub-btn.active { background: var(--secondary); color: white; border-color: var(--secondary); }
@@ -254,22 +257,22 @@
         /* ─── WORD CARDS ─── */
         .word-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 14px;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
             padding: 8px 0 20px;
         }
 
         .word-card {
             background: white;
             border-radius: var(--radius);
-            padding: 18px 10px;
+            padding: 22px 14px;
             text-align: center;
             cursor: pointer;
             transition: transform 0.15s, box-shadow 0.15s;
             box-shadow: 0 3px 12px rgba(0,0,0,0.05);
             border: 3px solid transparent;
             position: relative;
-            min-height: 130px;
+            min-height: 160px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -282,9 +285,9 @@
 
         @keyframes pop { 0%{transform:scale(0.95)} 50%{transform:scale(1.12)} 100%{transform:scale(1)} }
 
-        .word-emoji { font-size: 48px; margin-bottom: 6px; }
-        .word-label { font-size: 15px; font-weight: 800; }
-        .word-sublabel { font-size: 11px; color: var(--text2); margin-top: 1px; }
+        .word-emoji { font-size: 76px; margin-bottom: 8px; }
+        .word-label { font-size: 22px; font-weight: 800; }
+        .word-sublabel { font-size: 14px; color: var(--text2); margin-top: 1px; }
 
         .word-card .sound-tag {
             position: absolute;
@@ -298,10 +301,10 @@
             border-radius: 6px;
         }
 
-        .word-card .speaker { position: absolute; top: 6px; right: 8px; font-size: 14px; opacity: 0.3; }
+        .word-card .speaker { position: absolute; top: 6px; right: 8px; font-size: 18px; opacity: 0.5; }
 
         .mastery-dots { display: flex; gap: 3px; margin-top: 6px; }
-        .mastery-dot { width: 6px; height: 6px; border-radius: 50%; background: #e0e0e0; }
+        .mastery-dot { width: 10px; height: 10px; border-radius: 50%; background: #e0e0e0; }
         .mastery-dot.filled { background: var(--green); }
 
         /* ─── INLINE COACHING TIP (shown on tap) ─── */
@@ -342,15 +345,16 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 28px;
+            padding: 16px 36px;
             border-radius: 30px;
-            font-size: 15px;
+            font-size: 18px;
             font-weight: 800;
             cursor: pointer;
             margin-top: 12px;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            min-height: 56px;
         }
 
         /* ─── SOUND PRACTICE ─── */
@@ -412,8 +416,8 @@
 
         @keyframes mic-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(245,130,174,0.4)} 50%{box-shadow:0 0 0 15px rgba(245,130,174,0)} }
 
-        .vol-bar { width: 180px; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin: 12px auto; }
-        .vol-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--primary)); border-radius: 4px; width: 0%; transition: width 0.1s; }
+        .vol-bar { width: 180px; height: 20px; background: #eee; border-radius: 10px; overflow: hidden; margin: 12px auto; }
+        .vol-fill { height: 100%; background: linear-gradient(90deg, var(--green), var(--primary)); border-radius: 10px; width: 0%; transition: width 0.1s; }
 
         .mic-label { font-size: 13px; color: var(--text2); font-weight: 600; }
 
@@ -425,13 +429,14 @@
             background: var(--primary);
             color: white;
             border: none;
-            padding: 10px 28px;
+            padding: 16px 36px;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 800;
             cursor: pointer;
             margin-top: 10px;
             animation: gentle-pulse 2s ease-in-out infinite;
+            min-height: 56px;
         }
 
         @keyframes gentle-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
@@ -444,7 +449,7 @@
             top: 35%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0);
-            font-size: 36px;
+            font-size: 48px;
             font-weight: 900;
             color: var(--primary);
             text-shadow: 2px 2px 0 rgba(0,0,0,0.05);
@@ -572,7 +577,7 @@
 
         .progress-row:last-child { border: none; }
         .progress-row .pr-name { flex: 1; font-weight: 600; }
-        .pr-bar-bg { width: 80px; height: 7px; background: #eee; border-radius: 4px; overflow: hidden; }
+        .pr-bar-bg { width: 80px; height: 20px; background: #eee; border-radius: 10px; overflow: hidden; }
         .pr-bar { height: 100%; border-radius: 4px; }
         .pr-pct { font-size: 12px; font-weight: 700; color: var(--text2); width: 32px; text-align: right; }
 
@@ -628,10 +633,56 @@
         .red-flag h4 { font-size: 14px; font-weight: 800; color: #e65100; margin-bottom: 6px; }
         .red-flag ul { padding-left: 18px; font-size: 13px; color: var(--text); line-height: 1.8; }
 
+        /* ─── TODDLER MODE ─── */
+        body.toddler-mode .nav-badge,
+        body.toddler-mode .evidence-ribbon,
+        body.toddler-mode .parent-tip,
+        body.toddler-mode .session-timer,
+        body.toddler-mode .premium-cta,
+        body.toddler-mode #view-method,
+        body.toddler-mode #view-milestones,
+        body.toddler-mode #view-dashboard,
+        body.toddler-mode .icon-btn[title="Milestones"],
+        body.toddler-mode .icon-btn[title="Our Method"],
+        body.toddler-mode .icon-btn[title="Dashboard"],
+        body.toddler-mode .icon-btn[title="Voice Settings"],
+        body.toddler-mode #words-tip-banner,
+        body.toddler-mode .coaching-popup .cp-tip-label,
+        body.toddler-mode .coaching-popup .cp-tip-text,
+        body.toddler-mode .sound-card-big .sc-tip { display: none !important; }
+
+        body.toddler-mode .word-emoji { font-size: 96px; }
+        body.toddler-mode .word-label { font-size: 28px; }
+        body.toddler-mode .word-card { min-height: 190px; padding: 28px 16px; }
+        body.toddler-mode .word-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+        body.toddler-mode .sub-btn { padding: 16px 24px; font-size: 18px; min-height: 56px; }
+        body.toddler-mode .lang-btn { padding: 12px 18px; font-size: 16px; min-height: 48px; }
+        body.toddler-mode .coaching-popup .cp-emoji { font-size: 80px; }
+        body.toddler-mode .coaching-popup .cp-word { font-size: 36px; }
+        body.toddler-mode .coaching-popup .cp-play-btn { padding: 18px 40px; font-size: 20px; min-height: 60px; }
+        body.toddler-mode .find-prompt .fp-q { font-size: 28px; }
+        body.toddler-mode .find-prompt .fp-listen { padding: 18px 40px; font-size: 20px; min-height: 60px; }
+        body.toddler-mode .sound-card-big .sc-emoji { font-size: 96px; }
+        body.toddler-mode .sound-card-big .sc-sound { font-size: 52px; }
+        body.toddler-mode .mic-btn { width: 90px; height: 90px; font-size: 36px; }
+        body.toddler-mode .vol-bar { width: 260px; height: 24px; }
+        body.toddler-mode .snd-btn { width: 60px; height: 60px; font-size: 24px; }
+        body.toddler-mode .snd-btn.primary { width: 76px; height: 76px; font-size: 30px; }
+        body.toddler-mode .celeb-text { font-size: 64px; }
+        body.toddler-mode .stage-card .st-emoji { font-size: 52px; }
+        body.toddler-mode .stage-card .st-name { font-size: 20px; }
+        body.toddler-mode .stage-card { padding: 22px; }
+        body.toddler-mode .routine-chip { padding: 14px 24px; font-size: 18px; min-height: 52px; }
+
+        .voice-label-btn { padding: 10px 18px; border-radius: 20px; border: 2px solid #eee; background: white; font-size: 14px; font-weight: 700; cursor: pointer; transition: all 0.2s; }
+        .voice-label-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        #voice-settings-panel { max-height: 80vh; }
+        #recording-studio { max-height: 90vh; }
+
         @media (max-width: 500px) {
             .word-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .nav-right { gap: 4px; }
-            .lang-btn { padding: 4px 8px; font-size: 11px; }
+            .lang-btn { padding: 8px 12px; font-size: 13px; min-height: 40px; }
         }
     </style>
 </head>
@@ -656,6 +707,40 @@
     <div class="cp-tip-text" id="cp-accept"></div>
 </div>
 
+<!-- VOICE SETTINGS -->
+<div class="coaching-popup" id="voice-settings-panel">
+    <button class="cp-close" onclick="closeVoiceSettings()">✕</button>
+    <div style="text-align:center;padding-bottom:12px;">
+        <h3 style="font-size:20px;font-weight:900;">🔊 Voice Settings</h3>
+        <p style="font-size:13px;color:var(--text2);">Choose how words are spoken.</p>
+    </div>
+    <div id="voice-priority-info" style="background:var(--secondary);color:white;padding:10px 16px;border-radius:12px;font-size:13px;font-weight:700;margin-bottom:16px;text-align:center;"></div>
+    <div style="margin-bottom:20px;">
+        <div style="font-size:12px;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Choose Voice</div>
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+            <button class="voice-label-btn" data-vl="female" onclick="setVoiceGender('female')">👩 Mommy Voice</button>
+            <button class="voice-label-btn" data-vl="male" onclick="setVoiceGender('male')">👨 Daddy Voice</button>
+        </div>
+        <button class="cp-play-btn" onclick="testVoice()" style="font-size:14px;padding:12px 24px;background:var(--secondary);">▶ Test Voice</button>
+    </div>
+    <div style="margin-bottom:20px;">
+        <div style="font-size:12px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">❤️ Record Your Own Voice</div>
+        <p style="font-size:12px;color:var(--text2);margin-bottom:8px;">Your child learns best from YOUR voice!</p>
+        <div id="rec-stats" style="font-size:13px;font-weight:700;margin-bottom:10px;"></div>
+        <button class="cp-play-btn" onclick="openRecordingStudio()" style="font-size:14px;padding:12px 24px;">🎙️ Open Recording Studio</button>
+    </div>
+</div>
+
+<!-- RECORDING STUDIO -->
+<div class="coaching-popup" id="recording-studio">
+    <button class="cp-close" onclick="closeRecordingStudio()">✕</button>
+    <div style="text-align:center;padding-bottom:12px;">
+        <h3 style="font-size:20px;font-weight:900;">🎙️ Recording Studio</h3>
+        <p style="font-size:13px;color:var(--text2);">Tap 🎤 to record yourself saying each word. 3 seconds per word.</p>
+    </div>
+    <div id="rec-word-list" style="max-height:60vh;overflow-y:auto;-webkit-overflow-scrolling:touch;"></div>
+</div>
+
 <!-- NAV -->
 <nav class="nav">
     <div class="nav-left">
@@ -667,6 +752,8 @@
         <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">РУ</button>
         <button class="lang-btn" data-lang="ky" onclick="setLang('ky')">КЫР</button>
+        <button class="icon-btn" id="voice-settings-btn" onclick="openVoiceSettings()" title="Voice Settings">🔊</button>
+        <button class="icon-btn" id="toddler-toggle" onclick="toggleToddlerMode()" title="Toddler Mode">👶</button>
         <button class="icon-btn" onclick="showView('milestones')" title="Milestones">📋</button>
         <button class="icon-btn" onclick="showView('method')" title="Our Method">🔬</button>
         <button class="icon-btn" onclick="showView('dashboard')" title="Dashboard">📊</button>
@@ -1034,6 +1121,10 @@ let micActive = false;
 // Sound Practice state
 let soundIdx = 0;
 
+// Voice settings
+let voiceGender = localStorage.getItem('sb_voice_gender') || 'female';
+let toddlerMode = localStorage.getItem('sb_toddler_mode') === 'true';
+
 // Session tracking
 let sessionStart = Date.now();
 let sessionWords = {};
@@ -1070,14 +1161,35 @@ function saveSessions() {
 window.addEventListener('beforeunload', saveSessions);
 
 // ============================================================
-//  SPEECH SYNTHESIS
+//  SPEECH SYNTHESIS (Tiered: Parent Recording → Edge TTS → Browser TTS)
 // ============================================================
-function speak(text, lc) {
+async function speak(text, lc) {
+    // Tier 1: Parent recording from IndexedDB
+    const recorded = await getRecordedAudio(lc, text.toLowerCase().trim());
+    if (recorded) {
+        const url = URL.createObjectURL(recorded);
+        const a = new Audio(url);
+        a.onended = () => URL.revokeObjectURL(url);
+        a.play().catch(() => speakEdgeTTS(text, lc));
+        return;
+    }
+    // Tier 2: Pre-generated Edge TTS MP3
+    speakEdgeTTS(text, lc);
+}
+
+function speakEdgeTTS(text, lc) {
+    const safe = text.toLowerCase().trim().replace(/ /g, '_').replace(/-/g, '_');
+    const filename = `${lc}_${voiceGender}_${safe}.mp3`;
+    const audio = new Audio(`../assets/audio/${filename}`);
+    audio.onerror = () => speakFallbackTTS(text, lc); // Tier 3 fallback
+    audio.play().catch(() => speakFallbackTTS(text, lc));
+}
+
+function speakFallbackTTS(text, lc) {
     if (!window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.rate = 0.75;
-    u.pitch = 1.1;
+    u.rate = 0.6; u.pitch = 1.1;
     const map = { en:'en-US', ru:'ru-RU', ky:'ky' };
     u.lang = map[lc] || 'en-US';
     const voices = window.speechSynthesis.getVoices();
@@ -1086,8 +1198,6 @@ function speak(text, lc) {
     if (v) u.voice = v;
     window.speechSynthesis.speak(u);
 }
-window.speechSynthesis?.getVoices();
-window.speechSynthesis?.addEventListener('voiceschanged', ()=>{});
 
 // ============================================================
 //  AUDIO
@@ -1107,18 +1217,21 @@ function playWrong(){playTone(200,0.15,'triangle');}
 function celebrate(text) {
     const el = document.getElementById('celeb-text');
     el.textContent = text || CELEBRATIONS[lang][Math.floor(Math.random()*CELEBRATIONS[lang].length)];
-    el.classList.remove('show');
-    void el.offsetWidth;
-    el.classList.add('show');
-    setTimeout(()=>el.classList.remove('show'), 1200);
+    el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+    setTimeout(()=>el.classList.remove('show'), 2200);
     const c = document.getElementById('celebration');
-    for(let i=0;i<10;i++){
+    const count = toddlerMode ? 25 : 15;
+    const emojis = ['⭐','🌟','✨','💫','❤️','🎉','🥳','🎈','🎊','🦄','🌈'];
+    for(let i=0;i<count;i++){
         const s=document.createElement('div');s.className='star-particle';
-        s.textContent=['⭐','🌟','✨','💫','❤️','🎉'][Math.floor(Math.random()*6)];
-        s.style.left=(15+Math.random()*70)+'%';s.style.top=(20+Math.random()*30)+'%';
-        s.style.fontSize=(18+Math.random()*18)+'px';c.appendChild(s);
-        s.animate([{transform:'scale(0) rotate(0)',opacity:1},{transform:`scale(1) translateY(${-40-Math.random()*80}px) rotate(${Math.random()*360}deg)`,opacity:0}],{duration:700+Math.random()*400,easing:'ease-out'}).onfinish=()=>s.remove();
+        s.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+        s.style.left=(10+Math.random()*80)+'%';s.style.top=(15+Math.random()*40)+'%';
+        s.style.fontSize=(24+Math.random()*32)+'px';c.appendChild(s);
+        s.animate([{transform:'scale(0) rotate(0)',opacity:1},{transform:`scale(1.3) translateY(${-60-Math.random()*120}px) rotate(${Math.random()*720}deg)`,opacity:0}],{duration:1000+Math.random()*600,easing:'ease-out'}).onfinish=()=>s.remove();
     }
+    // Enhanced sound
+    ensureAudio();const ac=audioCtx,n=ac.currentTime;
+    [523,659,784,1047].forEach((f,i)=>{const o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(0.12,n+i*0.1);g.gain.exponentialRampToValueAtTime(0.001,n+i*0.1+0.3);o.connect(g).connect(ac.destination);o.start(n+i*0.1);o.stop(n+i*0.1+0.3);});
 }
 
 // ============================================================
@@ -1239,22 +1352,25 @@ function setMode(mode) {
 // ============================================================
 let currentWordForCoaching = null;
 
-function renderExplore() {
+async function renderExplore() {
     const words = getCurrentWords();
     const grid = document.getElementById('word-grid');
     grid.innerHTML = '';
+    const recordedKeys = new Set(await getAllRecordedKeys(lang));
     words.forEach((w, i) => {
         const card = document.createElement('div');
         card.className = 'word-card';
         const label = w[lang]||w.en;
         const key = `s${currentStageIdx}_${i}`;
         const mastery = getMastery(key);
+        const recKey = `${lang}_${label.toLowerCase().trim()}`;
+        const hasRec = recordedKeys.has(recKey);
         let dots = '<div class="mastery-dots">';
         for(let d=0;d<5;d++) dots+=`<div class="mastery-dot${d<mastery?' filled':''}"></div>`;
         dots+='</div>';
         card.innerHTML = `
             ${w.target&&w.target!=='combo'?`<div class="sound-tag">${w.target}</div>`:''}
-            <span class="speaker">🔊</span>
+            <span class="speaker">${hasRec?'❤️':'🔊'}</span>
             <div class="word-emoji">${w.emoji}</div>
             <div class="word-label">${label}</div>
             ${dots}
@@ -1279,7 +1395,7 @@ function tapExploreWord(idx, cardEl) {
     // Show coaching popup
     showCoaching(w);
 
-    if(Math.random()<0.3) setTimeout(()=>celebrate(),400);
+    if(Math.random()<0.5) setTimeout(()=>celebrate(),400);
 }
 
 function showCoaching(word) {
@@ -1522,8 +1638,169 @@ setInterval(()=>{
 },1000);
 
 // ============================================================
+//  TODDLER MODE
+// ============================================================
+function toggleToddlerMode() {
+    toddlerMode = !toddlerMode;
+    localStorage.setItem('sb_toddler_mode', toddlerMode ? 'true' : 'false');
+    document.body.classList.toggle('toddler-mode', toddlerMode);
+    const btn = document.getElementById('toddler-toggle');
+    if (btn) { btn.style.background = toddlerMode ? 'var(--primary)' : ''; btn.style.color = toddlerMode ? 'white' : ''; }
+}
+
+// ============================================================
+//  IndexedDB for parent voice recordings
+// ============================================================
+const VOICE_DB = 'SpeechBuddyVoice';
+function openVoiceDB() {
+    return new Promise((resolve, reject) => {
+        const r = indexedDB.open(VOICE_DB, 1);
+        r.onupgradeneeded = e => { if (!e.target.result.objectStoreNames.contains('recordings')) e.target.result.createObjectStore('recordings'); };
+        r.onsuccess = () => resolve(r.result);
+        r.onerror = () => reject(r.error);
+    });
+}
+async function saveRecordedAudio(lc, word, blob) {
+    const db = await openVoiceDB();
+    return new Promise(r => { const tx = db.transaction('recordings','readwrite'); tx.objectStore('recordings').put(blob, `${lc}_${word}`); tx.oncomplete = r; });
+}
+async function getRecordedAudio(lc, word) {
+    try { const db = await openVoiceDB(); return new Promise(r => { const req = db.transaction('recordings','readonly').objectStore('recordings').get(`${lc}_${word}`); req.onsuccess = () => r(req.result||null); req.onerror = () => r(null); }); } catch { return null; }
+}
+async function deleteRecordedAudio(lc, word) {
+    const db = await openVoiceDB();
+    return new Promise(r => { const tx = db.transaction('recordings','readwrite'); tx.objectStore('recordings').delete(`${lc}_${word}`); tx.oncomplete = r; });
+}
+async function getAllRecordedKeys(lc) {
+    try { const db = await openVoiceDB(); return new Promise(r => { const req = db.transaction('recordings','readonly').objectStore('recordings').getAllKeys(); req.onsuccess = () => r(req.result.filter(k=>k.startsWith(lc+'_'))); req.onerror = () => r([]); }); } catch { return []; }
+}
+async function getRecordedWordCount(lc) {
+    return (await getAllRecordedKeys(lc)).length;
+}
+
+// ============================================================
+//  VOICE SETTINGS UI
+// ============================================================
+function openVoiceSettings() {
+    document.querySelectorAll('.voice-label-btn').forEach(b => b.classList.toggle('active', b.dataset.vl === voiceGender));
+    updateRecStats();
+    document.getElementById('voice-priority-info').textContent = voiceGender === 'female' ? '👩 Using Mommy Voice' : '👨 Using Daddy Voice';
+    document.getElementById('voice-settings-panel').classList.add('show');
+}
+function closeVoiceSettings() { document.getElementById('voice-settings-panel').classList.remove('show'); }
+
+function setVoiceGender(g) {
+    voiceGender = g;
+    localStorage.setItem('sb_voice_gender', g);
+    document.querySelectorAll('.voice-label-btn').forEach(b => b.classList.toggle('active', b.dataset.vl === g));
+    document.getElementById('voice-priority-info').textContent = g === 'female' ? '👩 Using Mommy Voice' : '👨 Using Daddy Voice';
+}
+
+function testVoice() {
+    const words = { en:'Hello! I love you!', ru:'Привет! Я тебя люблю!', ky:'Салам!' };
+    speak(words[lang] || words.en, lang);
+}
+
+async function updateRecStats() {
+    const count = await getRecordedWordCount(lang);
+    const total = STAGES.reduce((a, s) => a + s.words.length, 0);
+    const el = document.getElementById('rec-stats');
+    if (el) el.textContent = count > 0 ? `❤️ ${count}/${total} words recorded` : 'No recordings yet';
+}
+
+// ============================================================
+//  RECORDING STUDIO
+// ============================================================
+let recMediaRecorder = null;
+let recChunks = [];
+let recCurrentWord = null;
+
+function openRecordingStudio() {
+    closeVoiceSettings();
+    renderRecWordList();
+    document.getElementById('recording-studio').classList.add('show');
+}
+function closeRecordingStudio() {
+    stopRec();
+    document.getElementById('recording-studio').classList.remove('show');
+}
+
+async function renderRecWordList() {
+    const container = document.getElementById('rec-word-list');
+    container.innerHTML = '';
+    const recorded = new Set(await getAllRecordedKeys(lang));
+    STAGES.forEach((stage, si) => {
+        const h = document.createElement('div');
+        h.style.cssText = 'font-size:14px;font-weight:800;color:var(--text2);padding:12px 0 6px;border-bottom:1px solid #f0f0f0;';
+        h.textContent = `${stage.emoji} ${stage.name[lang]||stage.name.en}`;
+        container.appendChild(h);
+        stage.words.forEach((w, wi) => {
+            const word = w[lang]||w.en;
+            const key = `${lang}_${word.toLowerCase().trim()}`;
+            const has = recorded.has(key);
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f8f8f8;';
+            const safeWord = word.replace(/'/g, "\\'");
+            row.innerHTML = `
+                <span style="font-size:28px;">${w.emoji}</span>
+                <span style="flex:1;font-size:16px;font-weight:700;">${word}</span>
+                <span style="font-size:11px;font-weight:700;color:${has?'var(--green)':'var(--text2)'}">${has?'✅':'—'}</span>
+                ${has?`<button onclick="playRec('${lang}','${safeWord}')" style="width:44px;height:44px;border-radius:50%;border:2px solid var(--green);background:white;font-size:16px;cursor:pointer;">▶</button>`:''}
+                ${has?`<button onclick="delRec('${lang}','${safeWord}')" style="width:44px;height:44px;border-radius:50%;border:2px solid #e74c3c;background:white;font-size:14px;cursor:pointer;color:#e74c3c;">✕</button>`:''}
+                <button onclick="startRec('${lang}','${safeWord}')" style="width:52px;height:52px;border-radius:50%;border:none;background:var(--primary);color:white;font-size:20px;cursor:pointer;">🎤</button>
+            `;
+            container.appendChild(row);
+        });
+    });
+}
+
+async function startRec(lc, word) {
+    stopRec();
+    recCurrentWord = { lang: lc, word };
+    recChunks = [];
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mime = typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/mp4';
+        recMediaRecorder = new MediaRecorder(stream, { mimeType: mime });
+        recMediaRecorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
+        recMediaRecorder.onstop = async () => {
+            stream.getTracks().forEach(t => t.stop());
+            if (recChunks.length > 0 && recCurrentWord) {
+                const blob = new Blob(recChunks, { type: recChunks[0].type });
+                await saveRecordedAudio(recCurrentWord.lang, recCurrentWord.word.toLowerCase().trim(), blob);
+                renderRecWordList();
+            }
+        };
+        recMediaRecorder.start();
+        setTimeout(() => { if (recMediaRecorder && recMediaRecorder.state === 'recording') recMediaRecorder.stop(); }, 3000);
+    } catch { alert('Could not access microphone'); }
+}
+
+function stopRec() { if (recMediaRecorder && recMediaRecorder.state === 'recording') recMediaRecorder.stop(); recMediaRecorder = null; }
+
+async function playRec(lc, word) {
+    const blob = await getRecordedAudio(lc, word.toLowerCase().trim());
+    if (blob) { const u = URL.createObjectURL(blob); const a = new Audio(u); a.onended = () => URL.revokeObjectURL(u); a.play(); }
+}
+
+async function delRec(lc, word) {
+    await deleteRecordedAudio(lc, word.toLowerCase().trim());
+    renderRecWordList();
+}
+
+// ============================================================
 //  INIT
 // ============================================================
+// Apply toddler mode on load
+if (toddlerMode) {
+    document.body.classList.add('toddler-mode');
+    const btn = document.getElementById('toddler-toggle');
+    if (btn) { btn.style.background = 'var(--primary)'; btn.style.color = 'white'; }
+}
+// Pre-load voices
+window.speechSynthesis?.getVoices();
+window.speechSynthesis?.addEventListener('voiceschanged',()=>{});
+
 renderHome();
 </script>
 </body>
