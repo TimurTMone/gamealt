@@ -23,7 +23,37 @@ VOICES = {
     "ky": {"female": "tr-TR-EmelNeural", "male": "tr-TR-AhmetNeural"},  # Turkish fallback
 }
 
-RATE = "-20%"  # Slower, parent-like pace
+RATE = "-30%"  # Slower, warm parent-like pace
+
+# When TTS text needs to differ from the display word (e.g., hyphens cause pauses)
+# Key: display word (lowercase), Value: what to send to TTS for natural speech
+TTS_OVERRIDES = {
+    # English - speak naturally like a mama talking to her baby
+    "ba-ba": "baba",
+    "ma-ma": "mama",
+    "da-da": "dada",
+    "moo": "mooo",
+    "woof": "woof woof",
+    "meow": "meow",
+    "baa": "baaa",
+    "vroom": "vroom",
+    "all done": "all done!",
+    "night night": "night night",
+    "yummy apple": "yummy apple!",
+    "more milk": "more milk!",
+    "want ball": "want ball!",
+    "mama go": "mama go!",
+    "big dog": "big dog!",
+    # Russian
+    "ба-ба": "баба",
+    "ма-ма": "мама",
+    "да-да": "дада",
+    "баю-бай": "баюбай",
+    "вжжж": "вжж",
+    # Kyrgyz
+    "жукта-жукта": "жуктажукта",
+    "жакшы кал": "жакшы кал",
+}
 
 # ── OUTPUT DIR ──
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -90,10 +120,32 @@ def get_filename(lang: str, gender: str, word: str) -> str:
     return f"{lang}_{gender}_{safe}.mp3"
 
 
-async def generate_one(text: str, voice: str, filepath: str) -> bool:
-    """Generate a single MP3 file."""
+CYRILLIC_TO_LATIN = str.maketrans({
+    'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'j','з':'z',
+    'и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r',
+    'с':'s','т':'t','у':'u','ф':'f','х':'h','ц':'ts','ч':'ç','ш':'ş','щ':'şç',
+    'ъ':'','ы':'ı','ь':'','э':'e','ю':'yu','я':'ya',
+    'ө':'ö','ү':'ü','ң':'ñ',
+    'А':'A','Б':'B','В':'V','Г':'G','Д':'D','Е':'E','Ё':'Yo','Ж':'J','З':'Z',
+    'И':'İ','Й':'Y','К':'K','Л':'L','М':'M','Н':'N','О':'O','П':'P','Р':'R',
+    'С':'S','Т':'T','У':'U','Ф':'F','Х':'H','Ц':'Ts','Ч':'Ç','Ш':'Ş',
+    'Ъ':'','Ы':'I','Ь':'','Э':'E','Ю':'Yu','Я':'Ya',
+    'Ө':'Ö','Ү':'Ü','Ң':'Ñ',
+})
+
+def cyrillic_to_turkish(text: str) -> str:
+    """Transliterate Kyrgyz Cyrillic to Turkish Latin for TTS."""
+    return text.translate(CYRILLIC_TO_LATIN)
+
+async def generate_one(text: str, voice: str, filepath: str, lang: str = "en") -> bool:
+    """Generate a single MP3 file with warm, natural delivery."""
+    # Use TTS override if available (fixes hyphens, adds natural phrasing)
+    tts_text = TTS_OVERRIDES.get(text.lower().strip(), text)
+    # For Kyrgyz (Turkish voice): transliterate Cyrillic to Latin
+    if lang == "ky":
+        tts_text = cyrillic_to_turkish(tts_text)
     try:
-        communicate = edge_tts.Communicate(text, voice, rate=RATE)
+        communicate = edge_tts.Communicate(tts_text, voice, rate=RATE, pitch="+5Hz")
         await communicate.save(filepath)
         return True
     except Exception as e:
@@ -143,7 +195,7 @@ async def generate_all(test_mode: bool = False):
 
                     print(f"  [{success + failed + skipped + 1}/{total}] {voice_name}: \"{text}\" → {filename}")
 
-                    ok = await generate_one(text, voice_name, filepath)
+                    ok = await generate_one(text, voice_name, filepath, lang=lang_code)
                     if ok:
                         success += 1
                         manifest[filename] = {
