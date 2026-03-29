@@ -1178,7 +1178,9 @@ async function speak(text, lc) {
 }
 
 function speakEdgeTTS(text, lc) {
-    const safe = text.toLowerCase().trim().replace(/ /g, '_').replace(/-/g, '_');
+    let safe = text.toLowerCase().trim().replace(/ /g, '_').replace(/-/g, '_');
+    // Must match Python generator transliteration
+    safe = safe.replace(/ё/g, 'yo').replace(/ü/g, 'u').replace(/ө/g, 'o').replace(/ң/g, 'n');
     const filename = `${lc}_${voiceGender}_${safe}.mp3`;
     const audio = new Audio(`../assets/audio/${filename}`);
     audio.onerror = () => speakFallbackTTS(text, lc); // Tier 3 fallback
